@@ -1,0 +1,10 @@
+Command: date
+
+--- With date command it is easy to format a string with date and time information.
+$ date "+%Y:%m:%d-%H%M%S-DATEDIR"
+
+--- This can be used as part of a variable as well:
+$ export MYVAR="HALOO-"`date "+%F-%T-DATEDIR"`
+$ echo $MYVAR
+
+(Author: Petteri)

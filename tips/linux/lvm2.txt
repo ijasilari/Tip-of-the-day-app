@@ -1,0 +1,9 @@
+Topic: LVM - Logical Volume Management
+
+To expand the existing LVM partition: 
+
+# lvextend -L +1G /dev/vg200/vision200
+# xfs_growfs /vision
+... OR:
+# lvresize -l +100%FREE /dev/vg200/vision
+

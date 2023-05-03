@@ -1,0 +1,10 @@
+Topic: chage - user account aging 
+
+To get to aging info of user test1:
+
+  # chage -l test1
+
+Set the MAXIMUM period between password change to 500 days:
+
+  $	sudo chage -M 500 test1
+

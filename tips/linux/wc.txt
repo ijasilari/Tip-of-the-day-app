@@ -1,0 +1,6 @@
+Topic: wc
+
+wc - counts the number of characters and lines.
+Example: calculate nr of lines:
+
+$ wc -l file.txt

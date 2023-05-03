@@ -1,0 +1,18 @@
+Command: wget
+
+--- To fetch a file from Internet with HTTP use this command.
+
+Example:
+
+$ wget https://www.rfc-editor.org/rfc/rfc19.txt
+
+Direct output to specific file:
+
+$ wget -O somefile.txt https://www.rfc-editor.org/rfc/rfc19.txt
+
+
+Other alternatives for command line HTTP:
+* curl
+
+
+(Author: Petteri)

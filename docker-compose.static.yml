@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+  db:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tips
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - /var/lib/postgresql/data
+  api_static:
+    build:
+      context: ./nodeapp
+      dockerfile: static.Dockerfile
+    environment:
+      DB_PORT: 5432
+      DB_HOST: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tips
+    ports:
+      - "3000:3000"
+    restart: always
+  client_static:
+    build:
+      context: ./client
+      dockerfile: static.Dockerfile
+    restart: always
+    ports:
+      - 80:80
+    environment:
+      REACT_APP_LOCAL_BACKEND_URL: http://localhost:3000

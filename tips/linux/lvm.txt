@@ -1,0 +1,19 @@
+Topic: LVM - Logical Volume Management
+
+LVM is a technique for creating dynamically expandable storage volumes. A mounted volume can be expanded on the fly with no need for restarting services using it.
+
+Logically steps for creating a LVM device are:
+- Create a (logical) volume group and add physical devices to it.
+- Create a logical partition using the volume group
+- Make a file system (like ext4) to the partition and mount it
+- Afterwards the logical partition can be expanded to the limit of free space in volume group and volume group by adding physical devices
+
+Steps to create a brand new LVM device:
+
+# lsblk  (diagnose)
+# pvcreate /dev/xvdc /dev/xvde         (not needed necessarily)
+# vgcreate vg200 /dev/xvdc /dev/xvde   (Create the pool)
+# lvcreate -n vision200 -L 2G vg200    (Create a mountable partition)
+# mkfs.xfs /dev/vg200/vision200        (Make filesystem)
+# mount /dev/vg200/vision200 /vision200
+

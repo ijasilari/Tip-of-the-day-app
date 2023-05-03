@@ -1,0 +1,15 @@
+Topic: gpasswd
+
+With gpasswd command a user can be promoted to a group admin.
+Set user u1 as admin to group engineers:
+
+$ gpasswd -A u1 engineers
+
+Demote user u2 from engineers group admins:
+
+$ gpasswd -d u2 engineers
+
+See the admins of the group:
+
+$ grep engineers /etc/gshadow
+

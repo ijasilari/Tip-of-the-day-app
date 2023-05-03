@@ -1,0 +1,6 @@
+Topic: find
+
+Find files from current location (.) with precise name. For each hit, run a command - this time grep from the found file ({}) - end the command with semicolon ... escape it to make part of parameter 
+
+$ find . -name "wisdom.txt" -exec grep -i vote {} \;
+
