@@ -1,9 +1,9 @@
 import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import ButtonAppBar from "./ButtonAppBar";
-import HomePage from "./HomePage";
-import AddTip from "./AddTip";
-import ViewTips from "./ViewTips";
+import ButtonAppBar from "./components/ButtonAppBar";
+import HomePage from "./pages/HomePage";
+import AddTip from "./pages/AddTip";
+import ViewTips from "./pages/ViewTips";
 
 function App() {
 
