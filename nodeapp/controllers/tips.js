@@ -60,10 +60,12 @@ const addNewTip = async (req, res, next) => {
   // console.log(description)
 
   const newTip = {
+    // id,
     description: description
   };
 
   const result = await addTip(newTip);
+  // console.log(result)
   if (!result) {
     const error = new Error(`Something went wrong when adding new tip`);
     error.statusCode = 500;
@@ -71,7 +73,8 @@ const addNewTip = async (req, res, next) => {
   }
 
   res.status(201).json({
-    description: newTip.description
+    Tip: newTip,
+    id: result
   });
 };
 
