@@ -1,11 +1,19 @@
 {
   "name": "expresstotd",
+  "jest": {
+    "verbose": true,
+    "testTimeout": 15000
+  },
   "version": "1.0.0",
   "description": "TotD with node ExpressJs",
   "type": "module",
   "main": "app.js",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "test:jest": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules npx jest --forceExit",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
@@ -21,6 +29,8 @@
     "pg": "^8.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.3.3"
   }
 }

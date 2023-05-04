@@ -25,11 +25,11 @@ const findTipById = async (id) => {
 
 const addTip = async (tip) => {
   const result = await pool.query(
-    "INSERT INTO tips (description) VALUES ($1)",
+    "INSERT INTO tips (description) VALUES ($1) RETURNING id",
     [tip.description]
   );
   // console.log(result)
-  return result.rows;
+  return result.rows[0].id;
 };
 
 const updateTipWithId = async (description, id) => {
