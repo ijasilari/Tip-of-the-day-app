@@ -18,21 +18,24 @@ const tips = [
 
 To get to aging info of user test1:
 
-  # chage -l test1
+  \`# chage -l test1\`
 
 Set the MAXIMUM period between password change to 500 days:
 
-  $	sudo chage -M 500 test1`
+\`$	sudo chage -M 500 test1\``
   ],
   [
     `Command: date
 
 --- With date command it is easy to format a string with date and time information.
-$ date "+%Y:%m:%d-%H%M%S-DATEDIR"
+
+\`$ date "+%Y:%m:%d-%H%M%S-DATEDIR"\`
 
 --- This can be used as part of a variable as well:
+~~~
 $ export MYVAR="HALOO-"date "+%F-%T-DATEDIR"
 $ echo $MYVAR
+~~~
 
 (Author: Petteri)`
   ],
@@ -41,14 +44,14 @@ $ echo $MYVAR
 
 Find files from current location (.) with precise name. For each hit, run a command - this time grep from the found file ({}) - end the command with semicolon ... escape it to make part of parameter
 
-$ find . -name "wisdom.txt" -exec grep -i vote {} \;`
+\`$ find . -name "wisdom.txt" -exec grep -i vote {} \;\``
   ],
   [
     `Topic: for loop (bash)
 
 Example one liner:
 
-$ for file in ls; do echo $file; done`
+\`$ for file in ls; do echo $file; done\``
   ],
   [
     `Topic: gpasswd
@@ -56,15 +59,15 @@ $ for file in ls; do echo $file; done`
 With gpasswd command a user can be promoted to a group admin.
 Set user u1 as admin to group engineers:
 
-$ gpasswd -A u1 engineers
+\`$ gpasswd -A u1 engineers\`
 
 Demote user u2 from engineers group admins:
 
-$ gpasswd -d u2 engineers
+\`$ gpasswd -d u2 engineers\`
 
 See the admins of the group:
 
-$ grep engineers /etc/gshadow`
+\`$ grep engineers /etc/gshadow\``
   ],
   [
     `Topic: LVM - Logical Volume Management
@@ -78,30 +81,32 @@ Logically steps for creating a LVM device are:
 - Afterwards the logical partition can be expanded to the limit of free space in volume group and volume group by adding physical devices
 
 Steps to create a brand new LVM device:
-
+~~~
 # lsblk  (diagnose)
 # pvcreate /dev/xvdc /dev/xvde         (not needed necessarily)
 # vgcreate vg200 /dev/xvdc /dev/xvde   (Create the pool)
 # lvcreate -n vision200 -L 2G vg200    (Create a mountable partition)
 # mkfs.xfs /dev/vg200/vision200        (Make filesystem)
-# mount /dev/vg200/vision200 /vision200`
+# mount /dev/vg200/vision200 /vision200
+~~~`
   ],
   [
     `Topic: LVM - Logical Volume Management
 
 To expand the existing LVM partition:
-
+~~~
 # lvextend -L +1G /dev/vg200/vision200
 # xfs_growfs /vision
+~~~
 ... OR:
-# lvresize -l +100%FREE /dev/vg200/vision`
+\`# lvresize -l +100%FREE /dev/vg200/vision\``
   ],
   [
     `Command: useradd
 
 Example: Create a user with userid "userjohn" with bash shel (-s). Create home directory (-m) automatically and provide natural name (-c). Uidnumber will be automatically generated.
 
-  $ useradd -m -c "User John" -s /bin/bash userjohn`
+\`$ useradd -m -c "User John" -s /bin/bash userjohn\``
   ],
   [
     `Topic: wc
@@ -109,7 +114,7 @@ Example: Create a user with userid "userjohn" with bash shel (-s). Create home d
 wc - counts the number of characters and lines.
 Example: calculate nr of lines:
 
-$ wc -l file.txt`
+\`$ wc -l file.txt\``
   ],
   [
     `Command: wget
@@ -118,11 +123,11 @@ $ wc -l file.txt`
 
 Example:
 
-$ wget https://www.rfc-editor.org/rfc/rfc19.txt
+\`$ wget https://www.rfc-editor.org/rfc/rfc19.txt\`
 
 Direct output to specific file:
 
-$ wget -O somefile.txt https://www.rfc-editor.org/rfc/rfc19.txt
+\`$ wget -O somefile.txt https://www.rfc-editor.org/rfc/rfc19.txt\`
 
 
 Other alternatives for command line HTTP:
