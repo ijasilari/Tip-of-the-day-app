@@ -5,8 +5,23 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useFormik } from "formik";
 import axios from "axios";
+import Dropdown from "./Dropdown";
+import { useState } from "react";
 
 function AddTip() {
+  const [catId, setCategoryId] = useState();
+
+  const categoryOptions = [
+    {value: 1, label: "CSS"},
+    {value: 2, label: "Java"},
+    {value: 3, label: "JavaScript"},
+    {value: 4, label: "HTTP"},
+    {value: 5, label: "Python"},
+    {value: 6, label: "CPP"},
+    {value: 7, label: "Dart"},
+    {value: 8, label: "Flutter"},
+    {value: 9, label: "Rust"}
+  ]
 
     const AddNewTip = async () => {
       const newTip = { description: formikTip.values.description };
@@ -55,6 +70,12 @@ function AddTip() {
       >
         Add New Tip To The List
       </Typography>
+      <Dropdown
+          isSearchable
+          placeHolder="Select..."
+          options={categoryOptions}
+          onChange={(categoryId) => setCategoryId(categoryId.label)}
+        />
       <Box
         component="form"
         onSubmit={formikTip.handleSubmit}
@@ -93,6 +114,7 @@ function AddTip() {
         >
           Add New Tip
         </Button>
+        {console.log(catId)}
       </Box>
     </>
   );
