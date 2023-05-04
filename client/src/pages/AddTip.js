@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useFormik } from "formik";
 import axios from "axios";
-import Dropdown from "./Dropdown";
+import Dropdown from "./../components/Dropdown";
 import { useState } from "react";
 
 function AddTip() {
@@ -114,7 +114,6 @@ function AddTip() {
         >
           Add New Tip
         </Button>
-        {console.log(catId)}
       </Box>
     </>
   );
