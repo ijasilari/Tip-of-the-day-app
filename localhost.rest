@@ -1,0 +1,24 @@
+###
+GET http://localhost:3000/getusers
+
+###
+GET http://localhost:3000/getall
+
+###
+POST http://localhost:3000/addtip
+Content-Type: application/json
+
+{
+  "description": "Test tip description" 
+}
+
+###
+POST http://localhost:3000/signup
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "John Wayne",
+  "email": "john@wayne.com",
+  "password": "john@wayne"
+}
