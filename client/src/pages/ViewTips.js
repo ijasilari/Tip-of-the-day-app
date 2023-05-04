@@ -16,6 +16,7 @@ import Box from "@mui/material/Box";
 import { useFormik } from "formik";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import "./viewTips.css";
 
 function ViewTips() {
   const [data, setData] = useState([]);
