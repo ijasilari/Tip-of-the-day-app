@@ -14,6 +14,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import "./viewTips.css";
 
 function ViewTips() {
   const [data, setData] = useState([]);
@@ -127,12 +130,30 @@ function ViewTips() {
                   {item.id}
                 </TableCell>
                 <TableCell
-                  align="right"
+                  align="left"
                   sx={{
                     overflow: "auto",
                   }}
                 >
-                  {item.description}
+                  <ReactMarkdown
+                    children={item.description}
+                    components={{
+                      code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || "");
+                        return !inline && match ? (
+                          <SyntaxHighlighter
+                            children={String(children).replace(/\n$/, "")}
+                            language={match[1]}
+                            {...props}
+                          />
+                        ) : (
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        );
+                      },
+                    }}
+                  />
                 </TableCell>
                 <TableCell align="right">
                   <Button
