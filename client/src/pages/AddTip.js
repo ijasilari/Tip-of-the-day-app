@@ -55,7 +55,8 @@ function AddTip() {
     {value: 6, label: "CPP"},
     {value: 7, label: "Dart"},
     {value: 8, label: "Flutter"},
-    {value: 9, label: "Rust"}
+    {value: 9, label: "Rust"},
+    {value: 10, label: "Other"}
   ]
 
     const AddNewTip = async () => {
@@ -179,9 +180,9 @@ function AddTip() {
                     }}
               />
           </div>
-          
         </Container>
       </Box>
+      
     </>
   );
 }
