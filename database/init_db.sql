@@ -3,12 +3,12 @@ CREATE TABLE public.tips (
     description VARCHAR(2000) NOT NULL
 );
 
-CREATE TABLE users (
-    `id` VARCHAR(36) NOT NULL,
-    `username` VARCHAR(100) NOT NULL,
-    `email` VARCHAR(50) NOT NULL,
-    `password` VARCHAR(60) NOT NULL,
-    `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
+CREATE TABLE public.users (
+    id VARCHAR(36) NOT NULL,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    password VARCHAR(60) NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    PRIMARY KEY (id)
 )
