@@ -7,10 +7,15 @@ GET http://localhost:3000/getall
 ###
 POST http://localhost:3000/addtip
 Content-Type: application/json
+Authorization: BEARER {{authToken}}
 
 {
   "description": "Test tip description" 
 }
+
+### 
+DELETE http://localhost:3000/2/delete
+Authorization: BEARER {{authToken}}
 
 ###
 POST http://localhost:3000/signup
