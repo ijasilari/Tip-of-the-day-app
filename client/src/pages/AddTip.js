@@ -7,9 +7,44 @@ import { useFormik } from "formik";
 import axios from "axios";
 import Dropdown from "./../components/Dropdown";
 import { useState } from "react";
+import Container from "@mui/material/Container";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import "./AddTip.css"
+
 
 function AddTip() {
   const [catId, setCategoryId] = useState();
+
+
+  const codeExample = 
+  `
+  ~~~javascript
+  function() {
+    const num1 = 5;
+    const num2 = 3;
+   }
+  ~~~
+  `
+  const codeBlSyntax=
+  `
+  ~~~
+  \`\`\`<codeLanguage>
+  <code>
+  \`\`\`
+  ~~~
+  `
+  const syntaxExample=
+  `
+  ~~~
+  \`\`\`javascript
+  function() {
+    const num1 = 5;
+    const num2 = 3;
+   }
+  \`\`\`
+  ~~~
+  `
 
   const categoryOptions = [
     {value: 1, label: "CSS"},
@@ -66,6 +101,7 @@ function AddTip() {
         variant="h3"
         textAlign="center"
         color="text.primary"
+        marginTop="3rem"
         gutterBottom
       >
         Add New Tip To The List
@@ -114,6 +150,37 @@ function AddTip() {
         >
           Add New Tip
         </Button>
+        <Container style={{ background: '#f2f6fc', display: 'block', marginLeft: 'auto', marginRight: 'auto'}}>
+          <h1>Attention!</h1>
+          <div style={{textAlign: 'left'}}>
+            <p>This page supports markdown and syntax highlight code.
+               To create codeblock with highlight write:</p>
+            <ReactMarkdown children={codeBlSyntax}/>
+            <p>Example:</p>
+            <ReactMarkdown children={syntaxExample}/>
+            <p>Output:</p>
+            <ReactMarkdown
+                    children={codeExample}
+                    components={{
+                      code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || "");
+                        return !inline && match ? (
+                          <SyntaxHighlighter
+                            children={String(children).replace(/\n$/, "")}
+                            language={match[1]}
+                            {...props}
+                          />
+                        ) : (
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        );
+                      },
+                    }}
+              />
+          </div>
+          
+        </Container>
       </Box>
     </>
   );
