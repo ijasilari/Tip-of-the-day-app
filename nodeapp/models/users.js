@@ -27,8 +27,8 @@ const users = {
     try {
         await pool.connect();
         await pool.query(
-            `INSERT INTO "users" ("id", "name", "email", "password")  
-             VALUES ($1, $2, $3)`, [user.id, user.name, user.email, user.password]); // sends queries
+            `INSERT INTO "users" ("id", "username", "email", "password")  
+             VALUES ($1, $2, $3, $4)`, [user.id, user.username, user.email, user.password]); // sends queries
         return true;
     } catch (error) {
         console.error(error.stack);
@@ -37,12 +37,13 @@ const users = {
 },
   findByEmail: (email) => new Promise((resolve, reject) => {
     console.log("models findbyemail");
-      pool.query('SELECT * FROM users WHERE email LIKE ?;', email, (err, result) => {
+    console.log(email);
+      pool.query('SELECT * FROM users WHERE email=$1;', [email], (err, result) => {
         if(err) {
          reject(err);
         }else{
-        console.log(result);
-        resolve(result);
+        console.log(result.rows);
+        resolve(result.rows);
         }
       });
   })
