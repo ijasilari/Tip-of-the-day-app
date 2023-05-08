@@ -14,7 +14,7 @@ import "./AddTip.css"
 
 
 function AddTip() {
-  const [catId, setCategoryId] = useState();
+  const [category, setCategory] = useState();
 
 
   const codeExample = 
@@ -56,11 +56,12 @@ function AddTip() {
     {value: 7, label: "Dart"},
     {value: 8, label: "Flutter"},
     {value: 9, label: "Rust"},
-    {value: 10, label: "Other"}
+    {value: 10, label: "Linux"}
   ]
 
     const AddNewTip = async () => {
-      const newTip = { description: formikTip.values.description };
+      const newTip = { category: category, description: formikTip.values.description };
+      console.log(newTip);
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_LOCAL_BACKEND_URL}/addtip`,
@@ -111,7 +112,7 @@ function AddTip() {
           isSearchable
           placeHolder="Select..."
           options={categoryOptions}
-          onChange={(categoryId) => setCategoryId(categoryId.label)}
+          onChange={(value) => setCategory(value.value)}
         />
       <Box
         component="form"
