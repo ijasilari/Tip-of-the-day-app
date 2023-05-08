@@ -6,53 +6,24 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
 const Card = () => {
   const [cardData, setCardData] = useState(null);
-  const [tipsLength, setTipsLength] = useState();
-  const [dataLoaded, setDataLoaded] = useState(false);
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      const response1 = await axios.get(`${process.env.REACT_APP_LOCAL_BACKEND_URL}/getall`);
-      const length = Object.keys(response1.data.tips).length;
-      
-      setTipsLength(length);
-      setDataLoaded(true);
-      
-    };
-    fetchData();
-  }, []);
+
+  const fetchCardData = async () => {
+    const response = await axios.get(`${process.env.REACT_APP_LOCAL_BACKEND_URL}/randomtip`);
+    setCardData(response.data.tip);
+    console.log(response);
+  };
 
   useEffect(() => {
-    const fetchData2 = async () => {
-      let randId = 1;
-      console.log(tipsLength);
-      if(dataLoaded) {
-        randId = Math.floor(Math.random() * (tipsLength-1)) + 1;
-        console.log(tipsLength);
-        console.log(randId);
-      const response = await axios.get(`${process.env.REACT_APP_LOCAL_BACKEND_URL}/${randId}`);
-      setCardData(response.data.tip);
-      console.log(response);
-      }
-    };
-    fetchData2();
-  }, [dataLoaded, tipsLength])
+    fetchCardData();
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      handleRefreshClick();
-    }, 500);
+      fetchCardData();
+    }, 15000);
   
     return () => clearInterval(interval);
   }, []);
-
-  const handleRefreshClick = async () => {
-    const response1 = await axios.get(`${process.env.REACT_APP_LOCAL_BACKEND_URL}/getall`);
-    const length = Object.keys(response1.data.tips).length;
-    const randId = Math.floor(Math.random() * (length-1)) + 1;
-    console.log(randId)
-    const response = await axios.get(`${process.env.REACT_APP_LOCAL_BACKEND_URL}/${randId}`);
-    setCardData(response.data.tip);
-  };
 
   return (
     <div className="card-container">
