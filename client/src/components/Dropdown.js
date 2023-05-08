@@ -20,6 +20,7 @@ const CloseIcon = () => {
         </svg>
     );
 };
+
 const Dropdown = ({ placeHolder, options, isMulti, isSearchable, onChange }) => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedValue, setSelectedValue] = useState(isMulti ? [] : null);

@@ -7,18 +7,36 @@ GET http://localhost:3000/getall
 ###
 POST http://localhost:3000/addtip
 Content-Type: application/json
+Authorization: BEARER {{authToken}}
 
 {
   "description": "Test tip description" 
 }
+
+### 
+DELETE http://localhost:3000/2/delete
+Authorization: BEARER {{authToken}}
 
 ###
 POST http://localhost:3000/signup
 Content-Type: application/json
 
 {
-  "id": 1,
-  "name": "John Wayne",
+  "username": "Tony Stark",
+  "email": "tony@stark.com",
+  "password": "tony"
+}
+
+###
+# @name login
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
   "email": "john@wayne.com",
   "password": "john@wayne"
 }
+
+
+###
+@authToken = {{login.response.body.token}}

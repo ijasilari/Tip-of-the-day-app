@@ -1,4 +1,4 @@
-import { getAllTips, findTipById, addTip, updateTipWithId, deleteTipWithId } from "../models/tips.js";
+import { getAllTips, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip } from "../models/tips.js";
 import { validationResult } from "express-validator";
 
 const getTips = async (req, res, next) => {
@@ -132,11 +132,20 @@ const deleteTipById = async (req, res, next) => {
   res.status(200).json({ message: "Deleted the tip." });
 };
 
+const getTipByRandom = async (req, res, next) => {
+
+  const tip = await getRandomTip();
+  console.log(tip)
+
+  res.status(200).json({ tip });
+};
+
 export {
   getTips,
   deleteTipById,
   updateTipById,
   getTipById,
   addNewTip,
-  getTipByIdPlainText
+  getTipByIdPlainText,
+  getTipByRandom
 };

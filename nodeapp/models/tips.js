@@ -46,4 +46,13 @@ const deleteTipWithId = async (id) => {
   return result.rowCount !== 0;
 };
 
-export { getAllTips, findTipById, addTip, updateTipWithId, deleteTipWithId, };
+const getRandomTip = async () => {
+
+  const result  = await pool.query(
+    "SELECT * FROM tips ORDER BY RANDOM() LIMIT 1"
+  );
+
+  return result.rows[0]
+};
+
+export { getAllTips, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip };

@@ -1,4 +1,5 @@
-import { getTips, deleteTipById, updateTipById, getTipById, addNewTip, getTipByIdPlainText } from './controllers/tips.js';
+import { getTips, deleteTipById, updateTipById, getTipById, addNewTip, getTipByIdPlainText, getTipByRandom } from './controllers/tips.js';
+import {signUpUser, loginUser, getUsers} from './controllers/users.js';
 import express from "express";
 import bodyParser from "body-parser";
 import { check } from "express-validator";
@@ -60,6 +61,11 @@ app.get('/api/*', (req, res) => {
 // version 2 below
 
 app.get("/getall", getTips);
+app.get("/randomtip", getTipByRandom);
+app.get("/getusers", getUsers);
+app.post("/signup", signUpUser);
+app.post("/login", loginUser);
+
 app.delete("/:tid/delete", deleteTipById);
 app.patch(
   "/:tid/update",
@@ -79,8 +85,10 @@ app.post(
   addNewTip
 );
 
-app.listen(port, () => {
-	console.log(`Example app listening at http://localhost:${port}`)
-})
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
 
 export default app
