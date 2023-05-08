@@ -1,4 +1,4 @@
-import { getTips, deleteTipById, updateTipById, getTipById, addNewTip, getTipByIdPlainText, getTipByRandom } from './controllers/tips.js';
+import { getTips, getTipsByCategory, deleteTipById, updateTipById, getTipById, addNewTip, getTipByIdPlainText, getTipByRandom } from './controllers/tips.js';
 import {signUpUser, loginUser, getUsers} from './controllers/users.js';
 import express from "express";
 import bodyParser from "body-parser";
@@ -61,6 +61,7 @@ app.get('/api/*', (req, res) => {
 // version 2 below
 
 app.get("/getall", getTips);
+app.get("/getall/:category", getTipsByCategory);
 app.get("/randomtip", getTipByRandom);
 app.get("/getusers", getUsers);
 app.post("/signup", signUpUser);

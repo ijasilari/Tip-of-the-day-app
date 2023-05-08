@@ -16,6 +16,9 @@ import Box from "@mui/material/Box";
 import { useFormik } from "formik";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import Dropdown from "../components/Dropdown";
+import { IconButton } from "@mui/material";
+import SearchIcon from '@mui/icons-material/Search';
 import "./viewTips.css";
 
 function ViewTips() {
@@ -23,6 +26,20 @@ function ViewTips() {
   const [openEditTip, setOpenEditTip] = useState(false);
   const [id, setId] = useState();
   const [editText, setEditText] = useState("");
+  const [category, setCategory] = useState(1);
+
+  const categoryOptions = [
+    {value: 1, label: "CSS"},
+    {value: 2, label: "Java"},
+    {value: 3, label: "JavaScript"},
+    {value: 4, label: "HTTP"},
+    {value: 5, label: "Python"},
+    {value: 6, label: "CPP"},
+    {value: 7, label: "Dart"},
+    {value: 8, label: "Flutter"},
+    {value: 9, label: "Rust"},
+    {value: 10, label: "Linux"}
+  ]
 
 
   const handleCancel = () => {
@@ -49,6 +66,15 @@ function ViewTips() {
     };
     fetchData();
   }, []);
+
+    const fetchDataByCategory = async () => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/getall/${category}`
+      );
+       console.log(response)
+      setData(response.data.tips);
+    };
+
 
   const deleteTip = async (tid) => {
     try {
@@ -77,7 +103,7 @@ function ViewTips() {
 
       setData(() => {
         const newTips = [...data];
-        // console.log(newTips);
+        console.log(newTips);
         const foundIndex = newTips.findIndex((tip) => tip.id === id);
         // console.log(foundIndex);
         newTips[foundIndex].description = formikTip.values.description;
@@ -109,6 +135,14 @@ function ViewTips() {
   });
 
   return (
+    <>
+    <Dropdown 
+         isSearchable
+         placeHolder="Select..."
+         options={categoryOptions}
+         onChange={(value) => setCategory(value.value)}/>
+         
+         <IconButton onClick={() => fetchDataByCategory()}> <SearchIcon/> </IconButton>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -232,6 +266,7 @@ function ViewTips() {
         </TableBody>
       </Table>
     </TableContainer>
+    </>
   );
 }
 

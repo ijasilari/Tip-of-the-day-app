@@ -1,9 +1,24 @@
-import { getAllTips, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip } from "../models/tips.js";
+import { getAllTips, findTipsByCategory, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip } from "../models/tips.js";
 import { validationResult } from "express-validator";
 
 const getTips = async (req, res, next) => {
   const tips = await getAllTips();
   // console.log(tips)
+  res.json({ tips });
+};
+
+const getTipsByCategory = async (req, res, next) => {
+  const tipCategory = req.params.category;
+  console.log(tipCategory);
+  // console.log(tipId)
+  const tips = await findTipsByCategory(tipCategory);
+
+  if (!tips) {
+    const error = new Error(`Tip with CATEGORY ${tipCategory} not found`);
+    error.statusCode = 404;
+    return next(error);
+  }
+
   res.json({ tips });
 };
 
@@ -55,12 +70,13 @@ const addNewTip = async (req, res, next) => {
     return next(error);
   }
 
-  const { description } = req.body;
+  const { category, description } = req.body;
   // console.log(req.body)
   // console.log(description)
 
   const newTip = {
     // id,
+    category: category,
     description: description
   };
 
@@ -142,6 +158,7 @@ const getTipByRandom = async (req, res, next) => {
 
 export {
   getTips,
+  getTipsByCategory,
   deleteTipById,
   updateTipById,
   getTipById,
