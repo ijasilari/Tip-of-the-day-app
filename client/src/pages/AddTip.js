@@ -183,6 +183,7 @@ function AddTip() {
           </div>
         </Container>
       </Box>
+      
     </>
   );
 }
