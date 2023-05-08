@@ -10,12 +10,14 @@ import { useState } from "react";
 import Container from "@mui/material/Container";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { useContext } from 'react';
+import { AuthContext } from '../components/auth-context';
 import "./AddTip.css"
 
 
 function AddTip() {
   const [category, setCategory] = useState();
-
+  const auth = useContext(AuthContext);
 
   const codeExample = 
   `
@@ -69,6 +71,8 @@ function AddTip() {
           {
             headers: {
               "Content-Type": "application/json",
+              'Accept': 'application/json',
+              Authorization: 'Bearer ' + auth.token
             },
           }
         );

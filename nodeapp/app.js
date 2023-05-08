@@ -4,6 +4,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import { check } from "express-validator";
 import cors from "cors";
+import {verifyToken} from './middleware/verifyToken.js';
+
 // const express = require('express')
 const app = express()
 const port = 3000
@@ -64,10 +66,16 @@ app.get("/getall", getTips);
 app.get("/getall/:category", getTipsByCategory);
 app.get("/randomtip", getTipByRandom);
 app.get("/getusers", getUsers);
+app.get("/:tid", getTipById);
+app.get("/:tid/plain", getTipByIdPlainText);
+
 app.post("/signup", signUpUser);
 app.post("/login", loginUser);
 
+app.use(verifyToken);
+
 app.delete("/:tid/delete", deleteTipById);
+
 app.patch(
   "/:tid/update",
   [
@@ -76,8 +84,7 @@ app.patch(
   ],
   updateTipById
 );
-app.get("/:tid", getTipById);
-app.get("/:tid/plain", getTipByIdPlainText);
+
 app.post(
   "/addtip",
   [

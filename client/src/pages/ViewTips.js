@@ -19,6 +19,8 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import Dropdown from "../components/Dropdown";
 import { IconButton } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import { useContext } from 'react';
+import { AuthContext } from '../components/auth-context';
 import "./viewTips.css";
 
 function ViewTips() {
@@ -27,6 +29,7 @@ function ViewTips() {
   const [id, setId] = useState();
   const [editText, setEditText] = useState("");
   const [category, setCategory] = useState(1);
+  const auth = useContext(AuthContext);
 
   const categoryOptions = [
     {value: 1, label: "CSS"},
@@ -79,7 +82,12 @@ function ViewTips() {
   const deleteTip = async (tid) => {
     try {
       const response = await axios.delete(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/${tid}/delete`
+        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/${tid}/delete`,
+        {
+          headers: {
+            Authorization: 'Bearer ' + auth.token 
+          },
+        }
       );
       console.log(response);
 
@@ -96,6 +104,7 @@ function ViewTips() {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: 'Bearer ' + auth.token
           },
         }
       );
@@ -103,7 +112,7 @@ function ViewTips() {
 
       setData(() => {
         const newTips = [...data];
-        console.log(newTips);
+        // console.log(newTips);
         const foundIndex = newTips.findIndex((tip) => tip.id === id);
         // console.log(foundIndex);
         newTips[foundIndex].description = formikTip.values.description;
@@ -207,6 +216,7 @@ function ViewTips() {
                     />
                   </TableCell>
                   <TableCell align="right">
+                  {auth.isLoggedIn && (
                     <Button
                       variant="contained"
                       onClick={() => {
@@ -215,6 +225,7 @@ function ViewTips() {
                     >
                       Edit
                     </Button>
+                  )}
                     <Dialog
                       maxWidth="sm"
                       open={openEditTip}
@@ -273,6 +284,7 @@ function ViewTips() {
                     </Dialog>
                   </TableCell>
                   <TableCell align="right">
+                  {auth.isLoggedIn && (
                     <Button
                       variant="contained"
                       onClick={() => {
@@ -281,6 +293,7 @@ function ViewTips() {
                     >
                       Delete
                     </Button>
+                  )}
                   </TableCell>
                 </TableRow>
               ))}

@@ -10,11 +10,22 @@ Content-Type: application/json
 Authorization: BEARER {{authToken}}
 
 {
-  "description": "Test tip description" 
-}
+  "description": "Test tip description" ,
+  "category": 2
+} 
+
+###
+PATCH http://localhost:3000/7/update
+Content-Type: application/json
+Authorization: BEARER {{authToken}}
+
+{
+  "description": "Edited tip",
+  "category": 5
+} 
 
 ### 
-DELETE http://localhost:3000/2/delete
+DELETE http://localhost:3000/9/delete
 Authorization: BEARER {{authToken}}
 
 ###
@@ -22,9 +33,9 @@ POST http://localhost:3000/signup
 Content-Type: application/json
 
 {
-  "username": "Tony Stark",
-  "email": "tony@stark.com",
-  "password": "tony"
+  "username": "John Wayne",
+  "email": "john@wayne.com",
+  "password": "john@wayne"
 }
 
 ###
