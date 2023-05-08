@@ -22,7 +22,7 @@ const Authenticate = props => {
   const auth = useContext(AuthContext);
 
   const signUpUserMutation = useMutation({
-    mutationFn: signUpUser,
+    mutationFn: signUpUser, 
     onSuccess: (data) => {
       console.log(data);
       auth.login(data.id, data.token);
@@ -33,7 +33,7 @@ const Authenticate = props => {
   });
 
   const loginUserMutation = useMutation({
-    mutationFn: loginUser,
+    mutationFn: loginUser, 
     onSuccess: (data) => {
       console.log(data);
       auth.login(data.id, data.token);
@@ -64,13 +64,13 @@ const Authenticate = props => {
     <Card className="authentication">
       <h2>{isLoginMode? 'Login' : 'Sign Up'}</h2>
       <form onSubmit={onSubmitHandler}>
-        {!isLoginMode &&
-          <Input id="username" ref={nameRef} type="text" label="Username"
+        {!isLoginMode && 
+          <Input id="username" ref={nameRef} type="text" label="Username" 
         />}
         <Input id="email" ref={emailRef} type="text" label="Email" />
         <Input id="password" ref={passwordRef} type="password" label="Password" />
 
-        <Button type="submit">
+        <Button type="submit" disable={signUpUserMutation.isLoading}>
           {isLoginMode? 'LOGIN' : 'SIGNUP'}
         </Button>
       </form>

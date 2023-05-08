@@ -102,10 +102,9 @@ const updateTipById = async (req, res, next) => {
     return next(error);
   }
 
-  const { description, category } = req.body;
+  const { description } = req.body;
   const tipId = req.params.tid;
   // console.log(tipId)
-  console.log(category)
   const tip = await findTipById(tipId);
 
   if (!tip) {
@@ -115,7 +114,6 @@ const updateTipById = async (req, res, next) => {
   }
     const result = await updateTipWithId(
       description,
-      category,
       tipId
     );
 
@@ -127,7 +125,6 @@ const updateTipById = async (req, res, next) => {
 
     tip.id = tipId
     tip.description = description
-    tip.category = category
     res.status(200).json({ tip });
   };
 

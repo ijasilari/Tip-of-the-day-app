@@ -85,7 +85,7 @@ function ViewTips() {
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/${tid}/delete`,
         {
           headers: {
-            Authorization: 'Bearer ' + auth.token
+            Authorization: 'Bearer ' + auth.token 
           },
         }
       );
@@ -96,7 +96,7 @@ function ViewTips() {
   };
 
   const editTip = async () => {
-    const editedTip = { description: formikTip.values.description,category: 1 };
+    const editedTip = { description: formikTip.values.description };
     try {
       const response = await axios.patch(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/${id}/update`,
