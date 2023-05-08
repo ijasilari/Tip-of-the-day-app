@@ -15,7 +15,7 @@ Authorization: BEARER {{authToken}}
 } 
 
 ###
-PATCH http://localhost:3000/7/update
+PATCH http://localhost:3000/13/update
 Content-Type: application/json
 Authorization: BEARER {{authToken}}
 

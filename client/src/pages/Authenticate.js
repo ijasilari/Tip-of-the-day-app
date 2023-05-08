@@ -70,7 +70,7 @@ const Authenticate = props => {
         <Input id="email" ref={emailRef} type="text" label="Email" />
         <Input id="password" ref={passwordRef} type="password" label="Password" />
 
-        <Button type="submit" disable={signUpUserMutation.isLoading}>
+        <Button type="submit">
           {isLoginMode? 'LOGIN' : 'SIGNUP'}
         </Button>
       </form>
