@@ -5,9 +5,12 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
+import { useContext } from 'react';
+import { AuthContext } from './auth-context';
 import "./ButtonAppBar.css";
 
 function ButtonAppBar() {
+  const auth = useContext(AuthContext);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -22,6 +25,7 @@ function ButtonAppBar() {
           >
             HomePage
           </Typography>
+          {auth.isLoggedIn && (
             <Button
               component={NavLink}
               to="/addtip"
@@ -29,6 +33,7 @@ function ButtonAppBar() {
             >
               Add Tip
             </Button>
+          )}
             <Button
               component={NavLink}
               to="/viewtips"
@@ -36,6 +41,25 @@ function ButtonAppBar() {
             >
               View All Tips
             </Button>
+            {!auth.isLoggedIn && (
+            <Button
+              component={NavLink}
+              to="/auth"
+              color="inherit"
+            >
+              Login
+            </Button>
+            )}
+            {auth.isLoggedIn && (
+            <Button
+              component={NavLink}
+              to="/"
+              color="inherit"
+              onClick={auth.logout}
+            >
+              LOGOUT
+            </Button>
+            )}
         </Toolbar>
       </AppBar>
     </Box>
