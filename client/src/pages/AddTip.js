@@ -49,7 +49,6 @@ function AddTip() {
   `
 
   const categoryOptions = [
-    {value: 0, label: "Other"},
     {value: 1, label: "CSS"},
     {value: 2, label: "Java"},
     {value: 3, label: "JavaScript"},
