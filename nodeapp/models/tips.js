@@ -39,7 +39,7 @@ const addTip = async (tip) => {
 
 const updateTipWithId = async (description, category, id) => {
   const result = await pool.query(
-    "UPDATE tips SET description=$1 AND category=$2 WHERE id=$3",
+    "UPDATE tips SET description=$1, category=$2 WHERE id=$3",
     [description, category, id]
   );
   return result.rowCount !== 0;

@@ -101,12 +101,13 @@ const updateTipById = async (req, res, next) => {
     error.statusCode = 400;
     return next(error);
   }
-
-  const { description } = req.body;
+ 
+  const { description, category } = req.body;
   const tipId = req.params.tid;
   // console.log(tipId)
+  console.log(category)
   const tip = await findTipById(tipId);
-
+ 
   if (!tip) {
     const error = new Error(`Tip with ID ${tipId} not found`);
     error.statusCode = 404;
@@ -114,17 +115,19 @@ const updateTipById = async (req, res, next) => {
   }
     const result = await updateTipWithId(
       description,
+      category,
       tipId
     );
-
+ 
     if (!result) {
     const error = new Error(`Couldnt update Tip with ID ${tipId}`);
     error.statusCode = 404;
     return next(error);
     }
-
+ 
     tip.id = tipId
     tip.description = description
+    tip.category = category
     res.status(200).json({ tip });
   };
 
