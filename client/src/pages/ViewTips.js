@@ -32,6 +32,7 @@ function ViewTips() {
   const auth = useContext(AuthContext);
 
   const categoryOptions = [
+    {value: 0, label: "Other"},
     {value: 1, label: "CSS"},
     {value: 2, label: "Java"},
     {value: 3, label: "JavaScript"},
@@ -145,161 +146,136 @@ function ViewTips() {
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          mt:3
-        }}
-      >
-        <Box sx={{ flexGrow: 1}}>{/* content of the first box */}</Box>
-        <Dropdown
-          isSearchable
-          placeHolder="Select..."
-          options={categoryOptions}
-          onChange={(value) => setCategory(value.value)}
-        />
-
-        <IconButton
-          sx={{ marginLeft: 0, mr:'30%'}}
-          onClick={() => fetchDataByCategory()}
-        >
-          {" "}
-          <SearchIcon />{" "}
-        </IconButton>
-      </Box>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Tip Id</TableCell>
-              <TableCell align="center">Description</TableCell>
-              <TableCell align="center">Functions</TableCell>
-              <TableCell align="center"></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data &&
-              data.map((item, index) => (
-                <TableRow
-                  key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+    <Dropdown 
+         isSearchable
+         placeHolder="Select..."
+         options={categoryOptions}
+         onChange={(value) => setCategory(value.value)}/>
+         
+         <IconButton onClick={() => fetchDataByCategory()}> <SearchIcon/> </IconButton>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Tip Id</TableCell>
+            <TableCell align="center">Description</TableCell>
+            <TableCell align="center">Functions</TableCell>
+            <TableCell align="center"></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data &&
+            data.map((item, index) => (
+              <TableRow
+                key={index}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {item.id}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{
+                    overflow: "auto",
+                  }}
                 >
-                  <TableCell component="th" scope="row">
-                    {item.id}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{
-                      overflow: "auto",
+                  <ReactMarkdown
+                    children={item.description}
+                    components={{
+                      code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || "");
+                        return !inline && match ? (
+                          <SyntaxHighlighter
+                            children={String(children).replace(/\n$/, "")}
+                            language={match[1]}
+                            {...props}
+                          />
+                        ) : (
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        );
+                      },
+                    }}
+                  />
+                </TableCell>
+                <TableCell align="right">
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      handleTipClickOpen(item.id, index);
                     }}
                   >
-                    <ReactMarkdown
-                      children={item.description}
-                      components={{
-                        code({ node, inline, className, children, ...props }) {
-                          const match = /language-(\w+)/.exec(className || "");
-                          return !inline && match ? (
-                            <SyntaxHighlighter
-                              children={String(children).replace(/\n$/, "")}
-                              language={match[1]}
-                              {...props}
-                            />
-                          ) : (
-                            <code className={className} {...props}>
-                              {children}
-                            </code>
-                          );
-                        },
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell align="right">
-                  {auth.isLoggedIn && (
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        handleTipClickOpen(item.id, index);
-                      }}
+                    Edit
+                  </Button>
+                  <Dialog
+                    maxWidth="sm"
+                    open={openEditTip}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    onClose={() => {
+                      handleTipClose();
+                    }}
+                  >
+                    <Box
+                      component="form"
+                      noValidate
+                      onSubmit={formikTip.handleSubmit}
+                      sx={{ mt: 3 }}
                     >
-                      Edit
-                    </Button>
-                  )}
-                    <Dialog
-                      maxWidth="sm"
-                      open={openEditTip}
-                      aria-labelledby="alert-dialog-title"
-                      aria-describedby="alert-dialog-description"
-                      onClose={() => {
-                        handleTipClose();
-                      }}
-                    >
-                      <Box
-                        component="form"
-                        noValidate
-                        onSubmit={formikTip.handleSubmit}
-                        sx={{ mt: 3 }}
-                      >
-                        <DialogTitle id="alert-dialog-title">
-                          Change Tip Id: {id}
-                          <TextField
-                            name="description"
-                            required
-                            variant="outlined"
-                            fullWidth
-                            id="description"
-                            label="Description"
-                            multiline={true}
-                            rows={10}
-                            autoFocus
-                            onChange={formikTip.handleChange}
-                            value={formikTip.values.description}
-                          />
-                          {formikTip.errors.description ? (
-                            <div style={{ color: "red" }}>
-                              {formikTip.errors.description}
-                            </div>
-                          ) : null}
-                        </DialogTitle>
-                        <DialogActions>
-                          <Button
-                            variant="contained"
-                            onClick={() => {
-                              handleCancel();
-                              handleTipClose();
-                            }}
-                          >
-                            Cancel
-                          </Button>
-                          <Button
-                            variant="contained"
-                            role="button"
-                            type="submit"
-                          >
-                            Change Tip Description
-                          </Button>
-                        </DialogActions>
-                      </Box>
-                    </Dialog>
-                  </TableCell>
-                  <TableCell align="right">
-                  {auth.isLoggedIn && (
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        deleteTip(item.id);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  )}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                      <DialogTitle id="alert-dialog-title">
+                        Change Tip Id: {id}
+                        <TextField
+                          name="description"
+                          required
+                          variant="outlined"
+                          fullWidth
+                          id="description"
+                          label="Description"
+                          multiline={true}
+                          rows={10}
+                          autoFocus
+                          onChange={formikTip.handleChange}
+                          value={formikTip.values.description}
+                        />
+                        {formikTip.errors.description ? (
+                          <div style={{ color: "red" }}>
+                            {formikTip.errors.description}
+                          </div>
+                        ) : null}
+                      </DialogTitle>
+                      <DialogActions>
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            handleCancel();
+                            handleTipClose();
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button variant="contained" role="button" type="submit">
+                          Change Tip Description
+                        </Button>
+                      </DialogActions>
+                    </Box>
+                  </Dialog>
+                </TableCell>
+                <TableCell align="right">
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      deleteTip(item.id);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
     </>
   );
 }
