@@ -2,6 +2,7 @@ import {users} from '../models/users.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import {v4} from 'uuid';
+import Joi from 'joi';
 import * as dotenv from "dotenv";
 dotenv.config({});
 
@@ -16,8 +17,21 @@ const getUsers = async (req, res) => {
 }
  
 const signUpUser = async (req, res) => {
-    console.log(req.body);
+    console.log(req.body);    
     const {username, email, password} = req.body;
+
+    const schema = Joi.object({
+        username: Joi.string().required(),
+        email: Joi.string().required(),
+        password: Joi.string().required()
+    });
+    
+    const {error} = schema.validate(req.body);
+    if(error){
+        res.status(400).send(error.details[0].message);
+        return;
+    }
+
 
     let hashedPassword;
 
