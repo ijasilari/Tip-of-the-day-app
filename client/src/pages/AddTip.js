@@ -56,7 +56,7 @@ function AddTip() {
     {value: 7, label: "Dart"},
     {value: 8, label: "Flutter"},
     {value: 9, label: "Rust"},
-    {value: 10, label: "Other"}
+    {value: 10, label: "Linux"}
   ]
 
     const AddNewTip = async () => {
