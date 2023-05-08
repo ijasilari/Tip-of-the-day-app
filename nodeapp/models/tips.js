@@ -23,19 +23,24 @@ const findTipById = async (id) => {
   return tip.rows[0];
 };
 
+const findTipsByCategory = async (category) => {
+  const tip = await pool.query("SELECT * FROM tips WHERE category=$1", [category]);
+  return tip.rows;
+}
+
 const addTip = async (tip) => {
   const result = await pool.query(
-    "INSERT INTO tips (description) VALUES ($1) RETURNING id",
-    [tip.description]
+    "INSERT INTO tips (category, description) VALUES ($1, $2) RETURNING id",
+    [tip.category, tip.description]
   );
   // console.log(result)
   return result.rows[0].id;
 };
 
-const updateTipWithId = async (description, id) => {
+const updateTipWithId = async (description, category, id) => {
   const result = await pool.query(
-    "UPDATE tips SET description=$1 WHERE id=$2",
-    [description, id]
+    "UPDATE tips SET description=$1 AND category=$2 WHERE id=$3",
+    [description, category, id]
   );
   return result.rowCount !== 0;
 };
@@ -55,4 +60,4 @@ const getRandomTip = async () => {
   return result.rows[0]
 };
 
-export { getAllTips, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip };
+export { getAllTips, findTipById, findTipsByCategory, addTip, updateTipWithId, deleteTipWithId, getRandomTip };
