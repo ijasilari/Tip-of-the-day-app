@@ -15,10 +15,29 @@ const devCon = {
 
 const pool = new pg.Pool(devCon);
 
+const loggedInUser = {
+  userId: "",
+  email: "",
+  token: "",
+};
+
 beforeAll(async () => {
   await pool.query("BEGIN");
   await pool.query("TRUNCATE TABLE tips CASCADE");
+  await pool.query("TRUNCATE TABLE users CASCADE");
   await pool.query("COMMIT");
+  const data = {
+    username: "Tauno Testaaja",
+    email: "taunotestaaja@gmail.com",
+    password: "password123",
+  };
+  const response = await supertest(app)
+    .post("/signup")
+    .set("Accept", "application/json")
+    .send(data);
+  loggedInUser.userId = response.body.userId;
+  loggedInUser.email = response.body.email;
+  loggedInUser.token = response.body.token;
 });
 
 afterAll(() => pool.end());
@@ -29,10 +48,12 @@ describe('Tips tests', () => {
   it("POST /addtip", async () => {
     const tip = {
       description: "Test Tip",
+      category: 1,
     };
 
     const response = await supertest(app)
       .post("/addtip")
+      .set("Authorization", "Bearer " + loggedInUser.token)
       .set("Accept", "application/json")
       .send(tip);
     expect(response.status).toEqual(201);
@@ -63,18 +84,22 @@ it("GET /:tipId/plain", async () => {
 it("PATCH /:tipId/update", async () => {
   const tip = {
     description: "Update Test Tip",
+    category: 2,
   };
   const response = await supertest(app)
     .patch(`/${TipId}/update`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json")
     .send(tip);
   expect(response.status).toEqual(200);
   expect(response.body.tip.description).toEqual('Update Test Tip');
+  expect(response.body.tip.category).toEqual(2)
 });
 
 it("DELETE /:tipId/delete", async () => {
   const response = await supertest(app)
     .delete(`/${TipId}/delete`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json");
   expect(response.status).toEqual(200);
   expect(response.body.message).toEqual("Deleted the tip.");
@@ -90,10 +115,12 @@ it("GET /:tipId with faulty id", async () => {
 it("POST /addtip without description", async () => {
   const tip = {
     description: "",
+    category: 2,
   };
 
   const response = await supertest(app)
     .post("/addtip")
+    .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json")
     .send(tip);
   expect(response.status).toEqual(400);
@@ -102,12 +129,28 @@ it("POST /addtip without description", async () => {
   );
 });
 
+it("POST /addtip without category", async () => {
+  const tip = {
+    description: ""
+  };
+
+  const response = await supertest(app)
+    .post("/addtip")
+    .set("Authorization", "Bearer " + loggedInUser.token)
+    .set("Accept", "application/json")
+    .send(tip);
+  expect(response.status).toEqual(400);
+  expect(response.error.text).toContain("Invalid values given check the data");
+});
+
 it("PATCH /:tipId/update with faulty id", async () => {
   const tip = {
     description: "Update Test Tip!",
+    category: 2,
   };
   const response = await supertest(app)
     .patch(`/1234567/update`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json")
     .send(tip);
   expect(response.status).toEqual(404);
@@ -117,9 +160,11 @@ it("PATCH /:tipId/update with faulty id", async () => {
 it("PATCH /:tipId/update without description", async () => {
   const tip = {
     description: "",
+    category: 2,
   };
   const response = await supertest(app)
     .patch(`/${TipId}/update`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json")
     .send(tip);
   expect(response.status).toEqual(400);
@@ -128,9 +173,23 @@ it("PATCH /:tipId/update without description", async () => {
   );
 });
 
+it("PATCH /:tipId/update without category", async () => {
+  const tip = {
+    description: "",
+  };
+  const response = await supertest(app)
+    .patch(`/${TipId}/update`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
+    .set("Accept", "application/json")
+    .send(tip);
+  expect(response.status).toEqual(400);
+  expect(response.error.text).toContain("Invalid values given check the data");
+});
+
 it("DELETE /:tipId/delete with faulty id", async () => {
   const response = await supertest(app)
     .delete(`/123456789/delete`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json");
   expect(response.status).toEqual(404);
   expect(response.error.text).toContain("Tip with ID 123456789 not found");
