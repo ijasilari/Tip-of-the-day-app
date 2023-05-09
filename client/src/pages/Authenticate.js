@@ -36,13 +36,20 @@ const Authenticate = (props) => {
       const errors = {};
       result.error.details.forEach((err) => {
         errors[err.path[0]] = err.message;
+        // errors[err.context.key] = err.message;
         console.log(errors);
       });
 
-      nameRef.current.style.backgroundColor = user.name ? "#d4edda" : "salmon";
-      emailRef.current.style.backgroundColor = user.email
-        ? "#d4edda"
-        : "salmon";
+      nameRef.current.style.backgroundColor =
+        user.name.length >= 3
+          ? "#d4edda"
+          : user.name
+          ? "salmon"
+          : "salmon";
+      emailRef.current.style.backgroundColor =
+        user.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)
+          ? "#d4edda"
+          : "salmon";
       passwordRef.current.style.backgroundColor =
         user.password.length >= 8
           ? "#d4edda"
