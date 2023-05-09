@@ -215,15 +215,27 @@ function ViewTips() {
                       }}
                     />
                   </TableCell>
-                  <TableCell align="right">
-                  {auth.isLoggedIn && (
+                  <TableCell align="center" style={{minWidth:'10rem'}}>
+                    {auth.isLoggedIn && (
+                      <Button
+                        style={{ display: 'inline', marginRight: '2px' }}
+                        variant="contained"
+                        onClick={() => {
+                          handleTipClickOpen(item.id, index);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                    {auth.isLoggedIn && (
                     <Button
+                      style={{ display: 'inline', marginLeft:'2px' }}
                       variant="contained"
                       onClick={() => {
-                        handleTipClickOpen(item.id, index);
+                        deleteTip(item.id);
                       }}
                     >
-                      Edit
+                      Delete
                     </Button>
                   )}
                     <Dialog
@@ -284,16 +296,7 @@ function ViewTips() {
                     </Dialog>
                   </TableCell>
                   <TableCell align="right">
-                  {auth.isLoggedIn && (
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        deleteTip(item.id);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  )}
+
                   </TableCell>
                 </TableRow>
               ))}
