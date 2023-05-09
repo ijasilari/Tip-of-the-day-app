@@ -69,7 +69,15 @@ app.get("/getusers", getUsers);
 app.get("/:tid", getTipById);
 app.get("/:tid/plain", getTipByIdPlainText);
 
-app.post("/signup", signUpUser);
+app.post(
+  "/signup",
+  [
+    check("username").notEmpty(),
+    check("email").normalizeEmail().isEmail(),
+    check("password").isLength({ min: 5 })
+  ],
+  signUpUser
+);
 app.post("/login", loginUser);
 
 app.use(verifyToken);
@@ -78,18 +86,13 @@ app.delete("/:tid/delete", deleteTipById);
 
 app.patch(
   "/:tid/update",
-  [
-    check("description")
-      .notEmpty()
-  ],
+  [check("description").notEmpty(), check("category").notEmpty()],
   updateTipById
 );
 
 app.post(
   "/addtip",
-  [
-    check("description").notEmpty()
-  ],
+  [check("description").notEmpty(), check("category").notEmpty()],
   addNewTip
 );
 
