@@ -29,6 +29,7 @@ function ViewTips() {
   const [id, setId] = useState();
   const [editText, setEditText] = useState("");
   const [category, setCategory] = useState(1);
+  const [categoryEdit, setCategoryEdit] = useState(1);
   const auth = useContext(AuthContext);
 
   const categoryOptions = [
@@ -96,8 +97,9 @@ function ViewTips() {
   };
 
   const editTip = async () => {
-    const editedTip = { description: formikTip.values.description, category:1 };
+    const editedTip = { description: formikTip.values.description, category: categoryEdit };
     try {
+      console.log(editedTip);
       const response = await axios.patch(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/${id}/update`,
         editedTip,
@@ -243,6 +245,12 @@ function ViewTips() {
                       >
                         <DialogTitle id="alert-dialog-title">
                           Change Tip Id: {id}
+                          <Dropdown
+                            isSearchable
+                            placeHolder="Select..."
+                            options={categoryOptions}
+                            onChange={(value) => setCategoryEdit(value.value)}
+                          />
                           <TextField
                             name="description"
                             required
