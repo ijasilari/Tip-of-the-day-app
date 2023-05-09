@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import HomePage from './pages/HomePage';
 
 test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
+  render(<HomePage />);
+  const linkElement = screen.getByText(
+    "Welcome to TOTD (Tip Of The Day) Application!"
+  );
   expect(linkElement).toBeInTheDocument();
 });
