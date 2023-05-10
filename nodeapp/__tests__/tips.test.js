@@ -35,7 +35,7 @@ beforeAll(async () => {
     .post("/signup")
     .set("Accept", "application/json")
     .send(data);
-  loggedInUser.userId = response.body.userId;
+  loggedInUser.userId = response.body.id;
   loggedInUser.email = response.body.email;
   loggedInUser.token = response.body.token;
 });
@@ -79,6 +79,16 @@ it("GET /:tipId", async () => {
 it("GET /:tipId/plain", async () => {
   const response = await supertest(app).get("/12345/plain");
   expect(response.body).toBeTruthy()
+});
+
+it("GET /getall/:category", async () => {
+  const response = await supertest(app).get(`/getall/1`);
+  expect(response.body.tips[0].category).toEqual(1);
+});
+
+it("GET /randomtip", async () => {
+  const response = await supertest(app).get(`/randomtip`);
+  expect(response.body.tip.description).toEqual('Test Tip');
 });
 
 it("PATCH /:tipId/update", async () => {
@@ -193,6 +203,123 @@ it("DELETE /:tipId/delete with faulty id", async () => {
     .set("Accept", "application/json");
   expect(response.status).toEqual(404);
   expect(response.error.text).toContain("Tip with ID 123456789 not found");
+});
+
+it("POST /login", async () => {
+  const data = {
+    email: "taunotestaaja@gmail.com",
+    password: "password123",
+  };
+
+  const response = await supertest(app)
+    .post("/login")
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(201);
+  expect(response.body.email).toEqual("taunotestaaja@gmail.com");
+  expect(response.body.token).toBeTruthy();
+  expect(response.body.id).toBeTruthy();
+});
+
+it("POST /login with wrong password", async () => {
+  const data = {
+    email: "taunotestaaja@gmail.com",
+    password: "password123321",
+  };
+
+  const response = await supertest(app)
+    .post("/login")
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(401);
+  expect(response.text).toEqual(
+    'No valid password, check your credentials'
+  );
+});
+
+it("POST /login with wrong email", async () => {
+  const data = {
+    email: "taunotestaaja123@gmail.com",
+    password: "password123",
+  };
+
+  const response = await supertest(app)
+    .post("/login")
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(401);
+  expect(response.text).toEqual(
+    'No user found, check your credentials'
+  );
+});
+
+it("POST /signup with invalid name length", async () => {
+  const data = {
+    username: "",
+    email: "taunotestaaja@gmail.com",
+    password: "password123",
+  };
+  const response = await supertest(app)
+    .post("/signup")
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(400);
+  expect(response.text).toEqual('"username" is not allowed to be empty');
+});
+
+it("POST /signup with invalid email", async () => {
+  const data = {
+    username: "Tauno Testaaja",
+    email: "tauno.testaaja@gmail",
+    password: "password123",
+  };
+  const response = await supertest(app)
+    .post("/signup")
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(400);
+  expect(response.text).toEqual('"email" must be a valid email');
+});
+
+it("POST /signup with invalid password", async () => {
+  const data = {
+    username: "Tauno Testaaja",
+    email: "taunotestaaja@gmail.com",
+    password: "pass",
+  };
+  const response = await supertest(app)
+    .post("/signup")
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(400);
+  expect(response.text).toEqual(
+    '"password" length must be at least 8 characters long'
+  );
+});
+
+it("POST /signup with existing user", async () => {
+  const data = {
+    username: "Tauno Testaaja",
+    email: "taunotestaaja@gmail.com",
+    password: "password123",
+  };
+  const response = await supertest(app)
+    .post("/signup")
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(422);
+  expect(response.text).toEqual(
+    'Could not create user, user exists'
+  );
+});
+
+it("GET /getusers", async () => {
+
+  const response = await supertest(app).get(`/getusers`);
+  expect(response.status).toEqual(200);
+  expect(response.body[0].id).toBeTruthy();
+  expect(response.body[0].email).toBeTruthy();
+  expect(response.body[0].username).toBeTruthy();
 });
 
 })

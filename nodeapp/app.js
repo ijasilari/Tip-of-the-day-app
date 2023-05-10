@@ -70,13 +70,7 @@ app.get("/:tid", getTipById);
 app.get("/:tid/plain", getTipByIdPlainText);
 
 app.post(
-  "/signup",
-  [
-    check("username").notEmpty(),
-    check("email").normalizeEmail().isEmail(),
-    check("password").isLength({ min: 5 })
-  ],
-  signUpUser
+  "/signup", signUpUser
 );
 app.post("/login", loginUser);
 
