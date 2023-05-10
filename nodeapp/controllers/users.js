@@ -15,17 +15,17 @@ const getUsers = async (req, res) => {
         res.status(500).send("Something went wrong");
     }
 }
- 
+
 const signUpUser = async (req, res) => {
-    console.log(req.body);    
+    console.log(req.body);
     const {username, email, password} = req.body;
 
     const schema = Joi.object({
-        username: Joi.string().required(),
-        email: Joi.string().required(),
-        password: Joi.string().required()
+      username: Joi.string().required(),
+      email: Joi.string().email().required(),
+      password: Joi.string().min(8).required(),
     });
-    
+
     const {error} = schema.validate(req.body);
     if(error){
         res.status(400).send(error.details[0].message);
@@ -37,7 +37,7 @@ const signUpUser = async (req, res) => {
 
     try{
         hashedPassword = await bcrypt.hash(password, 12);
-        
+
     } catch(Err) {
         return res.status(500).send('Could not create user, try again');
     }
@@ -55,7 +55,7 @@ const signUpUser = async (req, res) => {
         if(exist[0]){
             return res.status(422).send('Could not create user, user exists');
         }
-        const result = await users.create(newUser); 
+        const result = await users.create(newUser);
         if(!result){
             return res.status(500).send('Something went wrong, could not create user');
         }
@@ -87,8 +87,8 @@ const loginUser = async(req, res) => {
     let identifiedUser;
     try {
         const result = await users.findByEmail(email);
-        console.log("LÖYTYYKÖ??", result);
-        if(!result){
+        console.log("LÖYTYYKÖ??!", result);
+        if(!result[0]){
             return res.status(401).send('No user found, check your credentials');
         }
         identifiedUser = result[0];
