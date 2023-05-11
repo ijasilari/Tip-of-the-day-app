@@ -17,7 +17,7 @@ const Authenticate = (props) => {
   const navigate = useNavigate();
 
   const [isLoginMode, setLoginMode] = useState(true);
-  const [inputError, setInputError] = useState("");
+  const [inputError, setInputError] = useState();
 
   const schema = Joi.object().keys({
     name: Joi.string().min(3).max(20).required(),
@@ -57,27 +57,29 @@ const Authenticate = (props) => {
           ? "salmon"
           : "salmon";
 
-      setInputError(JSON.stringify(errors));
+      setInputError(errors);
       return false;
     } else {
       nameRef.current.style.backgroundColor = "#d4edda";
       emailRef.current.style.backgroundColor = "#d4edda";
       passwordRef.current.style.backgroundColor = "#d4edda";
-      setInputError("");
+      setInputError();
       return true;
     }
   };
   const switchModeHanlder = () => {
     setLoginMode((prevMode) => !prevMode);
-    setInputError("");
+    setInputError();
     if (nameRef.current) {
       nameRef.current.style.backgroundColor = "#f2f2f2";
     }
     if (emailRef.current) {
       emailRef.current.style.backgroundColor = "#f2f2f2";
+      emailRef.current.value = "";
     }
     if (passwordRef.current) {
       passwordRef.current.style.backgroundColor = "#f2f2f2";
+      passwordRef.current.value = "";
     }
   };
 
@@ -108,7 +110,7 @@ const Authenticate = (props) => {
     },
     onError: (error) => {
       // An error happened!
-      setInputError("Wrong credentials")
+      setInputError({login:"Wrong credentials"})
       console.log(error);
     },
   });
@@ -163,7 +165,18 @@ const Authenticate = (props) => {
       <Button onClick={switchModeHanlder}>
                 {isLoginMode ? "SignUp" : "Login"} instead?
       </Button>
-      {inputError ? <div style={{ color: "red" }}>{inputError}</div> : null}
+      {inputError ? (
+        <div style={{ color: "red" }}>{inputError.name}</div>
+      ) : null}
+      {inputError ? (
+        <div style={{ color: "red" }}>{inputError.email}</div>
+      ) : null}
+      {inputError ? (
+        <div style={{ color: "red" }}>{inputError.password}</div>
+      ) : null}
+      {inputError ? (
+        <div style={{ color: "red" }}>{inputError.login}</div>
+      ) : null}
     </Card>
   );
 };
