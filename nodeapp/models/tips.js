@@ -30,8 +30,8 @@ const findTipsByCategory = async (category) => {
 
 const addTip = async (tip) => {
   const result = await pool.query(
-    "INSERT INTO tips (category, description) VALUES ($1, $2) RETURNING id",
-    [tip.category, tip.description]
+    "INSERT INTO tips (category, description, creator) VALUES ($1, $2, $3) RETURNING id",
+    [tip.category, tip.description, tip.creator]
   );
   // console.log(result)
   return result.rows[0].id;

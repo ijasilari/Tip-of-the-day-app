@@ -70,14 +70,15 @@ const addNewTip = async (req, res, next) => {
     return next(error);
   }
 
-  const { category, description } = req.body;
+  const { category, description, creator } = req.body;
   // console.log(req.body)
   // console.log(description)
 
   const newTip = {
     // id,
     category: category,
-    description: description
+    description: description,
+    creator: creator
   };
 
   const result = await addTip(newTip);
@@ -102,7 +103,7 @@ const updateTipById = async (req, res, next) => {
     return next(error);
   }
  
-  const { description, category } = req.body;
+  const { description, category, creator } = req.body;
   const tipId = req.params.tid;
   // console.log(tipId)
   console.log(category)
@@ -128,6 +129,7 @@ const updateTipById = async (req, res, next) => {
     tip.id = tipId
     tip.description = description
     tip.category = category
+    tip.creator = creator
     res.status(200).json({ tip });
   };
 
