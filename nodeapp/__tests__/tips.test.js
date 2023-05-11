@@ -106,6 +106,41 @@ it("PATCH /:tipId/update", async () => {
   expect(response.body.tip.category).toEqual(2)
 });
 
+it("POST /addtip without token", async () => {
+  const tip = {
+    description: "New Test Tip",
+    category: 1,
+  };
+
+  const response = await supertest(app)
+    .post("/addtip")
+    .set("Accept", "application/json")
+    .send(tip);
+  expect(response.status).toEqual(401);
+  expect(response.text).toEqual("Authentication failed");
+});
+
+it("PATCH /:tipId/update without token", async () => {
+  const tip = {
+    description: "Update Test Tip",
+    category: 2,
+  };
+  const response = await supertest(app)
+    .patch(`/${TipId}/update`)
+    .set("Accept", "application/json")
+    .send(tip);
+  expect(response.status).toEqual(401);
+  expect(response.text).toEqual("Authentication failed");
+});
+
+it("DELETE /:tipId/delete without token", async () => {
+  const response = await supertest(app)
+    .delete(`/${TipId}/delete`)
+    .set("Accept", "application/json");
+  expect(response.status).toEqual(401);
+  expect(response.text).toEqual("Authentication failed");
+});
+
 it("DELETE /:tipId/delete", async () => {
   const response = await supertest(app)
     .delete(`/${TipId}/delete`)
