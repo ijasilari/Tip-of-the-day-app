@@ -66,7 +66,7 @@ function AddTip() {
       console.log(newTip);
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_LOCAL_BACKEND_URL}/addtip`,
+          `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/addtip`,
           newTip,
           {
             headers: {

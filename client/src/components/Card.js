@@ -28,7 +28,7 @@ const Card = () => {
   let categoryLabel = "";
   const fetchCardData = async () => {
 
-    const response = await axios.get(`${process.env.REACT_APP_LOCAL_BACKEND_URL}/randomtip`);
+    const response = await axios.get(`${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/randomtip`);
     console.log(response);
     setCardData(response.data.tip);
     setCardCategory(response.data.tip.category);

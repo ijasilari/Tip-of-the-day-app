@@ -63,7 +63,7 @@ function ViewTips() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/getall`
+        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall`
       );
        console.log(response)
       setData(response.data.tips);
@@ -73,7 +73,7 @@ function ViewTips() {
 
     const fetchDataByCategory = async () => {
       const response = await axios.get(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/getall/${category}`
+        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
       );
        console.log(response)
       setData(response.data.tips);
@@ -83,7 +83,7 @@ function ViewTips() {
   const deleteTip = async (tid) => {
     try {
       const response = await axios.delete(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/${tid}/delete`,
+        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${tid}/delete`,
         {
           headers: {
             Authorization: 'Bearer ' + auth.token
@@ -101,7 +101,7 @@ function ViewTips() {
     try {
       console.log(editedTip);
       const response = await axios.patch(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/${id}/update`,
+        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/update`,
         editedTip,
         {
           headers: {

@@ -1,13 +1,13 @@
 export const getUsers = async () => {
   const res = await fetch(
-    `${process.env.REACT_APP_LOCAL_BACKEND_URL}/getusers`
+    `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/getusers`
   );
   return await res.json();
 };
 
 export const signUpUser = async ({username, email, password}) => {
     const res = await fetch(
-      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/signup`, 
+      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/signup`,
       {
         method: 'POST',
         headers: {
@@ -27,7 +27,7 @@ export const signUpUser = async ({username, email, password}) => {
 
 export const loginUser = async ({email, password}) => {
     const res = await fetch(
-      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/login`,
+      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/login`,
       {
         method: 'POST',
         headers: {
