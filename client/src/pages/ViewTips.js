@@ -21,6 +21,8 @@ import { IconButton } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useContext } from 'react';
 import { AuthContext } from '../components/auth-context';
+//import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import "./viewTips.css";
 
 function ViewTips() {
@@ -30,6 +32,10 @@ function ViewTips() {
   const [editText, setEditText] = useState("");
   const [category, setCategory] = useState(1);
   const [categoryEdit, setCategoryEdit] = useState(1);
+  const [like, setLike] = useState(0);
+  const [likeActive, setLikeActive] = useState(false);
+
+
   const auth = useContext(AuthContext);
 
   const categoryOptions = [
@@ -60,6 +66,15 @@ function ViewTips() {
     setOpenEditTip(false);
   };
 
+  const likeEff = () => {
+    if(likeActive) {
+      setLikeActive(false);
+      setLike(like-1)
+    } else {
+      setLikeActive(true);
+      setLike(like+1);
+    }
+  }
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
@@ -86,7 +101,7 @@ function ViewTips() {
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/${tid}/delete`,
         {
           headers: {
-            Authorization: 'Bearer ' + auth.token 
+            Authorization: 'Bearer ' + auth.token
           },
         }
       );
@@ -218,6 +233,7 @@ function ViewTips() {
                     />
                   </TableCell>
                   <TableCell align="center" style={{minWidth:'10rem'}}>
+                    <IconButton onClick={likeEff}> <ThumbUpIcon/> </IconButton>
                     {auth.isLoggedIn && (
                       <Button
                         style={{ display: 'inline', marginRight: '2px' }}
