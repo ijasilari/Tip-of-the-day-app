@@ -97,7 +97,7 @@ function ViewTips() {
   };
 
   const editTip = async () => {
-    const editedTip = { description: formikTip.values.description, category: categoryEdit };
+    const editedTip = { description: formikTip.values.description, category: categoryEdit, creator: auth.userId };
     try {
       console.log(editedTip);
       const response = await axios.patch(
@@ -218,7 +218,7 @@ function ViewTips() {
                     />
                   </TableCell>
                   <TableCell align="center" style={{minWidth:'10rem'}}>
-                    {auth.isLoggedIn && (
+                    {auth.userId === item.creator && (
                       <Button
                         style={{ display: 'inline', marginRight: '2px' }}
                         variant="contained"
@@ -229,7 +229,7 @@ function ViewTips() {
                         Edit
                       </Button>
                     )}
-                    {auth.isLoggedIn && (
+                    {auth.userId === item.creator && (
                     <Button
                       style={{ display: 'inline', marginLeft:'2px' }}
                       variant="contained"

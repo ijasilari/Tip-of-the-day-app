@@ -62,7 +62,7 @@ function AddTip() {
   ]
 
     const AddNewTip = async () => {
-      const newTip = { category: category, description: formikTip.values.description };
+      const newTip = { category: category, description: formikTip.values.description, creator: auth.userId };
       console.log(newTip);
       try {
         const response = await axios.post(

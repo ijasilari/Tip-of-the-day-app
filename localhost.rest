@@ -10,17 +10,18 @@ Content-Type: application/json
 Authorization: BEARER {{authToken}}
 
 {
-  "description": "Test tip description" ,
-  "category": 2
+  "description": "Test tip description",
+  "category": 6,
+  "creator": "123456789"
 } 
 
 ###
-PATCH http://localhost:3000/13/update
+PATCH http://localhost:3000/1/update
 Content-Type: application/json
 Authorization: BEARER {{authToken}}
 
 {
-  "description": "Edited tip",
+  "description": "NEW TIP AGAIN",
   "category": 5
 } 
 
