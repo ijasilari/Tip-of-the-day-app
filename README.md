@@ -23,6 +23,7 @@ DB_HOST=localhost
 POSTGRES_USER=user
 POSTGRES_PASSWORD=password
 POSTGRES_DB=tips
+JWT_KEY=yourOwnKey
 ````
 to run the database in docker container run the following command in the root directory of the project
 ````
