@@ -19,7 +19,7 @@ function AddTip() {
   const [category, setCategory] = useState();
   const auth = useContext(AuthContext);
 
-  const codeExample = 
+  const codeExample =
   `
   ~~~javascript
   function() {
@@ -101,7 +101,7 @@ function AddTip() {
       onSubmit: AddNewTip,
     });
   return (
-    <>
+    <div data-testid="addTipPage">
       <Typography
         component="h5"
         variant="h3"
@@ -187,8 +187,8 @@ function AddTip() {
           </div>
         </Container>
       </Box>
-      
-    </>
+
+    </div>
   );
 }
 

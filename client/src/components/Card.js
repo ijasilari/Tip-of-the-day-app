@@ -29,6 +29,7 @@ const Card = () => {
   const fetchCardData = async () => {
 
     const response = await axios.get(`${process.env.REACT_APP_LOCAL_BACKEND_URL}/randomtip`);
+    console.log(response);
     setCardData(response.data.tip);
     setCardCategory(response.data.tip.category);
     //console.log(response);
@@ -52,7 +53,7 @@ const Card = () => {
       }, 12000);
       return () => clearInterval(interval);
     }
-    
+
   }, [dataLoaded]);
 
   return (

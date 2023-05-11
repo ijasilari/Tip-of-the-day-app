@@ -142,7 +142,7 @@ const Authenticate = (props) => {
   };
 
   return (
-    <Card style={{ padding: "20px" }} className="authentication">
+    <Card style={{ padding: "20px" }} className="authentication" data-testid="authPage">
       <h2>{isLoginMode ? "Login" : "Sign Up"}</h2>
       <form onSubmit={onSubmitHandler}>
                {" "}

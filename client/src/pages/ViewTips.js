@@ -85,7 +85,7 @@ function ViewTips() {
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/${tid}/delete`,
         {
           headers: {
-            Authorization: 'Bearer ' + auth.token 
+            Authorization: 'Bearer ' + auth.token
           },
         }
       );
@@ -144,7 +144,7 @@ function ViewTips() {
   });
 
   return (
-    <>
+    <div data-testid="viewTipsPage">
       <Box
         sx={{
           display: "flex",
@@ -303,7 +303,7 @@ function ViewTips() {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </div>
   );
 }
 
