@@ -4,7 +4,7 @@ import Card from "../components/Card";
 
 function HomePage() {
   return (
-    <div style={{width: '100%'}}>
+    <div style={{width: '100%'}} data-testid="homePage">
       <Typography
         component="h5"
         variant="h3"
