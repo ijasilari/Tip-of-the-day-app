@@ -32,7 +32,7 @@ beforeAll(async () => {
     password: "password123",
   };
   const response = await supertest(app)
-    .post("/signup")
+    .post("/api/users/signup")
     .set("Accept", "application/json")
     .send(data);
   loggedInUser.userId = response.body.id;
@@ -52,7 +52,7 @@ describe('Tips tests', () => {
     };
 
     const response = await supertest(app)
-      .post("/addtip")
+      .post("/api/tips/addtip")
       .set("Authorization", "Bearer " + loggedInUser.token)
       .set("Accept", "application/json")
       .send(tip);
@@ -63,7 +63,7 @@ describe('Tips tests', () => {
 
 it("GET /getall", async () => {
   await supertest(app)
-    .get("/getall")
+    .get("/api/tips/getall")
     .expect(200)
     .then((response) => {
       expect(Array.isArray(response.body.tips)).toBeTruthy();
@@ -72,22 +72,22 @@ it("GET /getall", async () => {
 
 it("GET /:tipId", async () => {
   const response = await supertest(app)
-  .get(`/${TipId}`);
+  .get(`/api/tips/${TipId}`);
   expect(response.body.tip.id).toEqual(TipId);
 });
 
 it("GET /:tipId/plain", async () => {
-  const response = await supertest(app).get("/12345/plain");
+  const response = await supertest(app).get("/api/tips/12345/plain");
   expect(response.body).toBeTruthy()
 });
 
 it("GET /getall/:category", async () => {
-  const response = await supertest(app).get(`/getall/1`);
+  const response = await supertest(app).get(`/api/tips/getall/1`);
   expect(response.body.tips[0].category).toEqual(1);
 });
 
 it("GET /randomtip", async () => {
-  const response = await supertest(app).get(`/randomtip`);
+  const response = await supertest(app).get(`/api/tips/randomtip`);
   expect(response.body.tip.description).toEqual('Test Tip');
 });
 
@@ -97,7 +97,7 @@ it("PATCH /:tipId/update", async () => {
     category: 2,
   };
   const response = await supertest(app)
-    .patch(`/${TipId}/update`)
+    .patch(`/api/tips/${TipId}/update`)
     .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json")
     .send(tip);
@@ -113,7 +113,7 @@ it("POST /addtip without token", async () => {
   };
 
   const response = await supertest(app)
-    .post("/addtip")
+    .post("/api/tips/addtip")
     .set("Accept", "application/json")
     .send(tip);
   expect(response.status).toEqual(401);
@@ -126,7 +126,7 @@ it("PATCH /:tipId/update without token", async () => {
     category: 2,
   };
   const response = await supertest(app)
-    .patch(`/${TipId}/update`)
+    .patch(`/api/tips/${TipId}/update`)
     .set("Accept", "application/json")
     .send(tip);
   expect(response.status).toEqual(401);
@@ -135,7 +135,7 @@ it("PATCH /:tipId/update without token", async () => {
 
 it("DELETE /:tipId/delete without token", async () => {
   const response = await supertest(app)
-    .delete(`/${TipId}/delete`)
+    .delete(`/api/tips/${TipId}/delete`)
     .set("Accept", "application/json");
   expect(response.status).toEqual(401);
   expect(response.text).toEqual("Authentication failed");
@@ -143,7 +143,7 @@ it("DELETE /:tipId/delete without token", async () => {
 
 it("DELETE /:tipId/delete", async () => {
   const response = await supertest(app)
-    .delete(`/${TipId}/delete`)
+    .delete(`/api/tips/${TipId}/delete`)
     .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json");
   expect(response.status).toEqual(200);
@@ -152,7 +152,7 @@ it("DELETE /:tipId/delete", async () => {
 
 it("GET /:tipId with faulty id", async () => {
   const tipId = 100;
-  const response = await supertest(app).get(`/${tipId}`);
+  const response = await supertest(app).get(`/api/tips/${tipId}`);
   expect(response.status).toEqual(404)
   expect(response.error.text).toContain("Tip with ID 100 not found");
 });
@@ -164,7 +164,7 @@ it("POST /addtip without description", async () => {
   };
 
   const response = await supertest(app)
-    .post("/addtip")
+    .post("/api/tips/addtip")
     .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json")
     .send(tip);
@@ -180,7 +180,7 @@ it("POST /addtip without category", async () => {
   };
 
   const response = await supertest(app)
-    .post("/addtip")
+    .post("/api/tips/addtip")
     .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json")
     .send(tip);
@@ -194,7 +194,7 @@ it("PATCH /:tipId/update with faulty id", async () => {
     category: 2,
   };
   const response = await supertest(app)
-    .patch(`/1234567/update`)
+    .patch(`/api/tips/1234567/update`)
     .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json")
     .send(tip);
@@ -208,7 +208,7 @@ it("PATCH /:tipId/update without description", async () => {
     category: 2,
   };
   const response = await supertest(app)
-    .patch(`/${TipId}/update`)
+    .patch(`/api/tips/${TipId}/update`)
     .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json")
     .send(tip);
@@ -223,7 +223,7 @@ it("PATCH /:tipId/update without category", async () => {
     description: "",
   };
   const response = await supertest(app)
-    .patch(`/${TipId}/update`)
+    .patch(`/api/tips/${TipId}/update`)
     .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json")
     .send(tip);
@@ -233,7 +233,7 @@ it("PATCH /:tipId/update without category", async () => {
 
 it("DELETE /:tipId/delete with faulty id", async () => {
   const response = await supertest(app)
-    .delete(`/123456789/delete`)
+    .delete(`/api/tips/123456789/delete`)
     .set("Authorization", "Bearer " + loggedInUser.token)
     .set("Accept", "application/json");
   expect(response.status).toEqual(404);
@@ -247,7 +247,7 @@ it("POST /login", async () => {
   };
 
   const response = await supertest(app)
-    .post("/login")
+    .post("/api/users/login")
     .set("Accept", "application/json")
     .send(data);
   expect(response.status).toEqual(201);
@@ -263,7 +263,7 @@ it("POST /login with wrong password", async () => {
   };
 
   const response = await supertest(app)
-    .post("/login")
+    .post("/api/users/login")
     .set("Accept", "application/json")
     .send(data);
   expect(response.status).toEqual(401);
@@ -279,7 +279,7 @@ it("POST /login with wrong email", async () => {
   };
 
   const response = await supertest(app)
-    .post("/login")
+    .post("/api/users/login")
     .set("Accept", "application/json")
     .send(data);
   expect(response.status).toEqual(401);
@@ -295,7 +295,7 @@ it("POST /signup with invalid name length", async () => {
     password: "password123",
   };
   const response = await supertest(app)
-    .post("/signup")
+    .post("/api/users/signup")
     .set("Accept", "application/json")
     .send(data);
   expect(response.status).toEqual(400);
@@ -309,7 +309,7 @@ it("POST /signup with invalid email", async () => {
     password: "password123",
   };
   const response = await supertest(app)
-    .post("/signup")
+    .post("/api/users/signup")
     .set("Accept", "application/json")
     .send(data);
   expect(response.status).toEqual(400);
@@ -323,7 +323,7 @@ it("POST /signup with invalid password", async () => {
     password: "pass",
   };
   const response = await supertest(app)
-    .post("/signup")
+    .post("/api/users/signup")
     .set("Accept", "application/json")
     .send(data);
   expect(response.status).toEqual(400);
@@ -339,7 +339,7 @@ it("POST /signup with existing user", async () => {
     password: "password123",
   };
   const response = await supertest(app)
-    .post("/signup")
+    .post("/api/users/signup")
     .set("Accept", "application/json")
     .send(data);
   expect(response.status).toEqual(422);
@@ -350,11 +350,17 @@ it("POST /signup with existing user", async () => {
 
 it("GET /getusers", async () => {
 
-  const response = await supertest(app).get(`/getusers`);
+  const response = await supertest(app).get(`/api/users/getusers`);
   expect(response.status).toEqual(200);
   expect(response.body[0].id).toBeTruthy();
   expect(response.body[0].email).toBeTruthy();
   expect(response.body[0].username).toBeTruthy();
+});
+
+it("GET /api/invalid", async () => {
+  const response = await supertest(app).get("/api/invalid");
+  expect(response.status).toEqual(404);
+  expect(response.text).toEqual('{"message":"Route not found"}');
 });
 
 })
