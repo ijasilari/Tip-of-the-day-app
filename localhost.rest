@@ -1,11 +1,17 @@
 ###
-GET http://localhost:3000/getusers
+GET http://localhost:3000/api/users/getusers
 
 ###
-GET http://localhost:3000/getall
+GET http://localhost:3000/api/tips/getall
 
 ###
-POST http://localhost:3000/addtip
+GET http://localhost:3000/api/tips/getall/10
+
+###
+GET http://localhost:3000/api/tips/randomtip
+
+###
+POST http://localhost:3000/api/tips/addtip
 Content-Type: application/json
 Authorization: BEARER {{authToken}}
 
@@ -16,21 +22,21 @@ Authorization: BEARER {{authToken}}
 } 
 
 ###
-PATCH http://localhost:3000/1/update
+PATCH http://localhost:3000/api/tips/17/update
 Content-Type: application/json
 Authorization: BEARER {{authToken}}
 
 {
-  "description": "NEW TIP AGAIN",
+  "description": "NEW TIP",
   "category": 5
 } 
 
 ### 
-DELETE http://localhost:3000/9/delete
+DELETE http://localhost:3000/api/tips/17/delete
 Authorization: BEARER {{authToken}}
 
 ###
-POST http://localhost:3000/signup
+POST http://localhost:3000/api/users/signup
 Content-Type: application/json
 
 {
@@ -41,7 +47,7 @@ Content-Type: application/json
 
 ###
 # @name login
-POST http://localhost:3000/login
+POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
 {
