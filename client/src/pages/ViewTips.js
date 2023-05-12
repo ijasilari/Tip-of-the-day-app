@@ -22,6 +22,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useContext } from 'react';
 import { AuthContext } from '../components/auth-context';
 import "./viewTips.css";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 function ViewTips() {
   const [data, setData] = useState([]);
@@ -144,7 +145,7 @@ function ViewTips() {
     validate: validateTip,
     onSubmit: editTip,
   });
-
+  const [animationParent] = useAutoAnimate()
   return (
     <div data-testid="viewTipsPage">
       <Box
@@ -172,7 +173,7 @@ function ViewTips() {
         </IconButton>
       </Box>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 650 }} aria-label="simple table" >
           <TableHead>
             <TableRow>
               <TableCell>Tip Id</TableCell>
@@ -181,7 +182,7 @@ function ViewTips() {
               <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody ref={animationParent}>
             {data &&
               data.map((item, index) => (
                 <TableRow

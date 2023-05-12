@@ -3,6 +3,7 @@ import axios from "axios";
 import "./Card.css";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 const Card = () => {
   const [cardData, setCardData] = useState(null);
@@ -50,16 +51,18 @@ const Card = () => {
 
       const interval = setInterval(() => {
         fetchCardData();
-      }, 12000);
+      }, 3000);
       return () => clearInterval(interval);
     }
 
   }, [dataLoaded]);
 
+  const [animationParent] = useAutoAnimate()
+
   return (
     <div className="card-container">
       {cardData ? (
-        <div className="card">
+        <div className="card" ref={animationParent}>
           <h2 className="title">{cardCategory}</h2>
           <ReactMarkdown
                     children={cardData.description}
