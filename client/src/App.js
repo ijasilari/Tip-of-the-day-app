@@ -91,7 +91,7 @@ function App() {
               <Route path="addtip" element={<AddTip />} />
               <Route path="viewtips" element={<ViewTips />} />
            <Route path="owntips" element={<OwnTips />} />
-              <Route path="auth" element={<Authenticate />} />
+              <Route path="auth" element={<Authenticate theme={theme}/>} />
               <Route path="*" element={<HomePage />} />
             </Routes>
           </div>

@@ -1,11 +1,8 @@
-
-
-  .authentication {
+.authentication {
     width: 100%;
-    height: 100%;
     max-width: 25rem;
-    margin: 7rem auto;
     text-align: center;
+    align-items: center;
   }
   .authentication form {
     margin-bottom: 1rem;

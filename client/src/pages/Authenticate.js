@@ -143,6 +143,14 @@ const Authenticate = (props) => {
     }
   };
 
+  let backgroundColor = "";
+  if(props.theme === 'light') {
+    backgroundColor = 'white'
+  }
+  else {
+    backgroundColor = '#1C1C1C'
+  }
+
   return (
     <div
       style={{
@@ -152,7 +160,7 @@ const Authenticate = (props) => {
         height: "100vh",
       }}
     >
-    <Card style={{ padding: "20px" }} data-testid="authPage">
+    <Card style={{ padding: "20px", backgroundColor: backgroundColor }} data-testid="authPage" className="authentication">
       <h2>{isLoginMode ? "Login" : "Sign Up"}</h2>
       <form onSubmit={onSubmitHandler}>
         {" "}

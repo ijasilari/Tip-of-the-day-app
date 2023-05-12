@@ -11,11 +11,11 @@
   
 }
 
-#dark h1, h2, h3, h4, h5, h6, hr, li, ol, p, ul{
-  color:#f0f0f0;
+#dark h1, h2, h3, h4, h5, h6, hr, li, ol, p, ul, label{
+  color: #f0f0f0;
 }
 
-#light h2, p, h5, h3, h1{
+#light h2, p, h5, h3, h1, label{
   color:#000000;
 }
 

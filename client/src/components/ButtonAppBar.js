@@ -30,11 +30,11 @@ function ButtonAppBar(props) {
       <AppBar position="static" sx={{backgroundColor:textColor}}>
         <Toolbar>
           <Typography
-            color="inherit"
-            variant="h6"
-            sx={{ mr: 2 }}
             component={NavLink}
             to="/"
+            variant="h6"
+            color="inherit"
+            sx={{ flexGrow: 1 }}
           >
             HomePage
           </Typography>
@@ -49,33 +49,23 @@ function ButtonAppBar(props) {
               Add Tip
             </Button>
           )}
-          <Button component={NavLink} to="/viewtips" color="inherit">
-            View All Tips
-          </Button>
-          {auth.isLoggedIn && (
             <Button
               component={NavLink}
-              to="/owntips"
+              to="/viewtips"
               color="inherit"
             >
-              My Tips
+              View All Tips
             </Button>
-          )}
-          {auth.isLoggedIn && (
+            {!auth.isLoggedIn && (
             <Button
               component={NavLink}
-              to="/profilepage"
+              to="/auth"
               color="inherit"
             >
-              ProfilePage
-            </Button>
-          )}
-          {!auth.isLoggedIn && (
-            <Button component={NavLink} to="/auth" color="inherit">
               Login
             </Button>
-          )}
-          {auth.isLoggedIn && (
+            )}
+            {auth.isLoggedIn && (
             <Button
               component={NavLink}
               to="/"
@@ -85,6 +75,7 @@ function ButtonAppBar(props) {
               LOGOUT
             </Button>
             )}
+          
         </Toolbar>
       </AppBar>
     </Box>
