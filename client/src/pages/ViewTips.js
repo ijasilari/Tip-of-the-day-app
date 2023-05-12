@@ -21,8 +21,8 @@ import { IconButton } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useContext } from 'react';
 import { AuthContext } from '../components/auth-context';
-import "./viewTips.css";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import {tomorrow} from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 function ViewTips() {
   const [data, setData] = useState([]);
@@ -207,6 +207,7 @@ function ViewTips() {
                             <SyntaxHighlighter
                               children={String(children).replace(/\n$/, "")}
                               language={match[1]}
+                              style={tomorrow}
                               {...props}
                             />
                           ) : (

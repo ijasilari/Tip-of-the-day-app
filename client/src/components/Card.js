@@ -3,13 +3,22 @@ import axios from "axios";
 import "./Card.css";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import {tomorrow} from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 
-const Card = () => {
+const Card = (props) => {
   const [cardData, setCardData] = useState(null);
   const [cardCategory, setCardCategory] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
+  console.log(props.theme)
 
+  let textColor = "";
+  if(props.theme === 'light') {
+    textColor = 'black'
+  }
+  else {
+    textColor = '#ECECEC'
+  }
 
   const categoryOptions = [
     {value: 0, label: "Other"},
@@ -67,12 +76,14 @@ const Card = () => {
           <ReactMarkdown
                     children={cardData.description}
                     components={{
+                        p: ({ node, ...props }) => <p style={{ color: textColor }} {...props} />,
                       code({ node, inline, className, children, ...props }) {
                         const match = /language-(\w+)/.exec(className || "");
                         return !inline && match ? (
                           <SyntaxHighlighter
                             children={String(children).replace(/\n$/, "")}
                             language={match[1]}
+                            style={tomorrow}
                             {...props}
                           />
                         ) : (

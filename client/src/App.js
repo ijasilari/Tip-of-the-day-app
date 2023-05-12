@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import { useState, useCallback, useEffect } from 'react';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -8,6 +8,9 @@ import HomePage from "./pages/HomePage";
 import AddTip from "./pages/AddTip";
 import ViewTips from "./pages/ViewTips";
 import Authenticate from "./pages/Authenticate";
+import "./App.css";
+
+export const ThemeContext = createContext(null);
 import ProfilePage from "./pages/ProfilePage";
 import OwnTips from "./pages/OwnTips";
 
@@ -18,6 +21,7 @@ function App() {
   const [token, setToken] = useState(false);
   const [userId, setuser] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState(false);
+  const [theme, setTheme] = useState("dark");
 
   const login = useCallback((uid, token, expirationDate) => {
     setToken(token);
@@ -61,9 +65,13 @@ function App() {
     }
   }, [token, logout, tokenExpirationDate]);
 
+  const toggleTheme = () => {
+    setTheme((curr) => (curr === "light" ? "dark" : "light"));
+  }
 
  return (
-   <AuthContext.Provider
+   
+      <AuthContext.Provider
      value={{
        isLoggedIn: !!token,
        token: token,
@@ -74,19 +82,25 @@ function App() {
    >
      <QueryClientProvider client={queryClient}>
        <BrowserRouter>
-         <ButtonAppBar />
-         <Routes>
-           <Route path="/" element={<HomePage />} />
+        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <div className="App" id={theme}>
+        <ButtonAppBar toggleTheme={toggleTheme} theme={theme}/>
+            <Routes>
+              <Route path="/" element={<HomePage theme={theme}/>} />
            <Route path="/profilepage" element={<ProfilePage userId={userId}/>} />
-           <Route path="addtip" element={<AddTip />} />
-           <Route path="viewtips" element={<ViewTips />} />
+              <Route path="addtip" element={<AddTip />} />
+              <Route path="viewtips" element={<ViewTips />} />
            <Route path="owntips" element={<OwnTips />} />
-           <Route path="auth" element={<Authenticate />} />
-           <Route path="*" element={<HomePage />} />
-         </Routes>
-       </BrowserRouter>
+              <Route path="auth" element={<Authenticate />} />
+              <Route path="*" element={<HomePage />} />
+            </Routes>
+          </div>
+    </ThemeContext.Provider>
+   </BrowserRouter>
      </QueryClientProvider>
    </AuthContext.Provider>
+  
+
  );
 }
 

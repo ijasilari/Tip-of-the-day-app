@@ -144,7 +144,15 @@ const Authenticate = (props) => {
   };
 
   return (
-    <Card style={{ padding: "20px" }} className="authentication" data-testid="authPage">
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+    <Card style={{ padding: "20px" }} data-testid="authPage">
       <h2>{isLoginMode ? "Login" : "Sign Up"}</h2>
       <form onSubmit={onSubmitHandler}>
         {" "}
@@ -178,6 +186,7 @@ const Authenticate = (props) => {
         <div style={{ color: "red" }}>{inputError.login}</div>
       ) : null}
     </Card>
+    </div>
   );
 };
 
