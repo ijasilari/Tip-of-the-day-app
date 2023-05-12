@@ -1,4 +1,13 @@
-import { getAllTips, findTipsByCategory, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip } from "../models/tips.js";
+import { 
+  getAllTips, 
+  findTipsByCategory, 
+  findTipsByCreator, 
+  findTipById, 
+  addTip, 
+  updateTipWithId, 
+  deleteTipWithId, 
+  getRandomTip 
+} from "../models/tips.js";
 import { validationResult } from "express-validator";
 
 const getTips = async (req, res, next) => {
@@ -15,6 +24,20 @@ const getTipsByCategory = async (req, res, next) => {
 
   if (!tips) {
     const error = new Error(`Tip with CATEGORY ${tipCategory} not found`);
+    error.statusCode = 404;
+    return next(error);
+  }
+
+  res.json({ tips });
+};
+
+const getTipsByCreator = async (req, res, next) => {
+  const creator = req.params.creator;
+  console.log(creator);
+  const tips = await findTipsByCreator(creator);
+
+  if (!tips) {
+    const error = new Error(`Tip with CREATOR ${creator} not found`);
     error.statusCode = 404;
     return next(error);
   }
@@ -164,6 +187,7 @@ const getTipByRandom = async (req, res, next) => {
 export {
   getTips,
   getTipsByCategory,
+  getTipsByCreator,
   deleteTipById,
   updateTipById,
   getTipById,
