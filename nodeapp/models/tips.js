@@ -28,6 +28,11 @@ const findTipsByCategory = async (category) => {
   return tip.rows;
 }
 
+const findTipsByCreator = async (creator) => {
+  const tip = await pool.query("SELECT * FROM tips WHERE creator=$1", [creator]);
+  return tip.rows;
+}
+
 const addTip = async (tip) => {
   const result = await pool.query(
     "INSERT INTO tips (category, description, creator) VALUES ($1, $2, $3) RETURNING id",
@@ -60,4 +65,4 @@ const getRandomTip = async () => {
   return result.rows[0]
 };
 
-export { getAllTips, findTipById, findTipsByCategory, addTip, updateTipWithId, deleteTipWithId, getRandomTip };
+export { getAllTips, findTipById, findTipsByCategory, findTipsByCreator, addTip, updateTipWithId, deleteTipWithId, getRandomTip };

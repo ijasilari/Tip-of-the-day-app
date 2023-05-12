@@ -51,6 +51,9 @@ http://localhost:3000/api/users/getusers
 Get tips by category (GET)
 http://localhost:3000/api/tips/getall/:category
 
+Get tips by creator (GET)
+http://localhost:3000/api/tips/getbycreator/:creator
+
 Get a random tip (GET)
 http://localhost:3000/api/tips/randomtip
 

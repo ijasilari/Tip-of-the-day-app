@@ -8,6 +8,9 @@ GET http://localhost:3000/api/tips/getall
 GET http://localhost:3000/api/tips/getall/10
 
 ###
+GET http://localhost:3000/api/tips/getbycreator/123456789
+
+###
 GET http://localhost:3000/api/tips/randomtip
 
 ###

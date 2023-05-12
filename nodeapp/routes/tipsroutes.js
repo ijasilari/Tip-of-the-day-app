@@ -4,6 +4,7 @@ import { verifyToken } from "../middleware/verifyToken.js";
 import {
   getTips,
   getTipsByCategory,
+  getTipsByCreator,
   deleteTipById,
   updateTipById,
   getTipById,
@@ -17,6 +18,8 @@ const tipsRouter = Router();
 tipsRouter.get("/getall", getTips);
 
 tipsRouter.get("/getall/:category", getTipsByCategory);
+
+tipsRouter.get("/getbycreator/:creator", getTipsByCreator);
 
 tipsRouter.get("/randomtip", getTipByRandom);
 
