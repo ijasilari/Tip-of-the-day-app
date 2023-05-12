@@ -17,40 +17,33 @@ function ButtonAppBar() {
       <AppBar position="static">
         <Toolbar>
           <Typography
+            color="inherit"
+            variant="h6"
+            sx={{ mr: 2 }}
             component={NavLink}
             to="/"
-            variant="h6"
-            color="inherit"
-            sx={{ flexGrow: 1 }}
           >
             HomePage
           </Typography>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1 }}
+          ></Typography>
           {auth.isLoggedIn && (
-            <Button
-              component={NavLink}
-              to="/addtip"
-              color="inherit"
-            >
+            <Button component={NavLink} to="/addtip" color="inherit">
               Add Tip
             </Button>
           )}
-            <Button
-              component={NavLink}
-              to="/viewtips"
-              color="inherit"
-            >
-              View All Tips
-            </Button>
-            {!auth.isLoggedIn && (
-            <Button
-              component={NavLink}
-              to="/auth"
-              color="inherit"
-            >
+          <Button component={NavLink} to="/viewtips" color="inherit">
+            View All Tips
+          </Button>
+          {!auth.isLoggedIn && (
+            <Button component={NavLink} to="/auth" color="inherit">
               Login
             </Button>
-            )}
-            {auth.isLoggedIn && (
+          )}
+          {auth.isLoggedIn && (
             <Button
               component={NavLink}
               to="/"
@@ -59,7 +52,7 @@ function ButtonAppBar() {
             >
               LOGOUT
             </Button>
-            )}
+          )}
         </Toolbar>
       </AppBar>
     </Box>
