@@ -147,7 +147,7 @@ const Authenticate = (props) => {
     <Card style={{ padding: "20px" }} className="authentication" data-testid="authPage">
       <h2>{isLoginMode ? "Login" : "Sign Up"}</h2>
       <form onSubmit={onSubmitHandler}>
-               {" "}
+        {" "}
         {!isLoginMode && (
           <Input id="name" ref={nameRef} type="text" label="Name" />
         )}
@@ -158,12 +158,12 @@ const Authenticate = (props) => {
           type="password"
           label="Password"
         />
-        <Button type="submit">
-                    {isLoginMode ? "LOGIN" : "SIGNUP"}
+        <Button variant="contained" type="submit">
+         {isLoginMode ? "LOGIN" : "SIGNUP"}
         </Button>
       </form>
-      <Button onClick={switchModeHanlder}>
-                {isLoginMode ? "SignUp" : "Login"} instead?
+      <Button variant="outlined" onClick={switchModeHanlder}>
+       {isLoginMode ? "SignUp" : "Login"} instead?
       </Button>
       {inputError ? (
         <div style={{ color: "red" }}>{inputError.name}</div>
