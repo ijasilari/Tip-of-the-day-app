@@ -38,6 +38,15 @@ function ButtonAppBar() {
           <Button component={NavLink} to="/viewtips" color="inherit">
             View All Tips
           </Button>
+          {auth.isLoggedIn && (
+            <Button
+              component={NavLink}
+              to="/profilepage"
+              color="inherit"
+            >
+              ProfilePage
+            </Button>
+          )}
           {!auth.isLoggedIn && (
             <Button component={NavLink} to="/auth" color="inherit">
               Login

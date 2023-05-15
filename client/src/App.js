@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import AddTip from "./pages/AddTip";
 import ViewTips from "./pages/ViewTips";
 import Authenticate from "./pages/Authenticate";
+import ProfilePage from "./pages/ProfilePage";
 
 const queryClient = new QueryClient();
 let logoutTimer;
@@ -21,14 +22,14 @@ function App() {
     setToken(token);
     setuser(uid);
 
-    const tokenExpirationDate = 
+    const tokenExpirationDate =
     expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
     setTokenExpirationDate(tokenExpirationDate);
-    
+
     localStorage.setItem(
       'userData',
       JSON.stringify({
-        userId: uid, 
+        userId: uid,
         token,
         expiration: tokenExpirationDate.toISOString()
       })
@@ -61,27 +62,28 @@ function App() {
 
 
  return (
-  <AuthContext.Provider
-  value={{ 
-    isLoggedIn: !!token, 
-    token: token, 
-    userId: userId, 
-    login: login, 
-    logout: logout
-  }}
-> 
-  <QueryClientProvider client={queryClient}>
-   <BrowserRouter>
-     <ButtonAppBar />
-     <Routes>
-       <Route path="/" element={<HomePage />} />
-       <Route path="addtip" element={<AddTip />} />
-       <Route path="viewtips" element={<ViewTips />} />
-       <Route path="auth" element={<Authenticate />} />
-       <Route path="*" element={<HomePage />} />
-     </Routes>
-   </BrowserRouter>
-   </QueryClientProvider>
+   <AuthContext.Provider
+     value={{
+       isLoggedIn: !!token,
+       token: token,
+       userId: userId,
+       login: login,
+       logout: logout,
+     }}
+   >
+     <QueryClientProvider client={queryClient}>
+       <BrowserRouter>
+         <ButtonAppBar />
+         <Routes>
+           <Route path="/" element={<HomePage />} />
+           <Route path="/profilepage" element={<ProfilePage userId={userId}/>} />
+           <Route path="addtip" element={<AddTip />} />
+           <Route path="viewtips" element={<ViewTips />} />
+           <Route path="auth" element={<Authenticate />} />
+           <Route path="*" element={<HomePage />} />
+         </Routes>
+       </BrowserRouter>
+     </QueryClientProvider>
    </AuthContext.Provider>
  );
 }
