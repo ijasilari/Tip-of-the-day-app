@@ -76,6 +76,24 @@ function ButtonAppBar(props) {
             >
               View All Tips
             </Button>
+            {auth.isLoggedIn && (
+            <Button
+              component={NavLink}
+              to="/owntips"
+              color="inherit"
+            >
+              My Tips
+            </Button>
+          )}
+          {auth.isLoggedIn && (
+            <Button
+              component={NavLink}
+              to="/profilepage"
+              color="inherit"
+            >
+              ProfilePage
+            </Button>
+          )}
             {!auth.isLoggedIn && (
             <Button
               component={NavLink}

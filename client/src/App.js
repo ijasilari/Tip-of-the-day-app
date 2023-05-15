@@ -9,10 +9,10 @@ import AddTip from "./pages/AddTip";
 import ViewTips from "./pages/ViewTips";
 import Authenticate from "./pages/Authenticate";
 import "./App.css";
-
-export const ThemeContext = createContext(null);
 import ProfilePage from "./pages/ProfilePage";
 import OwnTips from "./pages/OwnTips";
+
+export const ThemeContext = createContext(null);
 
 const queryClient = new QueryClient();
 let logoutTimer;
@@ -87,10 +87,10 @@ function App() {
         <ButtonAppBar toggleTheme={toggleTheme} theme={theme}/>
             <Routes>
               <Route path="/" element={<HomePage theme={theme}/>} />
-           <Route path="/profilepage" element={<ProfilePage userId={userId}/>} />
+              <Route path="/profilepage" element={<ProfilePage userId={userId}/>} />
               <Route path="addtip" element={<AddTip />} />
               <Route path="viewtips" element={<ViewTips theme={theme}/>} />
-           <Route path="owntips" element={<OwnTips />} />
+              <Route path="owntips" element={<OwnTips />} />
               <Route path="auth" element={<Authenticate theme={theme}/>} />
               <Route path="*" element={<HomePage />} />
             </Routes>

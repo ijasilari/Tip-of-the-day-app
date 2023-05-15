@@ -21,7 +21,6 @@ import { IconButton } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useContext } from 'react';
 import { AuthContext } from '../components/auth-context';
-import "./viewTips.css";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 function OwnTips(props) {
