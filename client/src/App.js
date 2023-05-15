@@ -87,7 +87,7 @@ function App() {
         <ButtonAppBar toggleTheme={toggleTheme} theme={theme}/>
             <Routes>
               <Route path="/" element={<HomePage theme={theme}/>} />
-              <Route path="/profilepage" element={<ProfilePage userId={userId}/>} />
+              <Route path="/profilepage" element={<ProfilePage userId={userId} theme={theme}/>} />
               <Route path="addtip" element={<AddTip />} />
               <Route path="viewtips" element={<ViewTips theme={theme}/>} />
               <Route path="owntips" element={<OwnTips />} />

@@ -4,9 +4,8 @@ import Card from "../components/Card";
 import SlideTransition from "../components/SlideTransition";
 
 function HomePage(props) {
-  let textColor = "";
   
-  console.log(props.theme);
+  let textColor = "";
   if (props.theme === "light") {
     textColor = "black";
   } else {

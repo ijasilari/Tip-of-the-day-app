@@ -259,6 +259,15 @@ const ProfilePage = (props) => {
     onSubmit: changeUsername,
   });
 
+  let textColor = "";
+  let bgColor = ""
+  if (props.theme === "light") {
+    textColor = "black";
+  } else {
+    textColor = "#ECECEC";
+    bgColor = "black";
+  }
+
   return (
     <div
       style={{
@@ -274,9 +283,9 @@ const ProfilePage = (props) => {
         sx={{ display: "flex", textAlign: "center", justifyContent: "center" }}
       >
         <Grid item xs={12}>
-          <Card>
-            <CardHeader title="Profile" />
-            <CardContent>
+          <Card style={{ backgroundColor: bgColor}}>
+            <CardHeader title="Profile" style={{color: textColor}}/>
+            <CardContent >
               <Grid
                 container
                 spacing={2}
@@ -292,8 +301,8 @@ const ProfilePage = (props) => {
                   </Avatar>
                 </Grid>
                 <Grid item sx={{ textAlign: "center" }}>
-                  <Typography variant="h6">{userData.username}</Typography>
-                  <Typography variant="h6">{userData.email}</Typography>
+                  <Typography variant="h6" color={textColor}>{userData.username}</Typography>
+                  <Typography variant="h6" color={textColor}>{userData.email}</Typography>
                 </Grid>
               </Grid>
             </CardContent>
