@@ -15,12 +15,15 @@ import { useState } from 'react';
 
 function ButtonAppBar(props) {
   const auth = useContext(AuthContext);
+
   let textColor = "";
+  let backgroundBttnColor
   if(props.theme === 'light') {
-    textColor = '#1976D2'
+    textColor = '#1976D2';
   }
   else {
-    textColor = '#2D2D2D'
+    textColor = '#2D2D2D';
+    backgroundBttnColor = '#bb86fcd6';
   }
 
 
@@ -39,12 +42,24 @@ function ButtonAppBar(props) {
             HomePage
           </Typography>
           <label className="toggleLabel">{props.theme == "light" ? "Light Mode" : "Dark Mode"} </label>
-          <ReactSwitch onChange={props.toggleTheme} checked={props.theme === "dark"} height={14} width={28} onColor={"#BB86FC"} className="toggle"/>
+          <ReactSwitch  onChange={props.toggleTheme} 
+                        checked={props.theme === "dark"} 
+                        height={14}
+                        width={28}
+                        onColor={"#BB86FC"}
+                        className="toggle"
+                        uncheckedIcon={false}
+                        checkedIcon={false}/>
           {auth.isLoggedIn && (
             <Button
               component={NavLink}
               to="/addtip"
-              color="primary"
+              color="inherit"
+              sx={{
+                ':hover': {
+                  bgcolor: backgroundBttnColor
+                },
+              }}
             >
               Add Tip
             </Button>
@@ -53,6 +68,11 @@ function ButtonAppBar(props) {
               component={NavLink}
               to="/viewtips"
               color="inherit"
+              sx={{
+                ':hover': {
+                  bgcolor: backgroundBttnColor
+                },
+              }}
             >
               View All Tips
             </Button>
@@ -61,6 +81,11 @@ function ButtonAppBar(props) {
               component={NavLink}
               to="/auth"
               color="inherit"
+              sx={{
+                ':hover': {
+                  bgcolor: backgroundBttnColor
+                },
+              }}
             >
               Login
             </Button>
@@ -71,6 +96,11 @@ function ButtonAppBar(props) {
               to="/"
               color="inherit"
               onClick={auth.logout}
+              sx={{
+                ':hover': {
+                  bgcolor: backgroundBttnColor
+                },
+              }}
             >
               LOGOUT
             </Button>

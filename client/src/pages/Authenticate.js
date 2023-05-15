@@ -174,11 +174,11 @@ const Authenticate = (props) => {
           type="password"
           label="Password"
         />
-        <Button variant="contained" type="submit">
+        <Button variant="contained" type="submit" className="buttons">
          {isLoginMode ? "LOGIN" : "SIGNUP"}
         </Button>
       </form>
-      <Button variant="outlined" onClick={switchModeHanlder}>
+      <Button variant="outlined" onClick={switchModeHanlder} className="signUp">
        {isLoginMode ? "SignUp" : "Login"} instead?
       </Button>
       {inputError ? (

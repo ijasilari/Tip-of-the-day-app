@@ -2,44 +2,62 @@
   background-color: #fff;
 }
 
-.App{
+.App {
   height: 100%;
 }
 
 #dark {
   background-color: #121212;
-  
 }
 
-#dark h1, h2, h3, h4, h5, h6, hr, li, ol, p, ul, label{
+#dark h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+li,
+ol,
+p,
+ul,
+label {
   color: #f0f0f0;
 }
 
-#light h2, p, h5, h3, h1, label{
-  color:#000000;
+#light h2,
+p,
+h5,
+h3,
+h1 {
+  color: #000000;
 }
 
-#light .card{
-  background-color: #fff;
-}
-
-#dark .card{
-  background-color: #1C1C1C;
-}
-
-code{
-  border-radius: 8px;
-  background-color: #2D2D2D;
+code {
+  border-radius: 5px;
+  background-color: #2d2d2d;
   padding: 3px 4px;
-  color:#E0E0E0;
+  color: #e0e0e0;
 }
 
-pre{
-  padding: 0px;
+pre {
+  padding: 5px;
   border-radius: 8px;
-  background-color: #2D2D2D;
+  background-color: #2d2d2d;
 }
 
-#light li{
-  color:#000000;
+#light li {
+  color: #000000;
+}
+
+.searchIcon {
+  margin-bottom: 16px;
+}
+
+#dark .searchIcon {
+  color: #e0e0e0;
+}
+.searchIcon:hover {
+  background-color: #e0e0e021;
+  border-radius: 8px;
 }

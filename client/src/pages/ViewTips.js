@@ -18,13 +18,13 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import Dropdown from "../components/Dropdown";
 import { IconButton } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
-import { useContext } from 'react';
-import { AuthContext } from '../components/auth-context';
-import { useAutoAnimate } from '@formkit/auto-animate/react'
-import {tomorrow} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import SearchIcon from "@mui/icons-material/Search";
+import { useContext } from "react";
+import { AuthContext } from "../components/auth-context";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-function ViewTips() {
+function ViewTips(props) {
   const [data, setData] = useState([]);
   const [openEditTip, setOpenEditTip] = useState(false);
   const [id, setId] = useState();
@@ -34,18 +34,17 @@ function ViewTips() {
   const auth = useContext(AuthContext);
 
   const categoryOptions = [
-    {value: 1, label: "CSS"},
-    {value: 2, label: "Java"},
-    {value: 3, label: "JavaScript"},
-    {value: 4, label: "HTTP"},
-    {value: 5, label: "Python"},
-    {value: 6, label: "CPP"},
-    {value: 7, label: "Dart"},
-    {value: 8, label: "Flutter"},
-    {value: 9, label: "Rust"},
-    {value: 10, label: "Linux"}
-  ]
-
+    { value: 1, label: "CSS" },
+    { value: 2, label: "Java" },
+    { value: 3, label: "JavaScript" },
+    { value: 4, label: "HTTP" },
+    { value: 5, label: "Python" },
+    { value: 6, label: "CPP" },
+    { value: 7, label: "Dart" },
+    { value: 8, label: "Flutter" },
+    { value: 9, label: "Rust" },
+    { value: 10, label: "Linux" },
+  ];
 
   const handleCancel = () => {
     formikTip.resetForm();
@@ -53,8 +52,8 @@ function ViewTips() {
 
   const handleTipClickOpen = (id, index) => {
     setOpenEditTip(true);
-    setId(id)
-    setEditText(data[index].description)
+    setId(id);
+    setEditText(data[index].description);
   };
 
   const handleTipClose = () => {
@@ -66,20 +65,19 @@ function ViewTips() {
       const response = await axios.get(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall`
       );
-       console.log(response)
+      console.log(response);
       setData(response.data.tips);
     };
     fetchData();
   }, []);
 
-    const fetchDataByCategory = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
-      );
-       console.log(response)
-      setData(response.data.tips);
-    };
-
+  const fetchDataByCategory = async () => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
+    );
+    console.log(response);
+    setData(response.data.tips);
+  };
 
   const deleteTip = async (tid) => {
     try {
@@ -87,7 +85,7 @@ function ViewTips() {
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${tid}/delete`,
         {
           headers: {
-            Authorization: 'Bearer ' + auth.token
+            Authorization: "Bearer " + auth.token,
           },
         }
       );
@@ -98,7 +96,11 @@ function ViewTips() {
   };
 
   const editTip = async () => {
-    const editedTip = { description: formikTip.values.description, category: categoryEdit, creator: auth.userId };
+    const editedTip = {
+      description: formikTip.values.description,
+      category: categoryEdit,
+      creator: auth.userId,
+    };
     try {
       console.log(editedTip);
       const response = await axios.patch(
@@ -107,7 +109,7 @@ function ViewTips() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: 'Bearer ' + auth.token
+            Authorization: "Bearer " + auth.token,
           },
         }
       );
@@ -145,7 +147,20 @@ function ViewTips() {
     validate: validateTip,
     onSubmit: editTip,
   });
-  const [animationParent] = useAutoAnimate()
+
+  const [animationParent] = useAutoAnimate();
+
+  let textColor = "";
+  let backgroundColor = "";
+  if(props.theme === 'light') {
+    textColor = 'black'
+    backgroundColor = 'white';
+  }
+  else {
+    textColor = '#ECECEC';
+    backgroundColor = '#1C1C1C';
+  }
+  
   return (
     <div data-testid="viewTipsPage">
       <Box
@@ -153,10 +168,10 @@ function ViewTips() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          mt:3
+          mt: 3,
         }}
       >
-        <Box sx={{ flexGrow: 1}}>{/* content of the first box */}</Box>
+        <Box sx={{ flexGrow: 1 }}>{/* content of the first box */}</Box>
         <Dropdown
           isSearchable
           placeHolder="Select..."
@@ -165,21 +180,22 @@ function ViewTips() {
         />
 
         <IconButton
-          sx={{ marginLeft: 0, mr:'30%'}}
+          sx={{ marginLeft: 0, mr: "30%" }}
           onClick={() => fetchDataByCategory()}
+          style={{ backgroundColor: 'transparent' }}
         >
           {" "}
-          <SearchIcon />{" "}
+          <SearchIcon className="searchIcon"/>{" "}
         </IconButton>
       </Box>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table" >
+        <Table sx={{ minWidth: 650, backgroundColor: {backgroundColor} }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Tip Id</TableCell>
-              <TableCell align="center">Description</TableCell>
-              <TableCell align="center">Functions</TableCell>
-              <TableCell align="center"></TableCell>
+              <TableCell sx={{color: textColor}}>Tip Id</TableCell>
+              <TableCell align="center" sx={{color: textColor}}>Description</TableCell>
+              <TableCell align="center" sx={{color: textColor}}>Functions</TableCell>
+              <TableCell align="center" sx={{color: textColor}}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody ref={animationParent}>
@@ -189,8 +205,8 @@ function ViewTips() {
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
-                    {index+1}
+                  <TableCell component="th" scope="row" sx={{color: textColor}}>
+                    {item.id}
                   </TableCell>
                   <TableCell
                     align="left"
@@ -201,6 +217,7 @@ function ViewTips() {
                     <ReactMarkdown
                       children={item.description}
                       components={{
+                        p: ({ node, ...props }) => <p style={{ color: textColor }} {...props} />,
                         code({ node, inline, className, children, ...props }) {
                           const match = /language-(\w+)/.exec(className || "");
                           return !inline && match ? (
@@ -219,10 +236,10 @@ function ViewTips() {
                       }}
                     />
                   </TableCell>
-                  <TableCell align="center" style={{minWidth:'10rem'}}>
+                  <TableCell align="center" style={{ minWidth: "10rem" }}>
                     {auth.userId === item.creator && (
                       <Button
-                        style={{ display: 'inline', marginRight: '2px' }}
+                        style={{ display: "inline", marginRight: "2px" }}
                         variant="contained"
                         onClick={() => {
                           handleTipClickOpen(item.id, index);
@@ -232,16 +249,16 @@ function ViewTips() {
                       </Button>
                     )}
                     {auth.userId === item.creator && (
-                    <Button
-                      style={{ display: 'inline', marginLeft:'2px' }}
-                      variant="contained"
-                      onClick={() => {
-                        deleteTip(item.id);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  )}
+                      <Button
+                        style={{ display: "inline", marginLeft: "2px" }}
+                        variant="contained"
+                        onClick={() => {
+                          deleteTip(item.id);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    )}
                     <Dialog
                       maxWidth="sm"
                       open={openEditTip}
@@ -305,9 +322,7 @@ function ViewTips() {
                       </Box>
                     </Dialog>
                   </TableCell>
-                  <TableCell align="right">
-
-                  </TableCell>
+                  <TableCell align="right"></TableCell>
                 </TableRow>
               ))}
           </TableBody>

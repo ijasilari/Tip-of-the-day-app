@@ -21,7 +21,7 @@ function App() {
   const [token, setToken] = useState(false);
   const [userId, setuser] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState(false);
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
 
   const login = useCallback((uid, token, expirationDate) => {
     setToken(token);
@@ -89,7 +89,7 @@ function App() {
               <Route path="/" element={<HomePage theme={theme}/>} />
            <Route path="/profilepage" element={<ProfilePage userId={userId}/>} />
               <Route path="addtip" element={<AddTip />} />
-              <Route path="viewtips" element={<ViewTips />} />
+              <Route path="viewtips" element={<ViewTips theme={theme}/>} />
            <Route path="owntips" element={<OwnTips />} />
               <Route path="auth" element={<Authenticate theme={theme}/>} />
               <Route path="*" element={<HomePage />} />

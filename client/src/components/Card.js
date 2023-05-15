@@ -76,7 +76,7 @@ const Card = (props) => {
           <ReactMarkdown
                     children={cardData.description}
                     components={{
-                        p: ({ node, ...props }) => <p style={{ color: textColor }} {...props} />,
+                      p: ({ node, ...props }) => <p style={{ color: textColor }} {...props} />,
                       code({ node, inline, className, children, ...props }) {
                         const match = /language-(\w+)/.exec(className || "");
                         return !inline && match ? (
@@ -96,7 +96,7 @@ const Card = (props) => {
           />
         </div>
       ) : (
-        <div className="loading">Loading...</div>
+        <div className="loading" style={{textAlign: 'center'}}>Loading...</div>
       )}
     </div>
   );

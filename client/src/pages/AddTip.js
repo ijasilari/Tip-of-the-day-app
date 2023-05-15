@@ -180,6 +180,7 @@ function AddTip() {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+
         >
           Add New Tip
         </Button>

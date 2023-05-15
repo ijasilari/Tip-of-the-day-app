@@ -7,3 +7,21 @@
   .authentication form {
     margin-bottom: 1rem;
   }
+
+#dark .buttons{
+  background-color: #BB86FC;
+}
+
+#dark .signUp{
+  color: #BB86FC;
+  border-color: #BB86FC;
+}
+
+#dark .buttons:hover {
+  background-color: #a274db;
+}
+
+#dark .signUp:hover {
+  color: #a274db;
+  border-color: #a274db;
+}
