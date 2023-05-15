@@ -24,7 +24,7 @@ import { AuthContext } from '../components/auth-context';
 import "./viewTips.css";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 
-function ViewTips() {
+function OwnTips(props) {
   const [data, setData] = useState([]);
   const [openEditTip, setOpenEditTip] = useState(false);
   const [id, setId] = useState();
@@ -62,22 +62,24 @@ function ViewTips() {
   };
 
   useEffect(() => {
+    const creator = auth.userId;
     const fetchData = async () => {
       const response = await axios.get(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall`
+        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getbycreator/${creator}`
       );
-       console.log(response)
-      setData(response.data.tips);
+        console.log(response);
+        setData(response.data.tips);
     };
     fetchData();
-  }, []);
+  }, [auth.userId]);
 
-    const fetchDataByCategory = async () => {
+    const fetchDataByCategoryAndCreator = async () => {
       const response = await axios.get(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
       );
        console.log(response)
-      setData(response.data.tips);
+       const filteredData = response.data.tips.filter((tip) => tip.creator === auth.userId);
+       setData(filteredData);
     };
 
 
@@ -166,7 +168,7 @@ function ViewTips() {
 
         <IconButton
           sx={{ marginLeft: 0, mr:'30%'}}
-          onClick={() => fetchDataByCategory()}
+          onClick={() => fetchDataByCategoryAndCreator()}
         >
           {" "}
           <SearchIcon />{" "}
@@ -219,7 +221,6 @@ function ViewTips() {
                     />
                   </TableCell>
                   <TableCell align="center" style={{minWidth:'10rem'}}>
-                    {auth.userId === item.creator && (
                       <Button
                         style={{ display: 'inline', marginRight: '2px' }}
                         variant="contained"
@@ -229,8 +230,6 @@ function ViewTips() {
                       >
                         Edit
                       </Button>
-                    )}
-                    {auth.userId === item.creator && (
                     <Button
                       style={{ display: 'inline', marginLeft:'2px' }}
                       variant="contained"
@@ -240,7 +239,6 @@ function ViewTips() {
                     >
                       Delete
                     </Button>
-                  )}
                     <Dialog
                       maxWidth="sm"
                       open={openEditTip}
@@ -316,4 +314,4 @@ function ViewTips() {
   );
 }
 
-export default ViewTips;
+export default OwnTips;

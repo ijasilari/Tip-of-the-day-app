@@ -9,6 +9,7 @@ import AddTip from "./pages/AddTip";
 import ViewTips from "./pages/ViewTips";
 import Authenticate from "./pages/Authenticate";
 import ProfilePage from "./pages/ProfilePage";
+import OwnTips from "./pages/OwnTips";
 
 const queryClient = new QueryClient();
 let logoutTimer;
@@ -79,6 +80,7 @@ function App() {
            <Route path="/profilepage" element={<ProfilePage userId={userId}/>} />
            <Route path="addtip" element={<AddTip />} />
            <Route path="viewtips" element={<ViewTips />} />
+           <Route path="owntips" element={<OwnTips />} />
            <Route path="auth" element={<Authenticate />} />
            <Route path="*" element={<HomePage />} />
          </Routes>
