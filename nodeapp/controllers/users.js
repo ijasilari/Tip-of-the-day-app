@@ -129,8 +129,118 @@ const loginUser = async(req, res) => {
 
 };
 
+const updateUserWithId = async (req, res, next) => {
+
+
+  const { name, password, email } = req.body
+  console.log(email, 'jeepp')
+  const userId = req.params.uid
+
+  const user = await users.findUserById(userId);
+  console.log(user.email, 'löytyykö!!')
+
+  if (!user) {
+    const error = new Error(`User with ID ${userId} not found`);
+    error.statusCode = 404;
+    return next(error);
+  }
+
+  if (email !== user.email) {
+    const exist = await users.findRowCountByEmail(email)
+    console.log(exist, 'löytyykö tämä')
+    if (exist) {
+      const error = new Error(`Email exists`);
+      error.statusCode = 422;
+      return next(error);
+    }
+  }
+  if (password !== user.password) {
+    let hashedPassword
+    try {
+      hashedPassword = await bcrypt.hash(password, 12)
+    } catch (err) {
+      const error = new Error(`Could not update`);
+      error.statusCode = 500;
+      return next(error);
+    }
+
+    const result = await users.updateUserById(userId, name, hashedPassword, email)
+    // console.log(hashedPassword)
+
+    if (!result) {
+      const error = new Error(`Could not update user`);
+      error.statusCode = 404;
+      return next(error);
+    }
+
+    user.name = name
+    user.password = hashedPassword
+    user.email = email
+
+    res.status(200).json({ user })
+  } else {
+    const result = await users.updateUserById(
+      userId,
+      name,
+      password,
+      email,
+    )
+    // console.log(password)
+
+    if (!result) {
+      const error = new Error(`Could not update user`);
+      error.statusCode = 404;
+      return next(error);
+    }
+
+    user.name = name
+    user.password = password
+    user.email = email
+
+    res.status(200).json({ user })
+}
+};
+
+const deleteUserWithId = async (req, res, next) => {
+  const userId = req.params.uid;
+
+  const user = await users.findUserById(userId);
+
+  if (!user) {
+    const error = new Error(`User with ID ${userId} not found`);
+    error.statusCode = 404;
+    return next(error);
+  }
+  const result = await users.deleteUserById(userId);
+  if (!result) {
+    const error = new Error(`Could not delete user`);
+    error.statusCode = 404;
+    return next(error);
+  }
+  res.status(200).json({ message: "Deleted the user." });
+};
+
+const getUserWithId = async (req, res, next) => {
+  const userId = req.params.uid;
+  // console.log(userId)
+  const user = await users.findUserById(userId)
+
+  if (!user) {
+    const error = new Error(`User with ID ${userId} not found`);
+    error.statusCode = 404;
+    return next(error);
+  }
+
+  res.json({ user });
+};
+
+
+
 export {
   signUpUser,
   loginUser,
-  getUsers
+  getUsers,
+  updateUserWithId,
+  deleteUserWithId,
+  getUserWithId
 };
