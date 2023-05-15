@@ -25,6 +25,7 @@ const Dropdown = ({ placeHolder, options, isMulti, isSearchable, onChange }) => 
     const [showMenu, setShowMenu] = useState(false);
     const [selectedValue, setSelectedValue] = useState(isMulti ? [] : null);
     const [searchValue, setSearchValue] = useState("");
+    
     const searchRef = useRef();
     const inputRef = useRef();
     let selectedVal;

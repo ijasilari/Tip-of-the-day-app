@@ -60,4 +60,20 @@ const getRandomTip = async () => {
   return result.rows[0]
 };
 
-export { getAllTips, findTipById, findTipsByCategory, addTip, updateTipWithId, deleteTipWithId, getRandomTip };
+const addLikeById = async (id) => {
+  const res = await pool.query("UPDATE tips SET likes = likes + 1 WHERE id=$1"
+  [id]
+  );
+  console.log(res)
+  return res.rows[0].likes;
+}
+
+const removeLikeById = async (id) => {
+  const res = await pool.query("UPDATE tips SET likes = likes - 1 WHERE id=$1"
+  [id]
+  );
+  // console.log(result)
+  return res.rows[0].likes;
+}
+
+export { getAllTips, findTipById, findTipsByCategory, addTip, updateTipWithId, deleteTipWithId, getRandomTip, addLikeById, removeLikeById };

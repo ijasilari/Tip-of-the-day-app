@@ -32,7 +32,7 @@ function ViewTips() {
   const [editText, setEditText] = useState("");
   const [category, setCategory] = useState(1);
   const [categoryEdit, setCategoryEdit] = useState(1);
-  const [like, setLike] = useState(0);
+  const [like, setLike] = useState(10);
   const [likeActive, setLikeActive] = useState(false);
 
 
@@ -231,9 +231,9 @@ function ViewTips() {
                         },
                       }}
                     />
+                    {like + " users found this tip useful"}
                   </TableCell>
                   <TableCell align="center" style={{minWidth:'10rem'}}>
-                    <IconButton onClick={likeEff}> <ThumbUpIcon/> </IconButton>
                     {auth.isLoggedIn && (
                       <Button
                         style={{ display: 'inline', marginRight: '2px' }}
@@ -255,7 +255,7 @@ function ViewTips() {
                     >
                       Delete
                     </Button>
-                  )}
+                  )}<IconButton onClick={likeEff}> <ThumbUpIcon/> </IconButton>
                     <Dialog
                       maxWidth="sm"
                       open={openEditTip}

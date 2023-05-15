@@ -1,4 +1,4 @@
-import { getTips, getTipsByCategory, deleteTipById, updateTipById, getTipById, addNewTip, getTipByIdPlainText, getTipByRandom } from './controllers/tips.js';
+import { getTips, addLike, getTipsByCategory, deleteTipById, updateTipById, getTipById, addNewTip, getTipByIdPlainText, getTipByRandom } from './controllers/tips.js';
 import {signUpUser, loginUser, getUsers} from './controllers/users.js';
 import express from "express";
 import bodyParser from "body-parser";
@@ -68,6 +68,7 @@ app.get("/randomtip", getTipByRandom);
 app.get("/getusers", getUsers);
 app.get("/:tid", getTipById);
 app.get("/:tid/plain", getTipByIdPlainText);
+app.patch("/:tid/addALike", addLike)
 
 app.post(
   "/signup", signUpUser
