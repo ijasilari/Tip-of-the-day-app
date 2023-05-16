@@ -35,6 +35,11 @@ const ProfilePage = (props) => {
   console.log(auth.userId)
   console.log(props.userId)
 
+  const dateView = (date) => {
+    const convertDate = new Date(date).toLocaleDateString("en-GB");
+    return convertDate;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
@@ -115,7 +120,7 @@ const ProfilePage = (props) => {
 
   const changePassword = async () => {
     const userDetails = {
-      name: userData.username,
+      username: userData.username,
       email: userData.email,
       password: formikPassword.values.password,
     };
@@ -138,7 +143,7 @@ const ProfilePage = (props) => {
 
   const changeEmail = async () => {
     const userDetails = {
-      name: userData.username,
+      username: userData.username,
       email: formikEmail.values.email,
       password: userData.password,
     };
@@ -169,7 +174,7 @@ const ProfilePage = (props) => {
 
   const changeUsername = async () => {
     const userDetails = {
-      name: formikUsername.values.username,
+      username: formikUsername.values.username,
       email: userData.email,
       password: userData.password,
     };
@@ -275,7 +280,18 @@ const ProfilePage = (props) => {
       >
         <Grid item xs={12}>
           <Card>
-            <CardHeader title="Profile" />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CardHeader title="Profile" />
+              <Avatar>
+                <AccountCircle />
+              </Avatar>
+            </div>
             <CardContent>
               <Grid
                 container
@@ -286,14 +302,18 @@ const ProfilePage = (props) => {
                   justifyContent: "center",
                 }}
               >
-                <Grid item>
-                  <Avatar>
-                    <AccountCircle />
-                  </Avatar>
-                </Grid>
+                <Grid item></Grid>
                 <Grid item sx={{ textAlign: "center" }}>
-                  <Typography variant="h6">{userData.username}</Typography>
-                  <Typography variant="h6">{userData.email}</Typography>
+                  <Typography variant="h6">
+                    Created: {dateView(userData.created_at)}
+                  </Typography>
+                  <Typography variant="h6">
+                    Last updated: {dateView(userData.updated_at)}
+                  </Typography>
+                  <Typography variant="h6">
+                    Username: {userData.username}
+                  </Typography>
+                  <Typography variant="h6">Email: {userData.email}</Typography>
                 </Grid>
               </Grid>
             </CardContent>

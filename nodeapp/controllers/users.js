@@ -131,13 +131,24 @@ const loginUser = async(req, res) => {
 
 const updateUserWithId = async (req, res, next) => {
 
+  const { username, password, email } = req.body
+  const schema = Joi.object({
+    username: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).required(),
+  });
 
-  const { name, password, email } = req.body
+  const { error } = schema.validate(req.body);
+  if (error) {
+    res.status(400).send(error.details[0].message);
+    return;
+  }
+
   console.log(email, 'jeepp')
   const userId = req.params.uid
 
   const user = await users.findUserById(userId);
-  console.log(user.email, 'löytyykö!!')
+  // console.log(user.email, 'löytyykö!!')
 
   if (!user) {
     const error = new Error(`User with ID ${userId} not found`);
@@ -164,7 +175,7 @@ const updateUserWithId = async (req, res, next) => {
       return next(error);
     }
 
-    const result = await users.updateUserById(userId, name, hashedPassword, email)
+    const result = await users.updateUserById(userId, username, hashedPassword, email)
     // console.log(hashedPassword)
 
     if (!result) {
@@ -173,7 +184,7 @@ const updateUserWithId = async (req, res, next) => {
       return next(error);
     }
 
-    user.name = name
+    user.username = username
     user.password = hashedPassword
     user.email = email
 
@@ -181,7 +192,7 @@ const updateUserWithId = async (req, res, next) => {
   } else {
     const result = await users.updateUserById(
       userId,
-      name,
+      username,
       password,
       email,
     )
@@ -193,7 +204,7 @@ const updateUserWithId = async (req, res, next) => {
       return next(error);
     }
 
-    user.name = name
+    user.username = username
     user.password = password
     user.email = email
 
