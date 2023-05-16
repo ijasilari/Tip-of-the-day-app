@@ -21,7 +21,7 @@ import { IconButton } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useContext } from 'react';
 import { AuthContext } from '../components/auth-context';
-import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 function OwnTips(props) {
   const [data, setData] = useState([]);
@@ -136,7 +136,16 @@ function OwnTips(props) {
     return errors;
   };
 
-  // console.log(editText)
+  let textColor = "";
+  let backgroundColor = "";
+  if(props.theme === 'light') {
+    textColor = 'black'
+    backgroundColor = 'white';
+  }
+  else {
+    textColor = '#ECECEC';
+    backgroundColor = '#1C1C1C';
+  }
 
   const formikTip = useFormik({
     enableReinitialize: true,
@@ -146,7 +155,7 @@ function OwnTips(props) {
     validate: validateTip,
     onSubmit: editTip,
   });
-  const [animationParent] = useAutoAnimate()
+
   return (
     <div data-testid="viewTipsPage">
       <Box
@@ -174,23 +183,23 @@ function OwnTips(props) {
         </IconButton>
       </Box>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table" >
+        <Table sx={{ minWidth: 650, backgroundColor: {backgroundColor} }} aria-label="simple table" >
           <TableHead>
             <TableRow>
-              <TableCell>Tip Id</TableCell>
-              <TableCell align="center">Description</TableCell>
-              <TableCell align="center">Functions</TableCell>
-              <TableCell align="center"></TableCell>
+              <TableCell sx={{color: textColor}}>Tip Id</TableCell>
+              <TableCell align="center" sx={{color: textColor}}>Description</TableCell>
+              <TableCell align="center" sx={{color: textColor}}>Functions</TableCell>
+              <TableCell align="center" sx={{color: textColor}}></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody ref={animationParent}>
+          <TableBody>
             {data &&
               data.map((item, index) => (
                 <TableRow
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell component="th" scope="row" sx={{color: textColor}}>
                     {index+1}
                   </TableCell>
                   <TableCell
@@ -202,12 +211,14 @@ function OwnTips(props) {
                     <ReactMarkdown
                       children={item.description}
                       components={{
+                        p: ({ node, ...props }) => <p style={{ color: textColor }} {...props} />,
                         code({ node, inline, className, children, ...props }) {
                           const match = /language-(\w+)/.exec(className || "");
                           return !inline && match ? (
                             <SyntaxHighlighter
                               children={String(children).replace(/\n$/, "")}
                               language={match[1]}
+                              style={tomorrow}
                               {...props}
                             />
                           ) : (
@@ -220,7 +231,7 @@ function OwnTips(props) {
                     />
                   </TableCell>
                   <TableCell align="center" style={{minWidth:'10rem'}}>
-                      <Button
+                      <Button className="buttons"
                         style={{ display: 'inline', marginRight: '2px' }}
                         variant="contained"
                         onClick={() => {
@@ -229,7 +240,7 @@ function OwnTips(props) {
                       >
                         Edit
                       </Button>
-                    <Button
+                    <Button className="buttons"
                       style={{ display: 'inline', marginLeft:'2px' }}
                       variant="contained"
                       onClick={() => {

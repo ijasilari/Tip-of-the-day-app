@@ -1,4 +1,11 @@
-code,
-pre{
-    padding: 100px;
+#dark #description-label{
+    color: #ECECEC;
+}
+
+#dark textarea{
+    color: #ECECEC;
+}
+
+#dark .text{
+    color:#ECECEC;
 }

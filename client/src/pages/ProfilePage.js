@@ -260,12 +260,12 @@ const ProfilePage = (props) => {
   });
 
   let textColor = "";
-  let bgColor = ""
+  let bgColor2 = "";
   if (props.theme === "light") {
     textColor = "black";
   } else {
     textColor = "#ECECEC";
-    bgColor = "black";
+    bgColor2 = "#1d1d1d";
   }
 
   return (
@@ -280,10 +280,10 @@ const ProfilePage = (props) => {
       <Grid
         container
         spacing={2}
-        sx={{ display: "flex", textAlign: "center", justifyContent: "center" }}
+        sx={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "10px" }}
       >
-        <Grid item xs={12}>
-          <Card style={{ backgroundColor: bgColor}}>
+        <Grid item xs={12} >
+          <Card style={{ backgroundColor: bgColor2}}>
             <CardHeader title="Profile" style={{color: textColor}}/>
             <CardContent >
               <Grid
@@ -308,9 +308,9 @@ const ProfilePage = (props) => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardHeader title="Account Settings" />
+        <Grid item xs={12} sm={6} >
+          <Card style={{ backgroundColor: bgColor2}}>
+            <CardHeader title="Account Settings" style={{ color: textColor}}/>
             <CardContent>
               <Button
                 startIcon={<Lock />}

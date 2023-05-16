@@ -1,13 +1,10 @@
-#light {
-  background-color: #fff;
-}
-
-.App {
-  height: 100%;
+.App{
+  box-sizing: border-box;
+  min-height: 100vh;
 }
 
 #dark {
-  background-color: #121212;
+  background-color: black;
 }
 
 #dark h1,

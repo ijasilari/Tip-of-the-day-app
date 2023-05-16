@@ -16,13 +16,13 @@ import { useState } from 'react';
 function ButtonAppBar(props) {
   const auth = useContext(AuthContext);
 
-  let textColor = "";
+  let bgColor = "";
   let backgroundBttnColor
   if(props.theme === 'light') {
-    textColor = '#1976D2';
+    bgColor = '#1976D2';
   }
   else {
-    textColor = '#2D2D2D';
+    bgColor = '#1d1d1d';
     backgroundBttnColor = '#bb86fcd6';
   }
 
@@ -30,20 +30,25 @@ function ButtonAppBar(props) {
 
   return (
     <Box sx={{flexGrow: 1 }}>
-      <AppBar position="static" sx={{backgroundColor:textColor}}>
+      <AppBar position="static" sx={{backgroundColor:bgColor}}>
         <Toolbar>
-          <Typography
+        <Typography
+            color="inherit"
+            variant="h6"
+            sx={{ mr: 2 }}
             component={NavLink}
             to="/"
-            variant="h6"
-            color="inherit"
-            sx={{ flexGrow: 1 }}
           >
             HomePage
           </Typography>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1 }}
+          ></Typography>
           <label className="toggleLabel">{props.theme == "light" ? "Light Mode" : "Dark Mode"} </label>
-          <ReactSwitch  onChange={props.toggleTheme} 
-                        checked={props.theme === "dark"} 
+          <ReactSwitch  onChange={props.toggleTheme}
+                        checked={props.theme === "dark"}
                         height={14}
                         width={28}
                         onColor={"#BB86FC"}
@@ -58,7 +63,7 @@ function ButtonAppBar(props) {
               sx={{
                 ':hover': {
                   bgcolor: backgroundBttnColor
-                },
+                }
               }}
             >
               Add Tip
@@ -81,6 +86,11 @@ function ButtonAppBar(props) {
               component={NavLink}
               to="/owntips"
               color="inherit"
+              sx={{
+                ':hover': {
+                  bgcolor: backgroundBttnColor
+                }
+              }}
             >
               My Tips
             </Button>
@@ -90,6 +100,11 @@ function ButtonAppBar(props) {
               component={NavLink}
               to="/profilepage"
               color="inherit"
+              sx={{
+                ':hover': {
+                  bgcolor: backgroundBttnColor
+                }
+              }}
             >
               ProfilePage
             </Button>
@@ -123,7 +138,7 @@ function ButtonAppBar(props) {
               LOGOUT
             </Button>
             )}
-          
+
         </Toolbar>
       </AppBar>
     </Box>
