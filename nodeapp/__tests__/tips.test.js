@@ -21,14 +21,27 @@ const loggedInUser = {
   token: "",
 };
 
+const loggedInUser2 = {
+  userId: "",
+  email: "",
+  token: "",
+};
+
 beforeAll(async () => {
   await pool.query("BEGIN");
   await pool.query("TRUNCATE TABLE tips CASCADE");
   await pool.query("TRUNCATE TABLE users CASCADE");
   await pool.query("COMMIT");
+
   const data = {
     username: "Tauno Testaaja",
     email: "taunotestaaja@gmail.com",
+    password: "password123",
+  };
+
+  const data2 = {
+    username: "Testaaja",
+    email: "testaaja@gmail.com",
     password: "password123",
   };
   const response = await supertest(app)
@@ -38,6 +51,14 @@ beforeAll(async () => {
   loggedInUser.userId = response.body.id;
   loggedInUser.email = response.body.email;
   loggedInUser.token = response.body.token;
+
+  const response2 = await supertest(app)
+    .post("/api/users/signup")
+    .set("Accept", "application/json")
+    .send(data2);
+  loggedInUser2.userId = response2.body.id;
+  loggedInUser2.email = response2.body.email;
+  loggedInUser2.token = response2.body.token;
 });
 
 afterAll(() => pool.end());
@@ -49,6 +70,7 @@ describe('Tips tests', () => {
     const tip = {
       description: "Test Tip",
       category: 1,
+      creator: loggedInUser.userId
     };
 
     const response = await supertest(app)
@@ -86,6 +108,26 @@ it("GET /getall/:category", async () => {
   expect(response.body.tips[0].category).toEqual(1);
 });
 
+it("GET /getall/:category with invalid category", async () => {
+  const response = await supertest(app).get(`/api/tips/getall/123`);
+  expect(response.status).toEqual(404);
+  expect(response.error.text).toContain(
+    "Tip with CATEGORY 123 not found");
+});
+
+it("GET /getbycreator/:creator", async () => {
+  const response = await supertest(app).get(`/api/tips/getbycreator/${loggedInUser.userId}`);
+  expect(response.body.tips[0].creator).toEqual(loggedInUser.userId);
+});
+
+it("GET /getbycreator/:creator with invalid creatorId", async () => {
+  const response = await supertest(app).get(`/api/tips/getbycreator/123456`);
+  expect(response.status).toEqual(404);
+  expect(response.error.text).toContain(
+    "Tip with CREATOR 123456 not found"
+  );
+});
+
 it("GET /randomtip", async () => {
   const response = await supertest(app).get(`/api/tips/randomtip`);
   expect(response.body.tip.description).toEqual('Test Tip');
@@ -95,6 +137,7 @@ it("PATCH /:tipId/update", async () => {
   const tip = {
     description: "Update Test Tip",
     category: 2,
+    creator: loggedInUser.userId
   };
   const response = await supertest(app)
     .patch(`/api/tips/${TipId}/update`)
@@ -110,6 +153,7 @@ it("POST /addtip without token", async () => {
   const tip = {
     description: "New Test Tip",
     category: 1,
+    creator: loggedInUser.userId
   };
 
   const response = await supertest(app)
@@ -124,6 +168,7 @@ it("PATCH /:tipId/update without token", async () => {
   const tip = {
     description: "Update Test Tip",
     category: 2,
+    creator: loggedInUser.userId
   };
   const response = await supertest(app)
     .patch(`/api/tips/${TipId}/update`)
@@ -161,6 +206,7 @@ it("POST /addtip without description", async () => {
   const tip = {
     description: "",
     category: 2,
+    creator: loggedInUser.userId,
   };
 
   const response = await supertest(app)
@@ -176,7 +222,8 @@ it("POST /addtip without description", async () => {
 
 it("POST /addtip without category", async () => {
   const tip = {
-    description: ""
+    description: "",
+    creator: loggedInUser.userId,
   };
 
   const response = await supertest(app)
@@ -192,6 +239,7 @@ it("PATCH /:tipId/update with faulty id", async () => {
   const tip = {
     description: "Update Test Tip!",
     category: 2,
+    creator: loggedInUser.userId,
   };
   const response = await supertest(app)
     .patch(`/api/tips/1234567/update`)
@@ -206,6 +254,7 @@ it("PATCH /:tipId/update without description", async () => {
   const tip = {
     description: "",
     category: 2,
+    creator: loggedInUser.userId,
   };
   const response = await supertest(app)
     .patch(`/api/tips/${TipId}/update`)
@@ -220,7 +269,8 @@ it("PATCH /:tipId/update without description", async () => {
 
 it("PATCH /:tipId/update without category", async () => {
   const tip = {
-    description: "",
+    description: "new tip",
+    creator: loggedInUser.userId,
   };
   const response = await supertest(app)
     .patch(`/api/tips/${TipId}/update`)
@@ -357,10 +407,151 @@ it("GET /getusers", async () => {
   expect(response.body[0].username).toBeTruthy();
 });
 
+it("GET /:uid", async () => {
+  const response = await supertest(app).get(`/api/users/${loggedInUser.userId}`);
+  expect(response.status).toEqual(200);
+  expect(response.body.user.id).toBeTruthy();
+  expect(response.body.user.email).toBeTruthy();
+  expect(response.body.user.username).toBeTruthy();
+});
+
+it("GET /:uid with faulty userId", async () => {
+  const response = await supertest(app).get(
+    `/api/users/123456`
+  );
+  expect(response.status).toEqual(404);
+  expect(response.error.text).toContain("User with ID 123456 not found");
+});
+
 it("GET /api/invalid", async () => {
   const response = await supertest(app).get("/api/invalid");
   expect(response.status).toEqual(404);
   expect(response.text).toEqual('{"message":"Route not found"}');
+});
+
+it("PATCH /:userId/update change name of the user, email and password with faulty id", async () => {
+  const data = {
+    username: "Tahvo Testaaja",
+    email: "tahvotestaaja@gmail.com",
+    password: "password123",
+  };
+
+  const response = await supertest(app)
+    .patch(`/api/users/123456789/update`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(404);
+  expect(response.error.text).toContain("User with ID 123456789 not found");
+});
+
+it("PATCH /:userId/update change name of the user, email and password", async () => {
+  const data = {
+    username: "Tahvo Testaaja",
+    email: "tahvotestaaja@gmail.com",
+    password: "password12345",
+  };
+
+  const response = await supertest(app)
+    .patch(`/api/users/${loggedInUser.userId}/update`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(200);
+  expect(response.body.user.username).toEqual("Tahvo Testaaja")
+  expect(response.body.user.email).toEqual("tahvotestaaja@gmail.com");
+});
+
+it("PATCH /:userId/update change email to same as other user email", async () => {
+  const data = {
+    username: "Tahvo Testaaja",
+    email: "testaaja@gmail.com",
+    password: "password12345",
+  };
+
+  const response = await supertest(app)
+    .patch(`/api/users/${loggedInUser.userId}/update`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(422);
+  expect(response.error.text).toContain("Email exists");
+});
+
+it("PATCH /:userId/update change name of the user with empty value", async () => {
+  const data = {
+    username: "",
+    email: "test@email.com",
+    password: "password12345",
+  };
+
+  const response = await supertest(app)
+    .patch(`/api/users/${loggedInUser.userId}/update`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(400);
+  expect(response.text).toContain('"username" is not allowed to be empty');
+});
+
+it("PATCH /:userId/update change email of the user with empty value", async () => {
+  const data = {
+    username: "testuser",
+    email: "",
+    password: "password12345",
+  };
+
+  const response = await supertest(app)
+    .patch(`/api/users/${loggedInUser.userId}/update`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(400);
+  expect(response.text).toContain('"email" is not allowed to be empty');
+});
+
+it("PATCH /:userId/update change password of the user with empty value", async () => {
+  const data = {
+    username: "testuser",
+    email: "test@email.com",
+    password: "",
+  };
+
+  const response = await supertest(app)
+    .patch(`/api/users/${loggedInUser.userId}/update`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(400);
+  expect(response.text).toContain('"password" is not allowed to be empty');
+});
+
+it("DELETE /:userId/delete delete user", async () => {
+  const response = await supertest(app)
+    .delete(`/api/users/${loggedInUser.userId}/delete`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
+    .set("Accept", "application/json");
+  expect(response.status).toEqual(200);
+  expect(response.text).toEqual('{"message":"Deleted the user."}');
+});
+
+it("DELETE /:userId/delete try to delete user with wrong id", async () => {
+  const response = await supertest(app)
+    .delete("/api/users/abcdefg123456789/delete")
+    .set("Authorization", "Bearer " + loggedInUser.token)
+    .set("Accept", "application/json");
+  expect(response.status).toEqual(404);
+  expect(response.error.text).toContain(
+    "User with ID abcdefg123456789 not found"
+  );
+});
+
+it("DELETE /:userId/delete try to delete user without token", async () => {
+  const response = await supertest(app)
+    .delete(`/api/users/${loggedInUser2.userId}/delete`)
+    .set("Accept", "application/json");
+  expect(response.status).toEqual(401);
+  expect(response.text).toEqual("Authentication failed");
 });
 
 })

@@ -1,12 +1,12 @@
-import { 
-  getAllTips, 
-  findTipsByCategory, 
-  findTipsByCreator, 
-  findTipById, 
-  addTip, 
-  updateTipWithId, 
-  deleteTipWithId, 
-  getRandomTip 
+import {
+  getAllTips,
+  findTipsByCategory,
+  findTipsByCreator,
+  findTipById,
+  addTip,
+  updateTipWithId,
+  deleteTipWithId,
+  getRandomTip
 } from "../models/tips.js";
 import { validationResult } from "express-validator";
 
@@ -21,8 +21,9 @@ const getTipsByCategory = async (req, res, next) => {
   console.log(tipCategory);
   // console.log(tipId)
   const tips = await findTipsByCategory(tipCategory);
+  console.log(tips)
 
-  if (!tips) {
+  if (tips.length === 0) {
     const error = new Error(`Tip with CATEGORY ${tipCategory} not found`);
     error.statusCode = 404;
     return next(error);
@@ -36,7 +37,7 @@ const getTipsByCreator = async (req, res, next) => {
   console.log(creator);
   const tips = await findTipsByCreator(creator);
 
-  if (!tips) {
+  if (tips.length === 0) {
     const error = new Error(`Tip with CREATOR ${creator} not found`);
     error.statusCode = 404;
     return next(error);
@@ -125,13 +126,13 @@ const updateTipById = async (req, res, next) => {
     error.statusCode = 400;
     return next(error);
   }
- 
+
   const { description, category, creator } = req.body;
   const tipId = req.params.tid;
   // console.log(tipId)
   console.log(category)
   const tip = await findTipById(tipId);
- 
+
   if (!tip) {
     const error = new Error(`Tip with ID ${tipId} not found`);
     error.statusCode = 404;
@@ -142,13 +143,13 @@ const updateTipById = async (req, res, next) => {
       category,
       tipId
     );
- 
+
     if (!result) {
     const error = new Error(`Couldnt update Tip with ID ${tipId}`);
     error.statusCode = 404;
     return next(error);
     }
- 
+
     tip.id = tipId
     tip.description = description
     tip.category = category
