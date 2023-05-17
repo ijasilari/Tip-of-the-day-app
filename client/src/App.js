@@ -69,9 +69,31 @@ function App() {
     setTheme((curr) => (curr === "light" ? "dark" : "light"));
   }
 
+  let routes;
+  if(token){
+    routes = (
+      <Routes>
+        <Route path="/" element={<HomePage theme={theme}/>} />
+        <Route path="/profilepage" element={<ProfilePage userId={userId}/>} />
+        <Route path="addtip" element={<AddTip />} />
+        <Route path="viewtips" element={<ViewTips theme={theme}/>} />
+        <Route path="owntips" element={<OwnTips theme={theme}/>} />
+        <Route path="*" element={<HomePage />} />
+      </Routes>
+    )
+  } else {
+    routes = (
+      <Routes>
+        <Route path="/" element={<HomePage theme={theme}/>} />
+        <Route path="viewtips" element={<ViewTips theme={theme}/>} />
+        <Route path="auth" element={<Authenticate theme={theme}/>} />
+        <Route path="*" element={<HomePage />} />
+      </Routes>
+    )
+  }
+
  return (
-   
-      <AuthContext.Provider
+    <AuthContext.Provider
      value={{
        isLoggedIn: !!token,
        token: token,
@@ -85,16 +107,8 @@ function App() {
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <div className="App" id={theme}>
         <ButtonAppBar toggleTheme={toggleTheme} theme={theme}/>
-            <Routes>
-              <Route path="/" element={<HomePage theme={theme}/>} />
-              <Route path="/profilepage" element={<ProfilePage userId={userId}/>} />
-              <Route path="addtip" element={<AddTip />} />
-              <Route path="viewtips" element={<ViewTips theme={theme}/>} />
-              <Route path="owntips" element={<OwnTips />} />
-              <Route path="auth" element={<Authenticate theme={theme}/>} />
-              <Route path="*" element={<HomePage />} />
-            </Routes>
-          </div>
+          {routes}
+      </div>
     </ThemeContext.Provider>
    </BrowserRouter>
      </QueryClientProvider>
