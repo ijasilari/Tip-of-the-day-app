@@ -58,3 +58,20 @@ pre {
   background-color: #e0e0e021;
   border-radius: 8px;
 }
+
+#dark .buttons{
+  background-color: #BB86FC;
+}
+
+#dark .buttonsOutline{
+  border-color: #BB86FC;
+  color:#BB86FC;
+}
+
+#dark #description-label{
+  color: #ECECEC;
+}
+
+#dark textarea{
+  color: #ECECEC;
+}
