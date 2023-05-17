@@ -138,6 +138,11 @@ const updateTipById = async (req, res, next) => {
     error.statusCode = 404;
     return next(error);
   }
+  if (tip.creator !== req.userData.userId) {
+    const error = new Error(`Not authorized to update tip`);
+    error.statusCode = 401;
+    return next(error);
+  }
     const result = await updateTipWithId(
       description,
       category,
@@ -165,6 +170,12 @@ const deleteTipById = async (req, res, next) => {
   if (!tip) {
     const error = new Error(`Tip with ID ${tipId} not found`);
     error.statusCode = 404;
+    return next(error);
+  }
+
+  if (tip.creator !== req.userData.userId) {
+    const error = new Error(`Not authorized to delete tip`);
+    error.statusCode = 401;
     return next(error);
   }
 
