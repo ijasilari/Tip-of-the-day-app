@@ -19,6 +19,7 @@ const loggedInUser = {
   userId: "",
   email: "",
   token: "",
+  password: ""
 };
 
 const loggedInUser2 = {
@@ -133,6 +134,21 @@ it("GET /randomtip", async () => {
   expect(response.body.tip.description).toEqual('Test Tip');
 });
 
+it("PATCH /:tipId/update with another user should throw authentication error", async () => {
+  const tip = {
+    description: "Update Test Tip",
+    category: 2,
+    creator: loggedInUser2.userId,
+  };
+  const response = await supertest(app)
+    .patch(`/api/tips/${TipId}/update`)
+    .set("Authorization", "Bearer " + loggedInUser2.token)
+    .set("Accept", "application/json")
+    .send(tip);
+  expect(response.status).toEqual(401);
+  expect(response.error.text).toContain("Not authorized to update tip");
+});
+
 it("PATCH /:tipId/update", async () => {
   const tip = {
     description: "Update Test Tip",
@@ -184,6 +200,15 @@ it("DELETE /:tipId/delete without token", async () => {
     .set("Accept", "application/json");
   expect(response.status).toEqual(401);
   expect(response.text).toEqual("Authentication failed");
+});
+
+it("DELETE /:tipId/delete with another user should throw authentication error", async () => {
+  const response = await supertest(app)
+    .delete(`/api/tips/${TipId}/delete`)
+    .set("Authorization", "Bearer " + loggedInUser2.token)
+    .set("Accept", "application/json");
+  expect(response.status).toEqual(401);
+  expect(response.error.text).toContain("Not authorized to delete tip");
 });
 
 it("DELETE /:tipId/delete", async () => {
@@ -445,6 +470,22 @@ it("PATCH /:userId/update change name of the user, email and password with fault
   expect(response.error.text).toContain("User with ID 123456789 not found");
 });
 
+it("PATCH /:userId/update should throw authentication error when trying to change another user values", async () => {
+  const data = {
+    username: "newuser",
+    email: "newuser@gmail.com",
+    password: "newuser12345",
+  };
+
+  const response = await supertest(app)
+    .patch(`/api/users/${loggedInUser.userId}/update`)
+    .set("Authorization", "Bearer " + loggedInUser2.token)
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(401);
+  expect(response.error.text).toContain("Not authorized to update user");
+});
+
 it("PATCH /:userId/update change name of the user, email and password", async () => {
   const data = {
     username: "Tahvo Testaaja",
@@ -460,6 +501,40 @@ it("PATCH /:userId/update change name of the user, email and password", async ()
   expect(response.status).toEqual(200);
   expect(response.body.user.username).toEqual("Tahvo Testaaja")
   expect(response.body.user.email).toEqual("tahvotestaaja@gmail.com");
+  loggedInUser.password = response.body.user.password;
+});
+
+it("PATCH /:userId/update update values to same as they were should succeed", async () => {
+  const data = {
+    username: "Tahvo Testaaja",
+    email: "tahvotestaaja@gmail.com",
+    password: loggedInUser.password,
+  };
+
+  const response = await supertest(app)
+    .patch(`/api/users/${loggedInUser.userId}/update`)
+    .set("Authorization", "Bearer " + loggedInUser.token)
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(200);
+  expect(response.body.user.username).toEqual("Tahvo Testaaja");
+  expect(response.body.user.email).toEqual("tahvotestaaja@gmail.com");
+});
+
+it("POST /login with new changed values", async () => {
+  const data = {
+    email: "tahvotestaaja@gmail.com",
+    password: "password12345",
+  };
+
+  const response = await supertest(app)
+    .post("/api/users/login")
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(201);
+  expect(response.body.email).toEqual("tahvotestaaja@gmail.com");
+  expect(response.body.token).toBeTruthy();
+  expect(response.body.id).toBeTruthy();
 });
 
 it("PATCH /:userId/update change email to same as other user email", async () => {
@@ -524,6 +599,15 @@ it("PATCH /:userId/update change password of the user with empty value", async (
     .send(data);
   expect(response.status).toEqual(400);
   expect(response.text).toContain('"password" is not allowed to be empty');
+});
+
+it("DELETE /:userId/delete trying to delete another user should throw authentication error", async () => {
+  const response = await supertest(app)
+    .delete(`/api/users/${loggedInUser.userId}/delete`)
+    .set("Authorization", "Bearer " + loggedInUser2.token)
+    .set("Accept", "application/json");
+  expect(response.status).toEqual(401);
+  expect(response.text).toContain("Not authorized to delete user");
 });
 
 it("DELETE /:userId/delete delete user", async () => {
