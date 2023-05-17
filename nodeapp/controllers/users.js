@@ -131,13 +131,22 @@ const loginUser = async(req, res) => {
 
 const updateUserWithId = async (req, res, next) => {
 
+  const { username, password, email } = req.body;
+  const schema = Joi.object({
+    username: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).required(),
+  });
 
-  const { name, password, email } = req.body
-  console.log(email, 'jeepp')
-  const userId = req.params.uid
+  const { error } = schema.validate(req.body);
+  if (error) {
+    res.status(400).send(error.details[0].message);
+    return;
+  }
+
+  const userId = req.params.uid;
 
   const user = await users.findUserById(userId);
-  console.log(user.email, 'löytyykö!!')
 
   if (!user) {
     const error = new Error(`User with ID ${userId} not found`);
@@ -146,8 +155,8 @@ const updateUserWithId = async (req, res, next) => {
   }
 
   if (email !== user.email) {
-    const exist = await users.findRowCountByEmail(email)
-    console.log(exist, 'löytyykö tämä')
+    const exist = await users.findRowCountByEmail(email);
+    console.log(exist, "löytyykö tämä");
     if (exist) {
       const error = new Error(`Email exists`);
       error.statusCode = 422;
@@ -155,16 +164,26 @@ const updateUserWithId = async (req, res, next) => {
     }
   }
   if (password !== user.password) {
-    let hashedPassword
+    let hashedPassword;
     try {
-      hashedPassword = await bcrypt.hash(password, 12)
+      hashedPassword = await bcrypt.hash(password, 12);
     } catch (err) {
       const error = new Error(`Could not update`);
       error.statusCode = 500;
       return next(error);
     }
 
-    const result = await users.updateUserById(userId, name, hashedPassword, email)
+    if (user.id !== req.userData.userId) {
+      const error = new Error(`Not authorized to update user`);
+      error.statusCode = 401;
+      return next(error);
+    }
+    const result = await users.updateUserById(
+      userId,
+      username,
+      hashedPassword,
+      email
+    );
     // console.log(hashedPassword)
 
     if (!result) {
@@ -173,19 +192,23 @@ const updateUserWithId = async (req, res, next) => {
       return next(error);
     }
 
-    user.name = name
-    user.password = hashedPassword
-    user.email = email
+    user.username = username;
+    user.password = hashedPassword;
+    user.email = email;
 
-    res.status(200).json({ user })
+    res.status(200).json({ user });
   } else {
+    if (user.id !== req.userData.userId) {
+      const error = new Error(`Not authorized to update user`);
+      error.statusCode = 401;
+      return next(error);
+    }
     const result = await users.updateUserById(
       userId,
-      name,
+      username,
       password,
-      email,
-    )
-    // console.log(password)
+      email
+    );
 
     if (!result) {
       const error = new Error(`Could not update user`);
@@ -193,12 +216,12 @@ const updateUserWithId = async (req, res, next) => {
       return next(error);
     }
 
-    user.name = name
-    user.password = password
-    user.email = email
+    user.username = username;
+    user.password = password;
+    user.email = email;
 
-    res.status(200).json({ user })
-}
+    res.status(200).json({ user });
+  }
 };
 
 const deleteUserWithId = async (req, res, next) => {
@@ -209,6 +232,11 @@ const deleteUserWithId = async (req, res, next) => {
   if (!user) {
     const error = new Error(`User with ID ${userId} not found`);
     error.statusCode = 404;
+    return next(error);
+  }
+  if (user.id !== req.userData.userId) {
+    const error = new Error(`Not authorized to delete user`);
+    error.statusCode = 401;
     return next(error);
   }
   const result = await users.deleteUserById(userId);

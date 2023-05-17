@@ -33,13 +33,21 @@ tipsRouter.delete("/:tid/delete", deleteTipById);
 
 tipsRouter.patch(
   "/:tid/update",
-  [check("description").notEmpty(), check("category").notEmpty()],
+  [
+    check("description").notEmpty(),
+    check("category").notEmpty(),
+    check("creator").notEmpty(),
+  ],
   updateTipById
 );
 
 tipsRouter.post(
   "/addtip",
-  [check("description").notEmpty(), check("category").notEmpty()],
+  [
+    check("description").notEmpty(),
+    check("category").notEmpty(),
+    check("creator").notEmpty(),
+  ],
   addNewTip
 );
 

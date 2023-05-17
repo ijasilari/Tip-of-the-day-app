@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import CssBaseline from '@mui/material/CssBaseline';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useFormik } from "formik";
 import axios from "axios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import { useFormik } from "formik";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import Dropdown from "../components/Dropdown";
@@ -23,7 +25,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../components/auth-context';
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-function OwnTips(props) {
+export default function OwnTips() {
   const [data, setData] = useState([]);
   const [openEditTip, setOpenEditTip] = useState(false);
   const [id, setId] = useState();
@@ -45,6 +47,12 @@ function OwnTips(props) {
     {value: 10, label: "Linux"}
   ]
 
+  const getCategoryLabel = (categoryId) => {
+    const category = categoryOptions.find(
+      (option) => option.value === categoryId
+    );
+    return category ? category.label : "";
+  };
 
   const handleCancel = () => {
     formikTip.resetForm();
@@ -157,99 +165,94 @@ function OwnTips(props) {
   });
 
   return (
-    <div data-testid="viewTipsPage">
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          mt:3
-        }}
-      >
-        <Box sx={{ flexGrow: 1}}>{/* content of the first box */}</Box>
-        <Dropdown
-          isSearchable
-          placeHolder="Select..."
-          options={categoryOptions}
-          onChange={(value) => setCategory(value.value)}
-        />
-
-        <IconButton
-          sx={{ marginLeft: 0, mr:'30%'}}
-          onClick={() => fetchDataByCategoryAndCreator()}
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <main>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: 3,
+          }}
         >
-          {" "}
-          <SearchIcon />{" "}
-        </IconButton>
-      </Box>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650, backgroundColor: {backgroundColor} }} aria-label="simple table" >
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{color: textColor}}>Tip Id</TableCell>
-              <TableCell align="center" sx={{color: textColor}}>Description</TableCell>
-              <TableCell align="center" sx={{color: textColor}}>Functions</TableCell>
-              <TableCell align="center" sx={{color: textColor}}></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data &&
-              data.map((item, index) => (
-                <TableRow
-                  key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row" sx={{color: textColor}}>
-                    {index+1}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{
-                      overflow: "auto",
-                    }}
-                  >
-                    <ReactMarkdown
-                      children={item.description}
-                      components={{
-                        p: ({ node, ...props }) => <p style={{ color: textColor }} {...props} />,
-                        code({ node, inline, className, children, ...props }) {
-                          const match = /language-(\w+)/.exec(className || "");
-                          return !inline && match ? (
-                            <SyntaxHighlighter
-                              children={String(children).replace(/\n$/, "")}
-                              language={match[1]}
-                              style={tomorrow}
-                              {...props}
-                            />
-                          ) : (
-                            <code className={className} {...props}>
-                              {children}
-                            </code>
-                          );
-                        },
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell align="center" style={{minWidth:'10rem'}}>
-                      <Button className="buttons"
-                        style={{ display: 'inline', marginRight: '2px' }}
-                        variant="contained"
+          <Box sx={{ flexGrow: 1 }}>{/* content of the first box */}</Box>
+          <Dropdown
+            isSearchable
+            placeHolder="Select..."
+            options={categoryOptions}
+            onChange={(value) => setCategory(value.value)}
+          />
+
+          <IconButton
+            sx={{ marginLeft: 0, mr: "30%" }}
+            onClick={() => fetchDataByCategoryAndCreator()}
+            style={{ backgroundColor: 'transparent' }}
+          >
+            {" "}
+            <SearchIcon className="searchIcon"/>{" "}
+          </IconButton>
+        </Box>
+        <Container sx={{ py: 8 }} maxWidth="md">
+          <Grid container spacing={4} ref={animationParent}>
+            {data.map((item, index) => (
+              <Grid item key={index} xs={10} sm={6} md={6}>
+                <Card sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {getCategoryLabel(item.category)}
+                    </Typography>
+                    <div style={{ overflowY: 'auto' }}>
+                      <ReactMarkdown
+                        children={item.description}
+                        components={{
+                          p: ({ node, ...props }) => <p style={{ color: textColor }} {...props} />,
+                          code({ node, inline, className, children, ...props }) {
+                            const match = /language-(\w+)/.exec(className || '');
+                            return !inline && match ? (
+                              <SyntaxHighlighter
+                                children={String(children).replace(/\n$/, '')}
+                                language={match[1]}
+                                style={tomorrow}
+                                {...props}
+                              />
+                            ) : (
+                              <code className={className} {...props}>
+                                {children}
+                              </code>
+                            );
+                          },
+                        }}
+                      />
+                    </div>
+                    </CardContent>
+                  <CardActions>
+                    {auth.userId === item.creator && (
+                        <Button
+                          style={{ display: "inline", marginRight: "2px" }}
+                          variant="outlined"
+                          onClick={() => {
+                            handleTipClickOpen(item.id, index);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      )}
+                    {auth.userId === item.creator && (
+                      <Button
+                        style={{ display: "inline", marginLeft: "2px" }}
+                        variant="outlined"
                         onClick={() => {
-                          handleTipClickOpen(item.id, index);
+                          deleteTip(item.id);
                         }}
                       >
-                        Edit
+                        Delete
                       </Button>
-                    <Button className="buttons"
-                      style={{ display: 'inline', marginLeft:'2px' }}
-                      variant="contained"
-                      onClick={() => {
-                        deleteTip(item.id);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                    <Dialog
+                    )}
+                  </CardActions>
+                </Card>
+                <Dialog
                       maxWidth="sm"
                       open={openEditTip}
                       aria-labelledby="alert-dialog-title"
@@ -311,17 +314,11 @@ function OwnTips(props) {
                         </DialogActions>
                       </Box>
                     </Dialog>
-                  </TableCell>
-                  <TableCell align="right">
-
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </main>
+    </ThemeProvider>
   );
 }
-
-export default OwnTips;

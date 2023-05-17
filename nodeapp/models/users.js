@@ -91,7 +91,7 @@ const users = {
       console.log("models updateuserbyid");
       console.log(userId, name, hashedPassword, email);
       pool.query(
-        "UPDATE users SET username=$1, password=$2, email=$3 WHERE id=$4",
+        "UPDATE users SET username=$1, password=$2, email=$3, updated_at=now() WHERE id=$4",
         [name, hashedPassword, email, userId],
         (err, result) => {
           if (err) {
