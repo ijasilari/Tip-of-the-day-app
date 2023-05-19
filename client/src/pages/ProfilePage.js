@@ -22,6 +22,7 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/auth-context";
 import axios from "axios";
+import "./ProfilePage.css";
 
 const ProfilePage = (props) => {
   const [showPasswordFields, setShowPasswordFields] = useState(false);
@@ -264,6 +265,19 @@ const ProfilePage = (props) => {
     onSubmit: changeUsername,
   });
 
+  let textColor = "";
+  let bgColor2 = "";
+  let textAreaOutlineColor = "";
+  let backgroundColor = "";
+  if (props.theme === "light") {
+    textColor = "black";
+  } else {
+    textColor = "#ECECEC";
+    bgColor2 = "#1d1d1d";
+    textAreaOutlineColor = '#bb86fc';
+    backgroundColor = '#373737';
+  }
+
   return (
     <div
       style={{
@@ -276,7 +290,7 @@ const ProfilePage = (props) => {
       <Grid
         container
         spacing={2}
-        sx={{ display: "flex", textAlign: "center", justifyContent: "center" }}
+        sx={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "10px" }}
       >
         <Grid item xs={12}>
           <Card>
@@ -319,11 +333,12 @@ const ProfilePage = (props) => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardHeader title="Account Settings" />
+        <Grid item xs={12} sm={6} >
+          <Card style={{ backgroundColor: bgColor2}}>
+            <CardHeader title="Account Settings" style={{ color: textColor}}/>
             <CardContent>
               <Button
+                className="buttonsOutline"
                 startIcon={<Lock />}
                 variant="outlined"
                 fullWidth
@@ -346,6 +361,12 @@ const ProfilePage = (props) => {
                     type="password"
                     onChange={formikPassword.handleChange}
                     value={formikPassword.values.password}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: textAreaOutlineColor,
+                      },
+                      backgroundColor: backgroundColor
+                    }}
                   />
                   {formikPassword.errors.password ? (
                     <div style={{ color: "red" }}>
@@ -361,6 +382,12 @@ const ProfilePage = (props) => {
                     type="password"
                     onChange={formikPassword.handleChange}
                     value={formikPassword.values.newpassword}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: textAreaOutlineColor,
+                      },
+                      backgroundColor: backgroundColor
+                    }}
                   />
                   {formikPassword.errors.newpassword ? (
                     <div style={{ color: "red" }}>
@@ -368,6 +395,7 @@ const ProfilePage = (props) => {
                     </div>
                   ) : null}
                   <Button
+                    className="buttons"
                     variant="contained"
                     role="button"
                     type="submit"
@@ -382,6 +410,7 @@ const ProfilePage = (props) => {
                 variant="outlined"
                 fullWidth
                 onClick={handleEmailButtonClick}
+                className="buttonsOutline"
               >
                 Change Email
               </Button>
@@ -399,6 +428,12 @@ const ProfilePage = (props) => {
                     name="email"
                     onChange={formikEmail.handleChange}
                     value={formikEmail.values.email}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: textAreaOutlineColor,
+                      },
+                      backgroundColor: backgroundColor
+                    }}
                   />
                   {formikEmail.errors.email ? (
                     <div style={{ color: "red" }}>
@@ -406,6 +441,7 @@ const ProfilePage = (props) => {
                     </div>
                   ) : null}
                   <Button
+                    className="buttons"
                     variant="contained"
                     role="button"
                     type="submit"
@@ -420,6 +456,7 @@ const ProfilePage = (props) => {
                 variant="outlined"
                 fullWidth
                 onClick={handleUsernameButtonClick}
+                className="buttonsOutline"
               >
                 Change Username
               </Button>
@@ -437,6 +474,12 @@ const ProfilePage = (props) => {
                     id="username"
                     onChange={formikUsername.handleChange}
                     value={formikUsername.values.username}
+                    sx={{
+                      '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: textAreaOutlineColor,
+                      },
+                      backgroundColor: backgroundColor
+                    }}
                   />
                   {formikUsername.errors.username ? (
                     <div style={{ color: "red" }}>
@@ -444,6 +487,7 @@ const ProfilePage = (props) => {
                     </div>
                   ) : null}
                   <Button
+                    className="buttons"
                     variant="contained"
                     role="button"
                     type="submit"
@@ -470,21 +514,23 @@ const ProfilePage = (props) => {
         open={showDeleteConfirmation}
         onClose={handleDeleteConfirmationClose}
       >
-        <DialogTitle>Delete Account</DialogTitle>
-        <DialogContent>
-          <Typography>Are you sure you want to delete your account?</Typography>
-          <FormControlLabel
+        <DialogTitle sx={{backgroundColor: bgColor2, color: textColor}}>Delete Account</DialogTitle>
+        <DialogContent
+        sx={{backgroundColor: bgColor2}}>
+          <Typography sx={{color: textColor}}>Are you sure you want to delete your account?</Typography>
+          <FormControlLabel sx={{color: textColor}}
             control={
               <Checkbox
                 checked={deleteVerified}
                 onChange={handleDeleteVerification}
+                sx={{color: textColor}}
               />
             }
             label="I understand that this action is irreversible."
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteConfirmationClose}>Cancel</Button>
+        <DialogActions sx={{backgroundColor: bgColor2}}>
+          <Button onClick={handleDeleteConfirmationClose} sx={{color: textAreaOutlineColor}}>Cancel</Button>
           <Button
             onClick={handleDeleteAccount}
             disabled={!deleteVerified}

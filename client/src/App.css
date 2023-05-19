@@ -1,13 +1,10 @@
-#light {
-  background-color: #fff;
-}
-
-.App {
-  height: 100%;
+.App{
+  box-sizing: border-box;
+  min-height: 100vh;
 }
 
 #dark {
-  background-color: #121212;
+  background-color: black;
 }
 
 #dark h1,
@@ -60,4 +57,21 @@ pre {
 .searchIcon:hover {
   background-color: #e0e0e021;
   border-radius: 8px;
+}
+
+#dark .buttons{
+  background-color: #BB86FC;
+}
+
+#dark .buttonsOutline{
+  border-color: #BB86FC;
+  color:#BB86FC;
+}
+
+#dark #description-label{
+  color: #ECECEC;
+}
+
+#dark textarea{
+  color: #ECECEC;
 }

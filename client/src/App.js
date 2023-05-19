@@ -74,8 +74,8 @@ function App() {
     routes = (
       <Routes>
         <Route path="/" element={<HomePage theme={theme}/>} />
-        <Route path="/profilepage" element={<ProfilePage userId={userId}/>} />
-        <Route path="addtip" element={<AddTip />} />
+        <Route path="/profilepage" element={<ProfilePage userId={userId} theme={theme}/>} />
+        <Route path="addtip" element={<AddTip theme={theme}/>} />
         <Route path="viewtips" element={<ViewTips theme={theme}/>} />
         <Route path="owntips" element={<OwnTips theme={theme}/>} />
         <Route path="*" element={<HomePage />} />
@@ -93,7 +93,8 @@ function App() {
   }
 
  return (
-    <AuthContext.Provider
+
+      <AuthContext.Provider
      value={{
        isLoggedIn: !!token,
        token: token,
@@ -113,8 +114,6 @@ function App() {
    </BrowserRouter>
      </QueryClientProvider>
    </AuthContext.Provider>
-  
-
  );
 }
 
