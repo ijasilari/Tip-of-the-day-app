@@ -41,6 +41,7 @@ pre {
   padding: 5px;
   border-radius: 8px;
   background-color: #2d2d2d;
+  width: fit-content;
 }
 
 #light li {
