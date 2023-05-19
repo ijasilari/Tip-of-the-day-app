@@ -191,7 +191,7 @@ export default function OwnTips(props) {
         <Grid container spacing={4} >
           {data.map((item, index) => (
             <Grid item key={index} xs={10} sm={6} md={6}>
-              <Card sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <Card sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: backgroundColor }}>
 
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography gutterBottom variant="h5" component="h2">
