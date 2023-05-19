@@ -222,6 +222,7 @@ export default function OwnTips(props) {
                 <CardActions>
                   {auth.userId === item.creator && (
                     <Button
+                      className="buttonsOutline"
                       style={{ display: "inline", marginRight: "2px" }}
                       variant="outlined"
                       onClick={() => {
@@ -233,6 +234,7 @@ export default function OwnTips(props) {
                   )}
                   {auth.userId === item.creator && (
                     <Button
+                      className="buttonsOutline"
                       style={{ display: "inline", marginLeft: "2px" }}
                       variant="outlined"
                       onClick={() => {

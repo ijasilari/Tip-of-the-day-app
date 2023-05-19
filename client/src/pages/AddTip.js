@@ -138,6 +138,7 @@ function AddTip(props) {
         component="form"
         onSubmit={formikTip.handleSubmit}
         textAlign="center"
+        display='-ms-inline-grid'
         flexGrow="1"
         sx={{
           "& > :not(style)": { mt: 3, ml: 3, mr: 3, width: "50%" , height: '100%'},
@@ -151,9 +152,10 @@ function AddTip(props) {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            "& > :not(style)": { mt: 3, ml: "125%", mr: "31%", width: "100%" },
+            "& > :not(style)": { mt: 3, ml: "125%", mr: "38%", width: "100%" },
           }}
         >
+      
           <Dropdown
             isSearchable
             placeHolder="Select..."

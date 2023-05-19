@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/auth-context";
 import axios from "axios";
 import "./ProfilePage.css";
+import { red } from "@mui/material/colors";
 
 const ProfilePage = (props) => {
   const [showPasswordFields, setShowPasswordFields] = useState(false);
@@ -275,8 +276,11 @@ const ProfilePage = (props) => {
     textColor = "#ECECEC";
     bgColor2 = "#1d1d1d";
     textAreaOutlineColor = '#bb86fc';
-    backgroundColor = '#373737';
+    backgroundColor = '#1D1D1D';
   }
+  const customInputStyle = {
+    borderColor: "red"
+  };
 
   return (
     <div
@@ -293,7 +297,8 @@ const ProfilePage = (props) => {
         sx={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "10px" }}
       >
         <Grid item xs={12}>
-          <Card>
+          <Card
+          sx={{backgroundColor: backgroundColor}}>
             <div
               style={{
                 display: "flex",
@@ -301,7 +306,7 @@ const ProfilePage = (props) => {
                 alignItems: "center",
               }}
             >
-              <CardHeader title="Profile" />
+              <CardHeader title="Profile" className="text"/>
               <Avatar>
                 <AccountCircle />
               </Avatar>
@@ -318,16 +323,16 @@ const ProfilePage = (props) => {
               >
                 <Grid item></Grid>
                 <Grid item sx={{ textAlign: "center" }}>
-                  <Typography variant="h6">
+                  <Typography variant="h6" className="text">
                     Created: {dateView(userData.created_at)}
                   </Typography>
-                  <Typography variant="h6">
+                  <Typography variant="h6" className="text">
                     Last updated: {dateView(userData.updated_at)}
                   </Typography>
-                  <Typography variant="h6">
+                  <Typography variant="h6" className="text">
                     Username: {userData.username}
                   </Typography>
-                  <Typography variant="h6">Email: {userData.email}</Typography>
+                  <Typography variant="h6" className="text">Email: {userData.email}</Typography>
                 </Grid>
               </Grid>
             </CardContent>
@@ -365,8 +370,9 @@ const ProfilePage = (props) => {
                       '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                         borderColor: textAreaOutlineColor,
                       },
-                      backgroundColor: backgroundColor
+                      backgroundColor: backgroundColor,
                     }}
+                    inputProps={{ style: { fontFamily: 'nunito', color: 'white' } }}
                   />
                   {formikPassword.errors.password ? (
                     <div style={{ color: "red" }}>
@@ -385,8 +391,10 @@ const ProfilePage = (props) => {
                     sx={{
                       '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                         borderColor: textAreaOutlineColor,
-                      },
-                      backgroundColor: backgroundColor
+                      }
+                    }}
+                    InputProps={{
+                      style: customInputStyle,
                     }}
                   />
                   {formikPassword.errors.newpassword ? (

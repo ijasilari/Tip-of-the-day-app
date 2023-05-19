@@ -18,7 +18,7 @@ li,
 ol,
 p,
 ul,
-label {
+label{
   color: #f0f0f0;
 }
 
@@ -74,4 +74,13 @@ pre {
 
 #dark textarea{
   color: #ECECEC;
+}
+
+#dark label{
+  color: #ECECEC;
+}
+
+#dark input{
+  color: #ECECEC;
+  background-color: #262626;
 }
