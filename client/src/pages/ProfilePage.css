@@ -1,7 +1,3 @@
-#dark label{
-    color: #ECECEC;
-  }
-
-#dark input{
-    color: #ECECEC;
+#light .text{
+    color:black;
 }

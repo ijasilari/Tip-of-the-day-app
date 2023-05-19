@@ -191,7 +191,7 @@ export default function OwnTips(props) {
         <Grid container spacing={4} >
           {data.map((item, index) => (
             <Grid item key={index} xs={10} sm={6} md={6}>
-              <Card sx={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+              <Card sx={{ width: '100%', display: 'flex', flexDirection: 'column', backgroundColor: backgroundColor }}>
 
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography gutterBottom variant="h5" component="h2">
@@ -222,6 +222,7 @@ export default function OwnTips(props) {
                 <CardActions>
                   {auth.userId === item.creator && (
                     <Button
+                      className="buttonsOutline"
                       style={{ display: "inline", marginRight: "2px" }}
                       variant="outlined"
                       onClick={() => {
@@ -233,6 +234,7 @@ export default function OwnTips(props) {
                   )}
                   {auth.userId === item.creator && (
                     <Button
+                      className="buttonsOutline"
                       style={{ display: "inline", marginLeft: "2px" }}
                       variant="outlined"
                       onClick={() => {
