@@ -6,7 +6,7 @@ GET http://localhost:3000/getall
 ###
 GET http://localhost:3000/getall
 ###
-PATCH http://localhost:3000/14/addALike
+PATCH http://localhost:3000/2/addALike
 Authorization: BEARER {{authToken}}
 ###
 POST http://localhost:3000/addtip

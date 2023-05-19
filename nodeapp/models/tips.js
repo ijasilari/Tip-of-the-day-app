@@ -64,15 +64,15 @@ const addLikeById = async (id) => {
   const res = await pool.query("UPDATE tips SET likes = likes + 1 WHERE id=$1"
   [id]
   );
-  console.log(res)
-  return res.rows[0].likes;
+  console.log("this is a console log of: " + res)
+  return res.rowCount!==0;
 }
 
 const removeLikeById = async (id) => {
   const res = await pool.query("UPDATE tips SET likes = likes - 1 WHERE id=$1"
   [id]
   );
-  // console.log(result)
+  // console.log("this is a console log of: " + res)
   return res.rows[0].likes;
 }
 

@@ -164,6 +164,20 @@ const addLike = async (req, res, next) => {
   const tipId = req.params.tid;
   // console.log(tipId)
   const like = await addLikeById(tipId)
+  console.log("this is a console log of: " + like);
+  if (!like) {
+    const error = new Error(`Tip with ID ${tipId} not found`);
+    error.statusCode = 404;
+    return next(error);
+  } 
+
+  res.json({ like });
+};
+
+const removeLike = async (req, res, next) => {
+  const tipId = req.params.tid;
+  // console.log(tipId)
+  const like = await removeLikeById(tipId)
   console.log(like);
   if (!like) {
     const error = new Error(`Tip with ID ${tipId} not found`);
@@ -183,5 +197,7 @@ export {
   addNewTip,
   getTipByIdPlainText,
   getTipByRandom,
-  addLike
+  addLike,
+  removeLike
+
 };
