@@ -23,7 +23,11 @@ import { useContext } from "react";
 import { AuthContext } from "../components/auth-context";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import TablePagination from "@mui/material/TablePagination";
+import { css } from '@emotion/react';
 
+const labelStyle = css`
+  color: red; /* Change the text color */
+`;
 function ViewTips(props) {
   const [data, setData] = useState([]);
   const [openEditTip, setOpenEditTip] = useState(false);
@@ -383,6 +387,9 @@ function ViewTips(props) {
           onRowsPerPageChange={(event) => {
             setRowsPerPage(parseInt(event.target.value, 10));
             setPage(0);
+          }}
+          sx={{
+            color: textColor
           }}
         />
       </div>
