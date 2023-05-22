@@ -46,10 +46,10 @@ const Authenticate = (props) => {
           : user.name
           ? "salmon"
           : "salmon";
-      emailRef.current.style.backgroundColor =
-        user.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)
-          ? "#d4edda"
-          : "salmon";
+       emailRef.current.style.backgroundColor =
+         user.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)
+           ? "#d4edda"
+           : "salmon";
       passwordRef.current.style.backgroundColor =
         user.password.length >= 8
           ? "#d4edda"
@@ -95,7 +95,11 @@ const Authenticate = (props) => {
       navigate("/");
     },
     onError: (error) => {
-      console.log(error);
+      console.log(error)
+      setInputError({ signup: "Email exists" });
+      if (emailRef.current) {
+        emailRef.current.style.backgroundColor = "salmon";
+      }
     },
   });
 
@@ -160,40 +164,51 @@ const Authenticate = (props) => {
         height: "100vh",
       }}
     >
-    <Card style={{ padding: "20px", backgroundColor: backgroundColor }} data-testid="authPage" className="authentication">
-      <h2>{isLoginMode ? "Login" : "Sign Up"}</h2>
-      <form onSubmit={onSubmitHandler}>
-        {" "}
-        {!isLoginMode && (
-          <Input id="name" ref={nameRef} type="text" label="Name" />
-        )}
-        <Input id="email" ref={emailRef} type="text" label="Email" />
-        <Input
-          id="password"
-          ref={passwordRef}
-          type="password"
-          label="Password"
-        />
-        <Button variant="contained" type="submit" className="buttons">
-         {isLoginMode ? "LOGIN" : "SIGNUP"}
+      <Card
+        style={{ padding: "20px", backgroundColor: backgroundColor }}
+        data-testid="authPage"
+        className="authentication"
+      >
+        <h2>{isLoginMode ? "Login" : "Sign Up"}</h2>
+        <form onSubmit={onSubmitHandler}>
+          {" "}
+          {!isLoginMode && (
+            <Input id="name" ref={nameRef} type="text" label="Name" />
+          )}
+          <Input id="email" ref={emailRef} type="text" label="Email" />
+          <Input
+            id="password"
+            ref={passwordRef}
+            type="password"
+            label="Password"
+          />
+          <Button variant="contained" type="submit" className="buttons">
+            {isLoginMode ? "LOGIN" : "SIGNUP"}
+          </Button>
+        </form>
+        <Button
+          variant="outlined"
+          onClick={switchModeHanlder}
+          className="signUp"
+        >
+          {isLoginMode ? "SignUp" : "Login"} instead?
         </Button>
-      </form>
-      <Button variant="outlined" onClick={switchModeHanlder} className="signUp">
-       {isLoginMode ? "SignUp" : "Login"} instead?
-      </Button>
-      {inputError ? (
-        <div style={{ color: "red" }}>{inputError.name}</div>
-      ) : null}
-      {inputError ? (
-        <div style={{ color: "red" }}>{inputError.email}</div>
-      ) : null}
-      {inputError ? (
-        <div style={{ color: "red" }}>{inputError.password}</div>
-      ) : null}
-      {inputError ? (
-        <div style={{ color: "red" }}>{inputError.login}</div>
-      ) : null}
-    </Card>
+        {inputError ? (
+          <div style={{ color: "red" }}>{inputError.name}</div>
+        ) : null}
+        {inputError ? (
+          <div style={{ color: "red" }}>{inputError.email}</div>
+        ) : null}
+        {inputError ? (
+          <div style={{ color: "red" }}>{inputError.password}</div>
+        ) : null}
+        {inputError ? (
+          <div style={{ color: "red" }}>{inputError.login}</div>
+        ) : null}
+        {inputError ? (
+          <div style={{ color: "red" }}>{inputError.signup}</div>
+        ) : null}
+      </Card>
     </div>
   );
 };

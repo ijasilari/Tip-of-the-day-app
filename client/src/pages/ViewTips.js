@@ -21,7 +21,6 @@ import { IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useContext } from "react";
 import { AuthContext } from "../components/auth-context";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import TablePagination from "@mui/material/TablePagination";
 
@@ -159,8 +158,6 @@ function ViewTips(props) {
     onSubmit: editTip,
   });
 
-  const [animationParent] = useAutoAnimate();
-
   let textColor = "";
   let backgroundColor = "";
   if(props.theme === 'light') {
@@ -262,7 +259,7 @@ function ViewTips(props) {
                   </TableCell>
                   <TableCell align="center" style={{ minWidth: "10rem" }}>
                     {auth.userId === item.creator && (
-                      <Button
+                      <Button className="buttons"
                         style={{ display: "inline", marginRight: "2px" }}
                         variant="contained"
                         onClick={() => {
@@ -273,7 +270,7 @@ function ViewTips(props) {
                       </Button>
                     )}
                     {auth.userId === item.creator && (
-                      <Button
+                      <Button className="buttons"
                         style={{ display: "inline", marginLeft: "2px" }}
                         variant="contained"
                         onClick={() => {
