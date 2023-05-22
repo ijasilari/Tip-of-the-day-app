@@ -204,7 +204,7 @@ function ViewTips(props) {
           <TableHead>
             <TableRow>
               <TableCell sx={{ color: textColor }}>Tip Id</TableCell>
-              <TableCell align="center" sx={{ color: textColor }}>
+              <TableCell align="left" sx={{ color: textColor }}>
                 Description
               </TableCell>
               <TableCell align="center" sx={{ color: textColor }}>
@@ -213,7 +213,7 @@ function ViewTips(props) {
               <TableCell align="center" sx={{ color: textColor }}></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody ref={animationParent}>
+          <TableBody>
             {paginatedData &&
               paginatedData.map((item, index) => (
                 <TableRow
@@ -233,33 +233,49 @@ function ViewTips(props) {
                       overflow: "auto",
                     }}
                   >
-                    <ReactMarkdown
-                      children={item.description}
-                      components={{
-                        p: ({ node, ...props }) => (
-                          <p style={{ color: textColor }} {...props} />
-                        ),
-                        code({ node, inline, className, children, ...props }) {
-                          const match = /language-(\w+)/.exec(className || "");
-                          return !inline && match ? (
-                            <SyntaxHighlighter
-                              children={String(children).replace(/\n$/, "")}
-                              language={match[1]}
-                              style={tomorrow}
-                              {...props}
-                            />
-                          ) : (
-                            <code className={className} {...props}>
-                              {children}
-                            </code>
-                          );
-                        },
+                    <div
+                      style={{
+                        overflow: "auto",
+                        maxWidth: "1000px", // Adjust the value as needed
                       }}
-                    />
+                    >
+                      <ReactMarkdown
+                        children={item.description}
+                        components={{
+                          p: ({ node, ...props }) => (
+                            <p style={{ color: textColor }} {...props} />
+                          ),
+                          code({
+                            node,
+                            inline,
+                            className,
+                            children,
+                            ...props
+                          }) {
+                            const match = /language-(\w+)/.exec(
+                              className || ""
+                            );
+                            return !inline && match ? (
+                              <SyntaxHighlighter
+                                children={String(children).replace(/\n$/, "")}
+                                language={match[1]}
+                                style={tomorrow}
+                                {...props}
+                              />
+                            ) : (
+                              <code className={className} {...props}>
+                                {children}
+                              </code>
+                            );
+                          },
+                        }}
+                      />
+                    </div>
                   </TableCell>
                   <TableCell align="center" style={{ minWidth: "10rem" }}>
                     {auth.userId === item.creator && (
-                      <Button className="buttons"
+                      <Button
+                        className="buttons"
                         style={{ display: "inline", marginRight: "2px" }}
                         variant="contained"
                         onClick={() => {
@@ -270,7 +286,8 @@ function ViewTips(props) {
                       </Button>
                     )}
                     {auth.userId === item.creator && (
-                      <Button className="buttons"
+                      <Button
+                        className="buttons"
                         style={{ display: "inline", marginLeft: "2px" }}
                         variant="contained"
                         onClick={() => {
@@ -346,21 +363,29 @@ function ViewTips(props) {
                   <TableCell align="right"></TableCell>
                 </TableRow>
               ))}
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={data.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={(event) => {
-                setRowsPerPage(parseInt(event.target.value, 10));
-                setPage(0);
-              }}
-            />
           </TableBody>
         </Table>
       </TableContainer>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "1rem",
+        }}
+      >
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={(event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0);
+          }}
+        />
+      </div>
     </div>
   );
 }
