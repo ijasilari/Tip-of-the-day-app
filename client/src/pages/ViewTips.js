@@ -213,7 +213,7 @@ function ViewTips(props) {
               <TableCell align="center" sx={{ color: textColor }}></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody ref={animationParent}>
+          <TableBody>
             {paginatedData &&
               paginatedData.map((item, index) => (
                 <TableRow
