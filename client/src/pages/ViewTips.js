@@ -23,7 +23,6 @@ import { useContext } from "react";
 import { AuthContext } from "../components/auth-context";
 //import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 function ViewTips(props) {
@@ -65,14 +64,42 @@ function ViewTips(props) {
   const handleTipClose = () => {
     setOpenEditTip(false);
   };
+  const removeTheLike = async (id, index) => {
+    const res = await axios.patch(
+      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/likeminus`,
+      {
+        headers: {
+          Authorization: 'Bearer ' + auth.token
+        },
+      }
+    );
+    console.log(index);
+    if(res) {
+      setLike(data[index].likes);
+    }
+  }
 
-  const likeEff = () => {
+  const addTheLike = async (id, index) => {
+    const res = await axios.patch(
+      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/likeplus`,
+      {
+        headers: {
+          Authorization: 'Bearer ' + auth.token
+        },
+      }
+    );
+    if(res) {
+      setLike(data[index].likes);
+    }
+  }
+
+  const likeEff = (id, index) => {
     if(likeActive) {
       setLikeActive(false);
-      setLike(like-1)
+      removeTheLike(id, index);
     } else {
       setLikeActive(true);
-      setLike(like+1);
+      addTheLike(id, index);
     }
   }
   useEffect(() => {
@@ -80,7 +107,7 @@ function ViewTips(props) {
       const response = await axios.get(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall`
       );
-      console.log(response);
+      //console.log(response);
       setData(response.data.tips);
     };
     fetchData();
@@ -90,7 +117,7 @@ function ViewTips(props) {
     const response = await axios.get(
       `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
     );
-    console.log(response);
+    //console.log(response);
     setData(response.data.tips);
   };
 
@@ -104,7 +131,7 @@ function ViewTips(props) {
           },
         }
       );
-      console.log(response);
+      //console.log(response);
 
       setData((prev) => prev.filter((e) => e.id !== tid));
     } catch (err) {}
@@ -117,7 +144,7 @@ function ViewTips(props) {
       creator: auth.userId,
     };
     try {
-      console.log(editedTip);
+      //console.log(editedTip);
       const response = await axios.patch(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/update`,
         editedTip,
@@ -128,7 +155,7 @@ function ViewTips(props) {
           },
         }
       );
-      console.log(response);
+      //console.log(response);
 
       setData(() => {
         const newTips = [...data];
@@ -162,7 +189,6 @@ function ViewTips(props) {
     validate: validateTip,
     onSubmit: editTip,
   });
-  const [animationParent] = useAutoAnimate();
 
   let textColor = "";
   let backgroundColor = "";
@@ -174,7 +200,7 @@ function ViewTips(props) {
     textColor = '#ECECEC';
     backgroundColor = '#1C1C1C';
   }
-  
+
   return (
     <div data-testid="viewTipsPage">
       <Box
@@ -212,7 +238,7 @@ function ViewTips(props) {
               <TableCell align="center" sx={{color: textColor}}></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody ref={animationParent}>
+          <TableBody>
             {data &&
               data.map((item, index) => (
                 <TableRow
@@ -253,7 +279,7 @@ function ViewTips(props) {
                   </TableCell>
                   <TableCell align="center" style={{ minWidth: "10rem" }}>
                     {auth.userId === item.creator && (
-                      <Button
+                      <Button className="buttons"
                         style={{ display: "inline", marginRight: "2px" }}
                         variant="contained"
                         onClick={() => {
@@ -264,7 +290,7 @@ function ViewTips(props) {
                       </Button>
                     )}
                     {auth.userId === item.creator && (
-                      <Button
+                      <Button className="buttons"
                         style={{ display: "inline", marginLeft: "2px" }}
                         variant="contained"
                         onClick={() => {
@@ -273,7 +299,10 @@ function ViewTips(props) {
                       >
                         Delete
                       </Button>
-                    )}<IconButton onClick={likeEff}> <ThumbUpIcon/> </IconButton>
+                    )}
+                    <IconButton onClick={() => {
+                          likeEff(item.id, index);
+                        }}> <ThumbUpIcon/> </IconButton>
                     <Dialog
                       maxWidth="sm"
                       open={openEditTip}

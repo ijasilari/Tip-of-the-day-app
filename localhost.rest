@@ -15,10 +15,13 @@ GET http://localhost:3000/getall
 ###
 GET http://localhost:3000/getall
 ###
-PATCH http://localhost:3000/2/addALike
+PATCH http://localhost:3000/api/tips/1/likeplus
 Authorization: BEARER {{authToken}}
 ###
-GET http://localhost:3000/api/tips/getall/10
+PATCH http://localhost:3000/api/tips/1/likeminus
+Authorization: BEARER {{authToken}}
+###
+GET http://localhost:3000/api/tips/getall/
 
 ###
 GET http://localhost:3000/api/tips/getbycreator/123456789

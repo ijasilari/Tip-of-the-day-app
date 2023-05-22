@@ -14,7 +14,3 @@ a{
     margin-right: 8px;
     color: white;
 }
-
-#dark .button:hover{
-    background-color: #BB86FC !important;
-}

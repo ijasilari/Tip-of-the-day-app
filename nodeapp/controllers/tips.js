@@ -1,17 +1,4 @@
-<<<<<<< HEAD
-import { getAllTips, findTipsByCategory, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip, addLikeById, removeLikeById } from "../models/tips.js";
-=======
-import {
-  getAllTips,
-  findTipsByCategory,
-  findTipsByCreator,
-  findTipById,
-  addTip,
-  updateTipWithId,
-  deleteTipWithId,
-  getRandomTip
-} from "../models/tips.js";
->>>>>>> 5e77f1729112c6e237a91ab9cf6f8efacd29c20d
+import {getAllTips, findTipsByCategory, findTipsByCreator, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip, addLikeById, removeLikeById } from "../models/tips.js";
 import { validationResult } from "express-validator";
 
 const getTips = async (req, res, next) => {
@@ -200,7 +187,6 @@ const getTipByRandom = async (req, res, next) => {
   res.status(200).json({ tip });
 };
 
-
 const addLike = async (req, res, next) => {
   const tipId = req.params.tid;
   // console.log(tipId)
@@ -219,7 +205,7 @@ const removeLike = async (req, res, next) => {
   const tipId = req.params.tid;
   // console.log(tipId)
   const like = await removeLikeById(tipId)
-  console.log(like);
+  console.log("this is a console log of: " + like);
   if (!like) {
     const error = new Error(`Tip with ID ${tipId} not found`);
     error.statusCode = 404;
@@ -241,5 +227,4 @@ export {
   getTipByRandom,
   addLike,
   removeLike
-
 };
