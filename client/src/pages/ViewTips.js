@@ -23,6 +23,7 @@ import { useContext } from "react";
 import { AuthContext } from "../components/auth-context";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
+import TablePagination from "@mui/material/TablePagination";
 
 function ViewTips(props) {
   const [data, setData] = useState([]);
@@ -32,6 +33,16 @@ function ViewTips(props) {
   const [category, setCategory] = useState(1);
   const [categoryEdit, setCategoryEdit] = useState(1);
   const auth = useContext(AuthContext);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const startIndex = page * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const paginatedData = data.slice(startIndex, endIndex);
+  console.log(paginatedData)
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
   const categoryOptions = [
     { value: 1, label: "CSS" },
@@ -160,7 +171,7 @@ function ViewTips(props) {
     textColor = '#ECECEC';
     backgroundColor = '#1C1C1C';
   }
-  
+
   return (
     <div data-testid="viewTipsPage">
       <Box
@@ -182,30 +193,41 @@ function ViewTips(props) {
         <IconButton
           sx={{ marginLeft: 0, mr: "30%" }}
           onClick={() => fetchDataByCategory()}
-          style={{ backgroundColor: 'transparent' }}
+          style={{ backgroundColor: "transparent" }}
         >
           {" "}
-          <SearchIcon className="searchIcon"/>{" "}
+          <SearchIcon className="searchIcon" />{" "}
         </IconButton>
       </Box>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650, backgroundColor: {backgroundColor} }} aria-label="simple table">
+        <Table
+          sx={{ minWidth: 650, backgroundColor: { backgroundColor } }}
+          aria-label="simple table"
+        >
           <TableHead>
             <TableRow>
-              <TableCell sx={{color: textColor}}>Tip Id</TableCell>
-              <TableCell align="center" sx={{color: textColor}}>Description</TableCell>
-              <TableCell align="center" sx={{color: textColor}}>Functions</TableCell>
-              <TableCell align="center" sx={{color: textColor}}></TableCell>
+              <TableCell sx={{ color: textColor }}>Tip Id</TableCell>
+              <TableCell align="center" sx={{ color: textColor }}>
+                Description
+              </TableCell>
+              <TableCell align="center" sx={{ color: textColor }}>
+                Functions
+              </TableCell>
+              <TableCell align="center" sx={{ color: textColor }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody ref={animationParent}>
-            {data &&
-              data.map((item, index) => (
+            {paginatedData &&
+              paginatedData.map((item, index) => (
                 <TableRow
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row" sx={{color: textColor}}>
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    sx={{ color: textColor }}
+                  >
                     {item.id}
                   </TableCell>
                   <TableCell
@@ -217,7 +239,9 @@ function ViewTips(props) {
                     <ReactMarkdown
                       children={item.description}
                       components={{
-                        p: ({ node, ...props }) => <p style={{ color: textColor }} {...props} />,
+                        p: ({ node, ...props }) => (
+                          <p style={{ color: textColor }} {...props} />
+                        ),
                         code({ node, inline, className, children, ...props }) {
                           const match = /language-(\w+)/.exec(className || "");
                           return !inline && match ? (
@@ -325,6 +349,18 @@ function ViewTips(props) {
                   <TableCell align="right"></TableCell>
                 </TableRow>
               ))}
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={data.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={(event) => {
+                setRowsPerPage(parseInt(event.target.value, 10));
+                setPage(0);
+              }}
+            />
           </TableBody>
         </Table>
       </TableContainer>
