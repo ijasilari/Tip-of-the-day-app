@@ -3,12 +3,22 @@ import axios from "axios";
 import "./Card.css";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import {tomorrow} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
-const Card = () => {
+const Card = (props) => {
   const [cardData, setCardData] = useState(null);
   const [cardCategory, setCardCategory] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
+  console.log(props.theme)
 
+  let textColor = "";
+  if(props.theme === 'light') {
+    textColor = 'black'
+  }
+  else {
+    textColor = '#ECECEC'
+  }
 
   const categoryOptions = [
     {value: 0, label: "Other"},
@@ -28,7 +38,8 @@ const Card = () => {
   let categoryLabel = "";
   const fetchCardData = async () => {
 
-    const response = await axios.get(`${process.env.REACT_APP_LOCAL_BACKEND_URL}/randomtip`);
+    const response = await axios.get(`${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/randomtip`);
+    console.log(response);
     setCardData(response.data.tip);
     setCardCategory(response.data.tip.category);
     //console.log(response);
@@ -49,26 +60,30 @@ const Card = () => {
 
       const interval = setInterval(() => {
         fetchCardData();
-      }, 12000);
+      }, 3000);
       return () => clearInterval(interval);
     }
-    
+
   }, [dataLoaded]);
+
+  const [animationParent] = useAutoAnimate()
 
   return (
     <div className="card-container">
       {cardData ? (
-        <div className="card">
+        <div className="card" ref={animationParent}>
           <h2 className="title">{cardCategory}</h2>
           <ReactMarkdown
                     children={cardData.description}
                     components={{
+                      p: ({ node, ...props }) => <p style={{ color: textColor }} {...props} />,
                       code({ node, inline, className, children, ...props }) {
                         const match = /language-(\w+)/.exec(className || "");
                         return !inline && match ? (
                           <SyntaxHighlighter
                             children={String(children).replace(/\n$/, "")}
                             language={match[1]}
+                            style={tomorrow}
                             {...props}
                           />
                         ) : (
@@ -81,7 +96,7 @@ const Card = () => {
           />
         </div>
       ) : (
-        <div className="loading">Loading...</div>
+        <div className="loading" style={{textAlign: 'center'}}>Loading...</div>
       )}
     </div>
   );

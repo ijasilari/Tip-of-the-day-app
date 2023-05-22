@@ -19,7 +19,7 @@ function AddTip() {
   const [category, setCategory] = useState();
   const auth = useContext(AuthContext);
 
-  const codeExample = 
+  const codeExample =
   `
   ~~~javascript
   function() {
@@ -62,11 +62,11 @@ function AddTip() {
   ]
 
     const AddNewTip = async () => {
-      const newTip = { category: category, description: formikTip.values.description };
+      const newTip = { category: category, description: formikTip.values.description, creator: auth.userId };
       console.log(newTip);
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_LOCAL_BACKEND_URL}/addtip`,
+          `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/addtip`,
           newTip,
           {
             headers: {
@@ -79,7 +79,9 @@ function AddTip() {
         console.log(response);
         formikTip.values.description = "";
         formikTip.errors.description = "";
-      } catch (err) {}
+      } catch (err) {
+        console.log(err.message)
+      }
     };
 
 
@@ -90,18 +92,22 @@ function AddTip() {
       if (!values.description) {
         errors.description = "Required tip description";
       }
+      if(!values.category){
+        errors.category = "Required tip category"
+      }
       return errors;
     };
 
     const formikTip = useFormik({
       initialValues: {
         description: "",
+        category: category,
       },
       validate: validateTip,
       onSubmit: AddNewTip,
     });
   return (
-    <>
+    <div data-testid="addTipPage">
       <Typography
         component="h5"
         variant="h3"
@@ -112,12 +118,6 @@ function AddTip() {
       >
         Add New Tip To The List
       </Typography>
-      <Dropdown
-          isSearchable
-          placeHolder="Select..."
-          options={categoryOptions}
-          onChange={(value) => setCategory(value.value)}
-        />
       <Box
         component="form"
         onSubmit={formikTip.handleSubmit}
@@ -129,6 +129,25 @@ function AddTip() {
         noValidate
         autoComplete="off"
       >
+        <Box
+          flexGrow="1"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            "& > :not(style)": { mt: 3, ml: "125%", mr: "31%", width: "100%" },
+          }}
+        >
+          <Dropdown
+            isSearchable
+            placeHolder="Select..."
+            options={categoryOptions}
+            onChange={(value) => {
+              setCategory(value.value);
+              formikTip.values.category = value.value;
+            }}
+          />
+        </Box>
         <TextField
           id="description"
           name="description"
@@ -140,6 +159,14 @@ function AddTip() {
           onChange={formikTip.handleChange}
           value={formikTip.values.description}
         />
+        {formikTip.errors.category ? (
+          <Box
+            display="inline-flex"
+            style={{ color: "red", textAlign: "inherit" }}
+          >
+            {formikTip.errors.category}
+          </Box>
+        ) : null}
         {formikTip.errors.description ? (
           <Box
             display="inline-flex"
@@ -153,42 +180,51 @@ function AddTip() {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+
         >
           Add New Tip
         </Button>
-        <Container style={{ background: '#f2f6fc', display: 'block', marginLeft: 'auto', marginRight: 'auto'}}>
+        <Container
+          style={{
+            background: "#f2f6fc",
+            display: "block",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
           <h1>Attention!</h1>
-          <div style={{textAlign: 'left'}}>
-            <p>This page supports markdown and syntax highlight code.
-               To create codeblock with highlight write:</p>
-            <ReactMarkdown children={codeBlSyntax}/>
+          <div style={{ textAlign: "left" }}>
+            <p>
+              This page supports markdown and syntax highlight code. To create
+              codeblock with highlight write:
+            </p>
+            <ReactMarkdown children={codeBlSyntax} />
             <p>Example:</p>
-            <ReactMarkdown children={syntaxExample}/>
+            <ReactMarkdown children={syntaxExample} />
             <p>Output:</p>
             <ReactMarkdown
-                    children={codeExample}
-                    components={{
-                      code({ node, inline, className, children, ...props }) {
-                        const match = /language-(\w+)/.exec(className || "");
-                        return !inline && match ? (
-                          <SyntaxHighlighter
-                            children={String(children).replace(/\n$/, "")}
-                            language={match[1]}
-                            {...props}
-                          />
-                        ) : (
-                          <code className={className} {...props}>
-                            {children}
-                          </code>
-                        );
-                      },
-                    }}
-              />
+              children={codeExample}
+              components={{
+                code({ node, inline, className, children, ...props }) {
+                  const match = /language-(\w+)/.exec(className || "");
+                  return !inline && match ? (
+                    <SyntaxHighlighter
+                      children={String(children).replace(/\n$/, "")}
+                      language={match[1]}
+                      {...props}
+                    />
+                  ) : (
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  );
+                },
+              }}
+            />
           </div>
         </Container>
       </Box>
-      
-    </>
+    </div>
   );
 }
 

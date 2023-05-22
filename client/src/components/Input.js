@@ -3,7 +3,7 @@ import './Input.css';
 const Input = forwardRef((props, ref) => {
   return (
     <div className="form-control">
-      <label htmlFor={props.id}>{props.label}</label>
+      <label htmlFor={props.id} className="inputLabel">{props.label}</label>
       <input ref={ref} id={props.id} type={props.type} placeholder={props.placeholder} />
     </div>
   )

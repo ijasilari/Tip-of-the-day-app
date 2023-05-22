@@ -23,6 +23,7 @@ DB_HOST=localhost
 POSTGRES_USER=user
 POSTGRES_PASSWORD=password
 POSTGRES_DB=tips
+JWT_KEY=yourOwnKey
 ````
 to run the database in docker container run the following command in the root directory of the project
 ````
@@ -42,22 +43,41 @@ endpoints
 
 ````
 Get all tips (GET)
-http://localhost:3000/getall
+http://localhost:3000/api/tips/getall
 
-Delete tip by Id (DELETE)
-http://localhost:3000/:tid/delete
+Get all users (GET)
+http://localhost:3000/api/users/getusers
 
-Update tip by Id (PATCH)
-http://localhost:3000/:tid/update
+Get tips by category (GET)
+http://localhost:3000/api/tips/getall/:category
+
+Get tips by creator (GET)
+http://localhost:3000/api/tips/getbycreator/:creator
+
+Get a random tip (GET)
+http://localhost:3000/api/tips/randomtip
 
 Get tip by Id (GET)
-http://localhost:3000/:tid
+http://localhost:3000/api/tips/:tid
 
 Get tip by Id as plain text (GET) and can use any positive integer number as :tid value to fetch tip
-http://localhost:3000/:tid/plain
+http://localhost:3000/api/tips/:tid/plain
+
+Delete tip by Id (DELETE)
+http://localhost:3000/api/tips/:tid/delete
+
+Update tip by Id (PATCH)
+http://localhost:3000/api/tips/:tid/update
 
 Add new tip (POST)
-http://localhost:3000/addtip
+http://localhost:3000/api/tips/addtip
+
+Sign up (POST)
+http://localhost:3000/api/users/signup
+
+Login (POST)
+http://localhost:3000/api/users/login
+
 ````
 
 # Postman screenshots

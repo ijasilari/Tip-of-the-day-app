@@ -1,3 +1,20 @@
 a{
     text-decoration: none;
 }
+
+.toggleLabel{
+    margin: 4px;
+    margin-bottom: 8px;
+    font-size: smaller;
+}
+
+.toggle{
+    margin: 4px;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    color: white;
+}
+
+#dark .button:hover{
+    background-color: #BB86FC !important;
+}

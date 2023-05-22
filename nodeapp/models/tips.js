@@ -28,10 +28,15 @@ const findTipsByCategory = async (category) => {
   return tip.rows;
 }
 
+const findTipsByCreator = async (creator) => {
+  const tip = await pool.query("SELECT * FROM tips WHERE creator=$1", [creator]);
+  return tip.rows;
+}
+
 const addTip = async (tip) => {
   const result = await pool.query(
-    "INSERT INTO tips (category, description) VALUES ($1, $2) RETURNING id",
-    [tip.category, tip.description]
+    "INSERT INTO tips (category, description, creator) VALUES ($1, $2, $3) RETURNING id",
+    [tip.category, tip.description, tip.creator]
   );
   // console.log(result)
   return result.rows[0].id;
@@ -64,15 +69,15 @@ const addLikeById = async (id) => {
   const res = await pool.query("UPDATE tips SET likes = likes + 1 WHERE id=$1"
   [id]
   );
-  console.log("this is a console log of: " + res)
-  return res.rowCount!==0;
+  console.log(res)
+  return res.rows[0].likes;
 }
 
 const removeLikeById = async (id) => {
   const res = await pool.query("UPDATE tips SET likes = likes - 1 WHERE id=$1"
   [id]
   );
-  // console.log("this is a console log of: " + res)
+  // console.log(result)
   return res.rows[0].likes;
 }
 

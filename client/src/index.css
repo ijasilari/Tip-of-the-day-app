@@ -8,6 +8,5 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font: 100%/1.5 Questrial, sans-serif;
 }

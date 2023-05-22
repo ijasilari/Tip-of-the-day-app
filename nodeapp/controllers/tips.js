@@ -1,4 +1,17 @@
+<<<<<<< HEAD
 import { getAllTips, findTipsByCategory, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip, addLikeById, removeLikeById } from "../models/tips.js";
+=======
+import {
+  getAllTips,
+  findTipsByCategory,
+  findTipsByCreator,
+  findTipById,
+  addTip,
+  updateTipWithId,
+  deleteTipWithId,
+  getRandomTip
+} from "../models/tips.js";
+>>>>>>> 5e77f1729112c6e237a91ab9cf6f8efacd29c20d
 import { validationResult } from "express-validator";
 
 const getTips = async (req, res, next) => {
@@ -12,9 +25,24 @@ const getTipsByCategory = async (req, res, next) => {
   console.log(tipCategory);
   // console.log(tipId)
   const tips = await findTipsByCategory(tipCategory);
+  console.log(tips)
 
-  if (!tips) {
+  if (tips.length === 0) {
     const error = new Error(`Tip with CATEGORY ${tipCategory} not found`);
+    error.statusCode = 404;
+    return next(error);
+  }
+
+  res.json({ tips });
+};
+
+const getTipsByCreator = async (req, res, next) => {
+  const creator = req.params.creator;
+  console.log(creator);
+  const tips = await findTipsByCreator(creator);
+
+  if (tips.length === 0) {
+    const error = new Error(`Tip with CREATOR ${creator} not found`);
     error.statusCode = 404;
     return next(error);
   }
@@ -70,14 +98,15 @@ const addNewTip = async (req, res, next) => {
     return next(error);
   }
 
-  const { category, description } = req.body;
+  const { category, description, creator } = req.body;
   // console.log(req.body)
   // console.log(description)
 
   const newTip = {
     // id,
     category: category,
-    description: description
+    description: description,
+    creator: creator
   };
 
   const result = await addTip(newTip);
@@ -101,16 +130,21 @@ const updateTipById = async (req, res, next) => {
     error.statusCode = 400;
     return next(error);
   }
- 
-  const { description, category } = req.body;
+
+  const { description, category, creator } = req.body;
   const tipId = req.params.tid;
   // console.log(tipId)
   console.log(category)
   const tip = await findTipById(tipId);
- 
+
   if (!tip) {
     const error = new Error(`Tip with ID ${tipId} not found`);
     error.statusCode = 404;
+    return next(error);
+  }
+  if (tip.creator !== req.userData.userId) {
+    const error = new Error(`Not authorized to update tip`);
+    error.statusCode = 401;
     return next(error);
   }
     const result = await updateTipWithId(
@@ -118,16 +152,17 @@ const updateTipById = async (req, res, next) => {
       category,
       tipId
     );
- 
+
     if (!result) {
     const error = new Error(`Couldnt update Tip with ID ${tipId}`);
     error.statusCode = 404;
     return next(error);
     }
- 
+
     tip.id = tipId
     tip.description = description
     tip.category = category
+    tip.creator = creator
     res.status(200).json({ tip });
   };
 
@@ -139,6 +174,12 @@ const deleteTipById = async (req, res, next) => {
   if (!tip) {
     const error = new Error(`Tip with ID ${tipId} not found`);
     error.statusCode = 404;
+    return next(error);
+  }
+
+  if (tip.creator !== req.userData.userId) {
+    const error = new Error(`Not authorized to delete tip`);
+    error.statusCode = 401;
     return next(error);
   }
 
@@ -191,6 +232,7 @@ const removeLike = async (req, res, next) => {
 export {
   getTips,
   getTipsByCategory,
+  getTipsByCreator,
   deleteTipById,
   updateTipById,
   getTipById,

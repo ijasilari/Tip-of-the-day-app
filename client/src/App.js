@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import { useState, useCallback, useEffect } from 'react';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -8,6 +8,11 @@ import HomePage from "./pages/HomePage";
 import AddTip from "./pages/AddTip";
 import ViewTips from "./pages/ViewTips";
 import Authenticate from "./pages/Authenticate";
+import "./App.css";
+import ProfilePage from "./pages/ProfilePage";
+import OwnTips from "./pages/OwnTips";
+
+export const ThemeContext = createContext(null);
 
 const queryClient = new QueryClient();
 let logoutTimer;
@@ -16,19 +21,20 @@ function App() {
   const [token, setToken] = useState(false);
   const [userId, setuser] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState(false);
+  const [theme, setTheme] = useState("light");
 
   const login = useCallback((uid, token, expirationDate) => {
     setToken(token);
     setuser(uid);
 
-    const tokenExpirationDate = 
+    const tokenExpirationDate =
     expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
     setTokenExpirationDate(tokenExpirationDate);
-    
+
     localStorage.setItem(
       'userData',
       JSON.stringify({
-        userId: uid, 
+        userId: uid,
         token,
         expiration: tokenExpirationDate.toISOString()
       })
@@ -59,30 +65,56 @@ function App() {
     }
   }, [token, logout, tokenExpirationDate]);
 
+  const toggleTheme = () => {
+    setTheme((curr) => (curr === "light" ? "dark" : "light"));
+  }
+
+  let routes;
+  if(token){
+    routes = (
+      <Routes>
+        <Route path="/" element={<HomePage theme={theme}/>} />
+        <Route path="/profilepage" element={<ProfilePage userId={userId}/>} />
+        <Route path="addtip" element={<AddTip />} />
+        <Route path="viewtips" element={<ViewTips theme={theme}/>} />
+        <Route path="owntips" element={<OwnTips theme={theme}/>} />
+        <Route path="*" element={<HomePage />} />
+      </Routes>
+    )
+  } else {
+    routes = (
+      <Routes>
+        <Route path="/" element={<HomePage theme={theme}/>} />
+        <Route path="viewtips" element={<ViewTips theme={theme}/>} />
+        <Route path="auth" element={<Authenticate theme={theme}/>} />
+        <Route path="*" element={<HomePage />} />
+      </Routes>
+    )
+  }
 
  return (
-  <AuthContext.Provider
-  value={{ 
-    isLoggedIn: !!token, 
-    token: token, 
-    userId: userId, 
-    login: login, 
-    logout: logout
-  }}
-> 
-  <QueryClientProvider client={queryClient}>
-   <BrowserRouter>
-     <ButtonAppBar />
-     <Routes>
-       <Route path="/" element={<HomePage />} />
-       <Route path="addtip" element={<AddTip />} />
-       <Route path="viewtips" element={<ViewTips />} />
-       <Route path="auth" element={<Authenticate />} />
-       <Route path="*" element={<HomePage />} />
-     </Routes>
+    <AuthContext.Provider
+     value={{
+       isLoggedIn: !!token,
+       token: token,
+       userId: userId,
+       login: login,
+       logout: logout,
+     }}
+   >
+     <QueryClientProvider client={queryClient}>
+       <BrowserRouter>
+        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <div className="App" id={theme}>
+        <ButtonAppBar toggleTheme={toggleTheme} theme={theme}/>
+          {routes}
+      </div>
+    </ThemeContext.Provider>
    </BrowserRouter>
-   </QueryClientProvider>
+     </QueryClientProvider>
    </AuthContext.Provider>
+  
+
  );
 }
 

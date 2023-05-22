@@ -31,3 +31,11 @@
     border-color: red;
     background: #ffd1d1;
   }
+
+  #light .inputLabel{
+    color: black;
+  }
+
+  #dark .inputLabel{
+    color:#f0f0f0;
+  }

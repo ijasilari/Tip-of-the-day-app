@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Card should render fetched data 1`] = `
+<div
+  className="card-container"
+>
+  <div
+    className="card"
+  >
+    <h2
+      className="title"
+    >
+      CSS
+    </h2>
+    <p>
+      Some test data
+    </p>
+  </div>
+</div>
+`;

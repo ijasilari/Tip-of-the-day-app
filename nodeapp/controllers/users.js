@@ -129,8 +129,146 @@ const loginUser = async(req, res) => {
 
 };
 
+const updateUserWithId = async (req, res, next) => {
+
+  const { username, password, email } = req.body;
+  const schema = Joi.object({
+    username: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).required(),
+  });
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    res.status(400).send(error.details[0].message);
+    return;
+  }
+
+  const userId = req.params.uid;
+
+  const user = await users.findUserById(userId);
+
+  if (!user) {
+    const error = new Error(`User with ID ${userId} not found`);
+    error.statusCode = 404;
+    return next(error);
+  }
+
+  if (email !== user.email) {
+    const exist = await users.findRowCountByEmail(email);
+    console.log(exist, "löytyykö tämä");
+    if (exist) {
+      const error = new Error(`Email exists`);
+      error.statusCode = 422;
+      return next(error);
+    }
+  }
+  if (password !== user.password) {
+    let hashedPassword;
+    try {
+      hashedPassword = await bcrypt.hash(password, 12);
+    } catch (err) {
+      const error = new Error(`Could not update`);
+      error.statusCode = 500;
+      return next(error);
+    }
+
+    if (user.id !== req.userData.userId) {
+      const error = new Error(`Not authorized to update user`);
+      error.statusCode = 401;
+      return next(error);
+    }
+    const result = await users.updateUserById(
+      userId,
+      username,
+      hashedPassword,
+      email
+    );
+    // console.log(hashedPassword)
+
+    if (!result) {
+      const error = new Error(`Could not update user`);
+      error.statusCode = 404;
+      return next(error);
+    }
+
+    user.username = username;
+    user.password = hashedPassword;
+    user.email = email;
+
+    res.status(200).json({ user });
+  } else {
+    if (user.id !== req.userData.userId) {
+      const error = new Error(`Not authorized to update user`);
+      error.statusCode = 401;
+      return next(error);
+    }
+    const result = await users.updateUserById(
+      userId,
+      username,
+      password,
+      email
+    );
+
+    if (!result) {
+      const error = new Error(`Could not update user`);
+      error.statusCode = 404;
+      return next(error);
+    }
+
+    user.username = username;
+    user.password = password;
+    user.email = email;
+
+    res.status(200).json({ user });
+  }
+};
+
+const deleteUserWithId = async (req, res, next) => {
+  const userId = req.params.uid;
+
+  const user = await users.findUserById(userId);
+
+  if (!user) {
+    const error = new Error(`User with ID ${userId} not found`);
+    error.statusCode = 404;
+    return next(error);
+  }
+  if (user.id !== req.userData.userId) {
+    const error = new Error(`Not authorized to delete user`);
+    error.statusCode = 401;
+    return next(error);
+  }
+  const result = await users.deleteUserById(userId);
+  if (!result) {
+    const error = new Error(`Could not delete user`);
+    error.statusCode = 404;
+    return next(error);
+  }
+  res.status(200).json({ message: "Deleted the user." });
+};
+
+const getUserWithId = async (req, res, next) => {
+  const userId = req.params.uid;
+  // console.log(userId)
+  const user = await users.findUserById(userId)
+
+  if (!user) {
+    const error = new Error(`User with ID ${userId} not found`);
+    error.statusCode = 404;
+    return next(error);
+  }
+
+  res.json({ user });
+};
+
+
+
 export {
   signUpUser,
   loginUser,
-  getUsers
+  getUsers,
+  updateUserWithId,
+  deleteUserWithId,
+  getUserWithId
 };

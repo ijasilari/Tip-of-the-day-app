@@ -2,13 +2,14 @@ import { getTips, addLike, getTipsByCategory, deleteTipById, updateTipById, getT
 import {signUpUser, loginUser, getUsers} from './controllers/users.js';
 import express from "express";
 import bodyParser from "body-parser";
-import { check } from "express-validator";
 import cors from "cors";
-import {verifyToken} from './middleware/verifyToken.js';
+import usersRouter from "../nodeapp/routes/usersroutes.js";
+import tipsRouter from "../nodeapp/routes/tipsroutes.js";
+
 
 // const express = require('express')
-const app = express()
 const port = 3000
+const app = express();
 app.use(cors());
 // var dt = require('./modules/totd.js')
 
@@ -62,34 +63,13 @@ app.get('/api/*', (req, res) => {
 */
 // version 2 below
 
-app.get("/getall", getTips);
-app.get("/getall/:category", getTipsByCategory);
-app.get("/randomtip", getTipByRandom);
-app.get("/getusers", getUsers);
-app.get("/:tid", getTipById);
-app.get("/:tid/plain", getTipByIdPlainText);
+app.use("/api/users", usersRouter);
+app.use("/api/tips", tipsRouter);
 app.patch("/:tid/addALike", addLike)
 
-app.post(
-  "/signup", signUpUser
-);
-app.post("/login", loginUser);
-
-app.use(verifyToken);
-
-app.delete("/:tid/delete", deleteTipById);
-
-app.patch(
-  "/:tid/update",
-  [check("description").notEmpty(), check("category").notEmpty()],
-  updateTipById
-);
-
-app.post(
-  "/addtip",
-  [check("description").notEmpty(), check("category").notEmpty()],
-  addNewTip
-);
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
 if (process.env.NODE_ENV !== "test") {
   app.listen(port, () => {
