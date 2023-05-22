@@ -21,7 +21,7 @@ const CloseIcon = () => {
     );
 };
 
-const Dropdown = ({ placeHolder, options, isMulti, isSearchable, onChange }) => {
+const Dropdown = ({ placeHolder, options, isMulti, isSearchable, onChange, theme }) => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedValue, setSelectedValue] = useState(isMulti ? [] : null);
     const [searchValue, setSearchValue] = useState("");
@@ -124,7 +124,7 @@ const Dropdown = ({ placeHolder, options, isMulti, isSearchable, onChange }) => 
     };
   
     return (
-      <div className="dropdown-container">
+      <div className="dropdown-container" id={theme}>
         <div ref={inputRef} onClick={handleInputClick} className="dropdown-input">
           <div className="dropdown-selected-value">{getDisplay()}</div>
           <div className="dropdown-tools">
