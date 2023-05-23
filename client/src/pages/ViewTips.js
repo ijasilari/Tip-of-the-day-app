@@ -239,6 +239,7 @@ function ViewTips(props) {
         />
 
         <IconButton
+          data-testid="fetchDataButton"
           sx={{ marginLeft: 0, mr: "30%" }}
           onClick={() => fetchDataByCategory()}
           style={{ backgroundColor: "transparent" }}

@@ -184,6 +184,7 @@ export default function OwnTips(props) {
         onChange={(value) => setCategory(value.value)} />
 
       <IconButton
+        data-testid="fetchDataButton"
         sx={{ marginLeft: 0, mr: "30%" }}
         onClick={() => fetchDataByCategoryAndCreator()}
         style={{ backgroundColor: 'transparent' }}
