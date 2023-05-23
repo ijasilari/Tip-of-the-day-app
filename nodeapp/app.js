@@ -1,3 +1,5 @@
+import { getTips, addLike, getTipsByCategory, deleteTipById, updateTipById, getTipById, addNewTip, getTipByIdPlainText, getTipByRandom } from './controllers/tips.js';
+import {signUpUser, loginUser, getUsers} from './controllers/users.js';
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -63,6 +65,7 @@ app.get('/api/*', (req, res) => {
 
 app.use("/api/users", usersRouter);
 app.use("/api/tips", tipsRouter);
+app.patch("/:tid/addALike", addLike)
 
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });

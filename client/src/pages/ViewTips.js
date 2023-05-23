@@ -21,6 +21,8 @@ import { IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useContext } from "react";
 import { AuthContext } from "../components/auth-context";
+//import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import TablePagination from "@mui/material/TablePagination";
 import { css } from '@emotion/react';
@@ -36,6 +38,10 @@ function ViewTips(props) {
   const [editText, setEditText] = useState("");
   const [category, setCategory] = useState(1);
   const [categoryEdit, setCategoryEdit] = useState(1);
+  const [like, setLike] = useState(10);
+  const [likeActive, setLikeActive] = useState(false);
+
+
   const auth = useContext(AuthContext);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -74,13 +80,50 @@ function ViewTips(props) {
   const handleTipClose = () => {
     setOpenEditTip(false);
   };
+  const removeTheLike = async (id, index) => {
+    const res = await axios.patch(
+      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/likeminus`,
+      {
+        headers: {
+          Authorization: 'Bearer ' + auth.token
+        },
+      }
+    );
+    console.log(index);
+    if(res) {
+      setLike(data[index].likes);
+    }
+  }
 
+  const addTheLike = async (id, index) => {
+    const res = await axios.patch(
+      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/likeplus`,
+      {
+        headers: {
+          Authorization: 'Bearer ' + auth.token
+        },
+      }
+    );
+    if(res) {
+      setLike(data[index].likes);
+    }
+  }
+
+  const likeEff = (id, index) => {
+    if(likeActive) {
+      setLikeActive(false);
+      removeTheLike(id, index);
+    } else {
+      setLikeActive(true);
+      addTheLike(id, index);
+    }
+  }
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall`
       );
-      console.log(response);
+      //console.log(response);
       setData(response.data.tips);
     };
     fetchData();
@@ -90,7 +133,7 @@ function ViewTips(props) {
     const response = await axios.get(
       `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
     );
-    console.log(response);
+    //console.log(response);
     setData(response.data.tips);
   };
 
@@ -100,11 +143,11 @@ function ViewTips(props) {
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${tid}/delete`,
         {
           headers: {
-            Authorization: "Bearer " + auth.token,
+            Authorization: 'Bearer ' + auth.token
           },
         }
       );
-      console.log(response);
+      //console.log(response);
 
       setData((prev) => prev.filter((e) => e.id !== tid));
     } catch (err) {}
@@ -117,7 +160,7 @@ function ViewTips(props) {
       creator: auth.userId,
     };
     try {
-      console.log(editedTip);
+      //console.log(editedTip);
       const response = await axios.patch(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/update`,
         editedTip,
@@ -128,7 +171,7 @@ function ViewTips(props) {
           },
         }
       );
-      console.log(response);
+      //console.log(response);
 
       setData(() => {
         const newTips = [...data];
@@ -305,6 +348,9 @@ function ViewTips(props) {
                         Delete
                       </Button>
                     )}
+                    <IconButton onClick={() => {
+                          likeEff(item.id, index);
+                        }}> <ThumbUpIcon/> </IconButton>
                     <Dialog
                       maxWidth="sm"
                       id={props.theme}
