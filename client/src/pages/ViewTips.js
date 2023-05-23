@@ -67,7 +67,7 @@ function ViewTips(props) {
   const handleTipClickOpen = (id, index) => {
     setOpenEditTip(true);
     setId(id);
-    setEditText(data[index].description);
+    setEditText(paginatedData[index].description);
   };
 
   const handleTipClose = () => {
@@ -240,7 +240,7 @@ function ViewTips(props) {
                     <div
                       style={{
                         overflow: "auto",
-                        maxWidth: "1000px", // Adjust the value as needed
+                        maxWidth: "1000px",
                       }}
                     >
                       <ReactMarkdown

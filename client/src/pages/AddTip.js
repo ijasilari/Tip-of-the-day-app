@@ -138,24 +138,34 @@ function AddTip(props) {
         component="form"
         onSubmit={formikTip.handleSubmit}
         textAlign="center"
-        display='-ms-inline-grid'
+        alignContent="center"
+        justifyContent="center"
+        display="-ms-inline-grid"
         flexGrow="1"
         sx={{
-          "& > :not(style)": { mt: 3, ml: 3, mr: 3, width: "50%" , height: '100%'},
+          "& > :not(style)": {
+            mt: 3,
+            ml: 3,
+            mr: 3,
+            width: "50%",
+            height: "100%",
+          },
         }}
         noValidate
         autoComplete="off"
       >
         <Box
-          flexGrow="1"
+          display="inline-flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            "& > :not(style)": { mt: 3, ml: "125%", mr: "38%", width: "100%" },
+            "& > :not(style)": {
+              mt: 3,
+              width: "100%",
+            },
           }}
         >
-
           <Dropdown
             isSearchable
             placeHolder="Select..."
@@ -177,10 +187,11 @@ function AddTip(props) {
           onChange={formikTip.handleChange}
           value={formikTip.values.description}
           sx={{
-            '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: textAreaOutlineColor,
-            },
-            backgroundColor: backgroundColor
+            "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+              {
+                borderColor: textAreaOutlineColor,
+              },
+            backgroundColor: backgroundColor,
           }}
         />
         {formikTip.errors.category ? (
@@ -205,7 +216,6 @@ function AddTip(props) {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
           className="buttons"
-
         >
           Add New Tip
         </Button>
@@ -214,11 +224,11 @@ function AddTip(props) {
             background: attentionBackground,
             marginLeft: "auto",
             marginRight: "auto",
-            borderRadius: "8px"
+            borderRadius: "8px",
           }}
         >
           <h1 className="text">Attention!</h1>
-          <div style={{ textAlign: "left", paddingBottom: "10px"}}>
+          <div style={{ textAlign: "left", paddingBottom: "10px" }}>
             <p className="text">
               This page supports markdown and syntax highlight code. To create
               codeblock with highlight write:
@@ -230,7 +240,9 @@ function AddTip(props) {
             <ReactMarkdown
               children={codeExample}
               components={{
-                p: ({ node, ...props }) => <p style={{ color: textColor }} {...props} />,
+                p: ({ node, ...props }) => (
+                  <p style={{ color: textColor }} {...props} />
+                ),
                 code({ node, inline, className, children, ...props }) {
                   const match = /language-(\w+)/.exec(className || "");
                   return !inline && match ? (
