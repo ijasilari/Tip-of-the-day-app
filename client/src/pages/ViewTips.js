@@ -24,6 +24,7 @@ import { AuthContext } from "../components/auth-context";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import TablePagination from "@mui/material/TablePagination";
 import { css } from '@emotion/react';
+import "./OwnTips.css"
 
 const labelStyle = css`
   color: red; /* Change the text color */
@@ -164,13 +165,16 @@ function ViewTips(props) {
 
   let textColor = "";
   let backgroundColor = "";
+  let textAreaOutlineColor = "";
   if(props.theme === 'light') {
     textColor = 'black'
     backgroundColor = 'white';
+    textAreaOutlineColor = 'primary';
   }
   else {
     textColor = '#ECECEC';
     backgroundColor = '#1C1C1C';
+    textAreaOutlineColor = '#bb86fc';
   }
 
   return (
@@ -303,6 +307,7 @@ function ViewTips(props) {
                     )}
                     <Dialog
                       maxWidth="sm"
+                      id={props.theme}
                       open={openEditTip}
                       aria-labelledby="alert-dialog-title"
                       aria-describedby="alert-dialog-description"
@@ -314,7 +319,7 @@ function ViewTips(props) {
                         component="form"
                         noValidate
                         onSubmit={formikTip.handleSubmit}
-                        sx={{ mt: 3 }}
+                        sx={{ backgroundColor: backgroundColor }}
                       >
                         <DialogTitle id="alert-dialog-title">
                           Change Tip Id: {id}
@@ -323,6 +328,7 @@ function ViewTips(props) {
                             placeHolder="Select..."
                             options={categoryOptions}
                             onChange={(value) => setCategoryEdit(value.value)}
+                            theme={props.theme}
                           />
                           <TextField
                             name="description"
@@ -333,6 +339,25 @@ function ViewTips(props) {
                             label="Description"
                             multiline={true}
                             rows={10}
+                            sx={{
+                              '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: textAreaOutlineColor,
+                              },
+                              backgroundColor: backgroundColor,
+                              '& .MuiInputBase-input': {
+                                color: textColor,
+                              },
+                              '& .MuiInputLabel-root': {
+                                color: textColor,
+                              },
+                              '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                  borderColor: textColor,
+                                },
+                                '&:hover fieldset': {
+                                  borderColor: textAreaOutlineColor,
+                                }}
+                            }}
                             autoFocus
                             onChange={formikTip.handleChange}
                             value={formikTip.values.description}
@@ -346,6 +371,7 @@ function ViewTips(props) {
                         <DialogActions>
                           <Button
                             variant="contained"
+                            className='buttons'
                             onClick={() => {
                               handleCancel();
                               handleTipClose();
@@ -357,6 +383,7 @@ function ViewTips(props) {
                             variant="contained"
                             role="button"
                             type="submit"
+                            className="buttons"
                           >
                             Change Tip Description
                           </Button>
