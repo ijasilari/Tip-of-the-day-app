@@ -155,7 +155,7 @@ function AddTip(props) {
             "& > :not(style)": { mt: 3, ml: "125%", mr: "38%", width: "100%" },
           }}
         >
-      
+
           <Dropdown
             isSearchable
             placeHolder="Select..."

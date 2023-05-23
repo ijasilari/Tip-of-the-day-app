@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 import { useState, useCallback, useEffect } from 'react';
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AuthContext } from "./components/auth-context";
 import ButtonAppBar from "./components/ButtonAppBar";
@@ -73,23 +73,26 @@ function App() {
   if(token){
     routes = (
       <Routes>
-        <Route path="/" element={<HomePage theme={theme}/>} />
-        <Route path="/profilepage" element={<ProfilePage userId={userId} theme={theme}/>} />
-        <Route path="addtip" element={<AddTip theme={theme}/>} />
-        <Route path="viewtips" element={<ViewTips theme={theme}/>} />
-        <Route path="owntips" element={<OwnTips theme={theme}/>} />
-        <Route path="*" element={<HomePage />} />
+        <Route path="/" element={<HomePage theme={theme} />} />
+        <Route
+          path="/profilepage"
+          element={<ProfilePage userId={userId} theme={theme} />}
+        />
+        <Route path="addtip" element={<AddTip theme={theme} />} />
+        <Route path="viewtips" element={<ViewTips theme={theme} />} />
+        <Route path="owntips" element={<OwnTips theme={theme} />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    )
+    );
   } else {
     routes = (
       <Routes>
-        <Route path="/" element={<HomePage theme={theme}/>} />
-        <Route path="viewtips" element={<ViewTips theme={theme}/>} />
-        <Route path="auth" element={<Authenticate theme={theme}/>} />
-        <Route path="*" element={<HomePage />} />
+        <Route path="/" element={<HomePage theme={theme} />} />
+        <Route path="viewtips" element={<ViewTips theme={theme} />} />
+        <Route path="auth" element={<Authenticate theme={theme} />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    )
+    );
   }
 
  return (
