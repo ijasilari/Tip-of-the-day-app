@@ -31,7 +31,7 @@ describe('Authentication', () => {
       cy.get('#name').should('have.css', 'background-color', 'rgb(212, 237, 218)');
       cy.get('#email').should('have.css', 'background-color', 'rgb(212, 237, 218)');
       cy.get('#password').should('have.css', 'background-color', 'rgb(212, 237, 218)');
-      cy.url().should('eq', 'http://localhost/auth');
+      cy.url().should('eq', 'http://localhost/');
     });
     
     it('Performs a successful login', () => {
@@ -41,4 +41,44 @@ describe('Authentication', () => {
       cy.url().should('eq', 'http://localhost/'); 
     }); 
 
+    it('Displays error messages for invalid inputs', () => {
+        cy.contains('SignUp instead?').click(); 
+        cy.contains('SIGNUP').click(); //Submit without entering any input
+        cy.get('#name').should('have.css', 'background-color', 'rgb(250, 128, 114)');
+        cy.get('#email').should('have.css', 'background-color', 'rgb(250, 128, 114)');
+        cy.get('#password').should('have.css', 'background-color', 'rgb(250, 128, 114)');
+        cy.contains('"name" is not allowed to be empty').should('be.visible');
+        cy.contains('"email" is not allowed to be empty').should('be.visible');
+        cy.contains('"password" is not allowed to be empty').should('be.visible');
+    
+        cy.get('#name').type('Username'); 
+        cy.get('#email').type('invalidemail'); // Enter an invalid email
+        cy.get('#password').type('short'); // Enter a short password
+        cy.contains('SIGNUP').click();
+        cy.get('#name').should('have.css', 'background-color', 'rgb(212, 237, 218)');
+        cy.get('#email').should('have.css', 'background-color', 'rgb(250, 128, 114)');
+        cy.get('#password').should('have.css', 'background-color', 'rgb(250, 128, 114)');
+        cy.contains('"email" must be a valid email').should('be.visible');
+        cy.contains('"password" length must be at least 8 characters long').should('be.visible');
+
+        cy.get('#name').clear().type('Username');
+        cy.get('#email').clear().type('newuser@example.com'); // Enter an already in use email
+        cy.get('#password').clear().type('longpassword'); // Enter a valid password
+        cy.contains('SIGNUP').click();
+        cy.get('#name').should('have.css', 'background-color', 'rgb(212, 237, 218)');
+        cy.get('#email').should('have.css', 'background-color', 'rgb(250, 128, 114)');
+        cy.get('#password').should('have.css', 'background-color', 'rgb(212, 237, 218)');
+        cy.contains('Email exists').should('be.visible');
+      });
+    
+      it('Displays error message for wrong credentials', () => {
+        cy.contains('LOGIN').click(); // Submit without entering any input
+        cy.contains('Wrong credentials').should('be.visible');
+        cy.get('#email').type('wrongemail@example.com'); // Enter wrong email
+        cy.get('#password').type('wrongpassword'); // Enter wrong password
+        cy.contains('LOGIN').click();
+        cy.contains('Wrong credentials').should('be.visible');
+      });
   });
+
+  
