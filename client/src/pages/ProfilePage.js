@@ -284,6 +284,7 @@ const ProfilePage = (props) => {
 
   return (
     <div
+      data-testid="ProfilePage"
       style={{
         display: "flex",
         justifyContent: "center",
