@@ -25,7 +25,12 @@ import { AuthContext } from "../components/auth-context";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import TablePagination from "@mui/material/TablePagination";
+import { css } from '@emotion/react';
+import "./OwnTips.css"
 
+const labelStyle = css`
+  color: red; /* Change the text color */
+`;
 function ViewTips(props) {
   const [data, setData] = useState([]);
   const [openEditTip, setOpenEditTip] = useState(false);
@@ -203,13 +208,16 @@ function ViewTips(props) {
 
   let textColor = "";
   let backgroundColor = "";
+  let textAreaOutlineColor = "";
   if(props.theme === 'light') {
     textColor = 'black'
     backgroundColor = 'white';
+    textAreaOutlineColor = 'primary';
   }
   else {
     textColor = '#ECECEC';
     backgroundColor = '#1C1C1C';
+    textAreaOutlineColor = '#bb86fc';
   }
 
   return (
@@ -247,7 +255,7 @@ function ViewTips(props) {
           <TableHead>
             <TableRow>
               <TableCell sx={{ color: textColor }}>Tip Id</TableCell>
-              <TableCell align="center" sx={{ color: textColor }}>
+              <TableCell align="left" sx={{ color: textColor }}>
                 Description
               </TableCell>
               <TableCell align="center" sx={{ color: textColor }}>
@@ -256,7 +264,7 @@ function ViewTips(props) {
               <TableCell align="center" sx={{ color: textColor }}></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody ref={animationParent}>
+          <TableBody>
             {paginatedData &&
               paginatedData.map((item, index) => (
                 <TableRow
@@ -276,34 +284,49 @@ function ViewTips(props) {
                       overflow: "auto",
                     }}
                   >
-                    <ReactMarkdown
-                      children={item.description}
-                      components={{
-                        p: ({ node, ...props }) => (
-                          <p style={{ color: textColor }} {...props} />
-                        ),
-                        code({ node, inline, className, children, ...props }) {
-                          const match = /language-(\w+)/.exec(className || "");
-                          return !inline && match ? (
-                            <SyntaxHighlighter
-                              children={String(children).replace(/\n$/, "")}
-                              language={match[1]}
-                              style={tomorrow}
-                              {...props}
-                            />
-                          ) : (
-                            <code className={className} {...props}>
-                              {children}
-                            </code>
-                          );
-                        },
+                    <div
+                      style={{
+                        overflow: "auto",
+                        maxWidth: "1000px", // Adjust the value as needed
                       }}
-                    />
-                    {like + " users found this tip useful"}
+                    >
+                      <ReactMarkdown
+                        children={item.description}
+                        components={{
+                          p: ({ node, ...props }) => (
+                            <p style={{ color: textColor }} {...props} />
+                          ),
+                          code({
+                            node,
+                            inline,
+                            className,
+                            children,
+                            ...props
+                          }) {
+                            const match = /language-(\w+)/.exec(
+                              className || ""
+                            );
+                            return !inline && match ? (
+                              <SyntaxHighlighter
+                                children={String(children).replace(/\n$/, "")}
+                                language={match[1]}
+                                style={tomorrow}
+                                {...props}
+                              />
+                            ) : (
+                              <code className={className} {...props}>
+                                {children}
+                              </code>
+                            );
+                          },
+                        }}
+                      />
+                    </div>
                   </TableCell>
                   <TableCell align="center" style={{ minWidth: "10rem" }}>
                     {auth.userId === item.creator && (
-                      <Button className="buttons"
+                      <Button
+                        className="buttons"
                         style={{ display: "inline", marginRight: "2px" }}
                         variant="contained"
                         onClick={() => {
@@ -314,7 +337,8 @@ function ViewTips(props) {
                       </Button>
                     )}
                     {auth.userId === item.creator && (
-                      <Button className="buttons"
+                      <Button
+                        className="buttons"
                         style={{ display: "inline", marginLeft: "2px" }}
                         variant="contained"
                         onClick={() => {
@@ -329,6 +353,7 @@ function ViewTips(props) {
                         }}> <ThumbUpIcon/> </IconButton>
                     <Dialog
                       maxWidth="sm"
+                      id={props.theme}
                       open={openEditTip}
                       aria-labelledby="alert-dialog-title"
                       aria-describedby="alert-dialog-description"
@@ -340,7 +365,7 @@ function ViewTips(props) {
                         component="form"
                         noValidate
                         onSubmit={formikTip.handleSubmit}
-                        sx={{ mt: 3 }}
+                        sx={{ backgroundColor: backgroundColor }}
                       >
                         <DialogTitle id="alert-dialog-title">
                           Change Tip Id: {id}
@@ -349,6 +374,7 @@ function ViewTips(props) {
                             placeHolder="Select..."
                             options={categoryOptions}
                             onChange={(value) => setCategoryEdit(value.value)}
+                            theme={props.theme}
                           />
                           <TextField
                             name="description"
@@ -359,6 +385,25 @@ function ViewTips(props) {
                             label="Description"
                             multiline={true}
                             rows={10}
+                            sx={{
+                              '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: textAreaOutlineColor,
+                              },
+                              backgroundColor: backgroundColor,
+                              '& .MuiInputBase-input': {
+                                color: textColor,
+                              },
+                              '& .MuiInputLabel-root': {
+                                color: textColor,
+                              },
+                              '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                  borderColor: textColor,
+                                },
+                                '&:hover fieldset': {
+                                  borderColor: textAreaOutlineColor,
+                                }}
+                            }}
                             autoFocus
                             onChange={formikTip.handleChange}
                             value={formikTip.values.description}
@@ -372,6 +417,7 @@ function ViewTips(props) {
                         <DialogActions>
                           <Button
                             variant="contained"
+                            className='buttons'
                             onClick={() => {
                               handleCancel();
                               handleTipClose();
@@ -383,6 +429,7 @@ function ViewTips(props) {
                             variant="contained"
                             role="button"
                             type="submit"
+                            className="buttons"
                           >
                             Change Tip Description
                           </Button>
@@ -393,21 +440,32 @@ function ViewTips(props) {
                   <TableCell align="right"></TableCell>
                 </TableRow>
               ))}
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={data.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={(event) => {
-                setRowsPerPage(parseInt(event.target.value, 10));
-                setPage(0);
-              }}
-            />
           </TableBody>
         </Table>
       </TableContainer>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "1rem",
+        }}
+      >
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={(event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0);
+          }}
+          sx={{
+            color: textColor
+          }}
+        />
+      </div>
     </div>
   );
 }

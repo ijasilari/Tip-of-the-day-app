@@ -23,6 +23,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useContext } from 'react';
 import { AuthContext } from '../components/auth-context';
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
+import "./OwnTips.css"
 
 export default function OwnTips(props) {
   const [data, setData] = useState([]);
@@ -145,13 +146,16 @@ export default function OwnTips(props) {
 
   let textColor = "";
   let backgroundColor = "";
+  let textAreaOutlineColor = "";
   if(props.theme === 'light') {
     textColor = 'black'
     backgroundColor = 'white';
+    textAreaOutlineColor = 'primary';
   }
   else {
     textColor = '#ECECEC';
     backgroundColor = '#1C1C1C';
+    textAreaOutlineColor = '#bb86fc';
   }
 
   const formikTip = useFormik({
@@ -248,6 +252,7 @@ export default function OwnTips(props) {
               </Card>
               <Dialog
                 maxWidth="sm"
+                id={props.theme}
                 open={openEditTip}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
@@ -259,7 +264,7 @@ export default function OwnTips(props) {
                   component="form"
                   noValidate
                   onSubmit={formikTip.handleSubmit}
-                  sx={{ mt: 3 }}
+                  sx={{ backgroundColor: backgroundColor }}
                 >
                   <DialogTitle id="alert-dialog-title">
                     Change Tip Id: {id}
@@ -267,7 +272,8 @@ export default function OwnTips(props) {
                       isSearchable
                       placeHolder="Select..."
                       options={categoryOptions}
-                      onChange={(value) => setCategoryEdit(value.value)} />
+                      onChange={(value) => setCategoryEdit(value.value)}
+                      theme={props.theme} />
                     <TextField
                       name="description"
                       required
@@ -277,6 +283,25 @@ export default function OwnTips(props) {
                       label="Description"
                       multiline={true}
                       rows={10}
+                      sx={{
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: textAreaOutlineColor,
+                        },
+                        backgroundColor: backgroundColor,
+                        '& .MuiInputBase-input': {
+                          color: textColor,
+                        },
+                        '& .MuiInputLabel-root': {
+                          color: textColor,
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            borderColor: textColor,
+                          },
+                          '&:hover fieldset': {
+                            borderColor: textAreaOutlineColor,
+                          }}
+                      }}
                       autoFocus
                       onChange={formikTip.handleChange}
                       value={formikTip.values.description} />
@@ -289,6 +314,7 @@ export default function OwnTips(props) {
                   <DialogActions>
                     <Button
                       variant="contained"
+                      className='buttons'
                       onClick={() => {
                         handleCancel();
                         handleTipClose();
@@ -300,6 +326,7 @@ export default function OwnTips(props) {
                       variant="contained"
                       role="button"
                       type="submit"
+                      className="buttons"
                     >
                       Change Tip Description
                     </Button>
