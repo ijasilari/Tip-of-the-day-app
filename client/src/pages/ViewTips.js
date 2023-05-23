@@ -83,6 +83,7 @@ function ViewTips(props) {
   const removeTheLike = async (id, index) => {
     const res = await axios.patch(
       `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/likeminus`,
+      {},
       {
         headers: {
           Authorization: 'Bearer ' + auth.token
@@ -96,15 +97,16 @@ function ViewTips(props) {
   }
 
   const addTheLike = async (id, index) => {
-    const res = await axios.patch(
-      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/likeplus`,
-      {
-        headers: {
-          Authorization: 'Bearer ' + auth.token
-        },
-      }
-    );
-    if(res) {
+      const res = await axios.patch(
+        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/likeplus`,
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + auth.token,
+          },
+        }
+      );
+      if(res) {
       setLike(data[index].likes);
     }
   }

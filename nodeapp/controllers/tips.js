@@ -196,7 +196,7 @@ const addLike = async (req, res, next) => {
     const error = new Error(`Tip with ID ${tipId} not found`);
     error.statusCode = 404;
     return next(error);
-  } 
+  }
 
   res.json({ like });
 };
@@ -210,7 +210,7 @@ const removeLike = async (req, res, next) => {
     const error = new Error(`Tip with ID ${tipId} not found`);
     error.statusCode = 404;
     return next(error);
-  } 
+  }
 
   res.json({ like });
 };
