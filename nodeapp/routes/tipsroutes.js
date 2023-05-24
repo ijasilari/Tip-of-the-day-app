@@ -11,8 +11,7 @@ import {
   addNewTip,
   getTipByIdPlainText,
   getTipByRandom,
-  addLike,
-  removeLike
+  addLike
 } from "../controllers/tips.js";
 
 const tipsRouter = Router();
@@ -31,9 +30,7 @@ tipsRouter.get("/:tid/plain", getTipByIdPlainText);
 
 tipsRouter.use(verifyToken);
 
-tipsRouter.patch("/:tid/likeplus", addLike);
-
-tipsRouter.patch("/:tid/likeminus", removeLike);
+tipsRouter.patch("/:tid/like", addLike);
 
 tipsRouter.delete("/:tid/delete", deleteTipById);
 
