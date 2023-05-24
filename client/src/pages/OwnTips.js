@@ -31,7 +31,7 @@ export default function OwnTips(props) {
   const [id, setId] = useState();
   const [editText, setEditText] = useState("");
   const [category, setCategory] = useState(1);
-  const [categoryEdit, setCategoryEdit] = useState(1);
+  const [categoryEdit, setCategoryEdit] = useState();
   const auth = useContext(AuthContext);
 
   const categoryOptions = [
@@ -128,6 +128,7 @@ export default function OwnTips(props) {
         const foundIndex = newTips.findIndex((tip) => tip.id === id);
         // console.log(foundIndex);
         newTips[foundIndex].description = formikTip.values.description;
+        newTips[foundIndex].category = categoryEdit;
         // console.log([...newTips])
         return [...newTips];
       });
@@ -140,6 +141,9 @@ export default function OwnTips(props) {
 
     if (!values.description) {
       errors.description = "Required tip description";
+    }
+    if(!values.category){
+      errors.category = "Required tip category"
     }
     return errors;
   };
@@ -162,6 +166,7 @@ export default function OwnTips(props) {
     enableReinitialize: true,
     initialValues: {
       description: editText,
+      category: categoryEdit,
     },
     validate: validateTip,
     onSubmit: editTip,
@@ -273,7 +278,10 @@ export default function OwnTips(props) {
                       isSearchable
                       placeHolder="Select..."
                       options={categoryOptions}
-                      onChange={(value) => setCategoryEdit(value.value)}
+                      onChange={(value) => {
+                        setCategoryEdit(value.value)
+                        formikTip.values.category = value.value;
+                      }}
                       theme={props.theme} />
                     <TextField
                       name="description"
@@ -306,6 +314,11 @@ export default function OwnTips(props) {
                       autoFocus
                       onChange={formikTip.handleChange}
                       value={formikTip.values.description} />
+                    {formikTip.errors.category ? (
+                      <div style={{ color: "red" }}>
+                        {formikTip.errors.category}
+                      </div>
+                    ) : null}
                     {formikTip.errors.description ? (
                       <div style={{ color: "red" }}>
                         {formikTip.errors.description}
