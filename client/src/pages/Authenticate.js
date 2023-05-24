@@ -28,6 +28,28 @@ const Authenticate = (props) => {
     password: Joi.string().min(8).required(),
   });
 
+  const switchThemeHanlder = () => {
+    if (nameRef.current) {
+      nameRef.current.style.backgroundColor = backgroundColor;
+    }
+    if (emailRef.current) {
+      emailRef.current.style.backgroundColor = backgroundColor;
+    }
+    if (passwordRef.current) {
+      passwordRef.current.style.backgroundColor = backgroundColor;
+    }
+  };
+
+  let backgroundColor = "";
+  if(props.theme === 'light') {
+    backgroundColor = 'white'
+    switchThemeHanlder();
+  }
+  else {
+    backgroundColor = '#1C1C1C';
+    switchThemeHanlder();
+  }
+
   const validateData = (user) => {
     const result = schema.validate(user, { abortEarly: false });
 
@@ -71,17 +93,19 @@ const Authenticate = (props) => {
     setLoginMode((prevMode) => !prevMode);
     setInputError();
     if (nameRef.current) {
-      nameRef.current.style.backgroundColor = "#f2f2f2";
+      nameRef.current.style.backgroundColor = backgroundColor;
     }
     if (emailRef.current) {
-      emailRef.current.style.backgroundColor = "#f2f2f2";
+      emailRef.current.style.backgroundColor = backgroundColor;
       emailRef.current.value = "";
     }
     if (passwordRef.current) {
-      passwordRef.current.style.backgroundColor = "#f2f2f2";
+      passwordRef.current.style.backgroundColor = backgroundColor;
       passwordRef.current.value = "";
     }
   };
+
+
 
   const auth = useContext(AuthContext);
 
@@ -146,14 +170,6 @@ const Authenticate = (props) => {
       });
     }
   };
-
-  let backgroundColor = "";
-  if(props.theme === 'light') {
-    backgroundColor = 'white'
-  }
-  else {
-    backgroundColor = '#1C1C1C'
-  }
 
   return (
     <div
