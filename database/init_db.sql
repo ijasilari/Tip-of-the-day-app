@@ -3,7 +3,8 @@ CREATE TABLE public.tips (
     description VARCHAR(2000) NOT NULL,
     category SMALLINT NOT NULL,
     likes SMALLINT DEFAULT 0,
-    creator VARCHAR(36) NOT NULL
+    creator VARCHAR(36) NOT NULL,
+    wholiked JSONB DEFAULT '{}'::jsonb
 );
 
 CREATE TABLE public.users (

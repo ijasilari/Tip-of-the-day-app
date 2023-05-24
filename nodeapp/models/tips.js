@@ -65,16 +65,12 @@ const getRandomTip = async () => {
   return result.rows[0]
 };
 
-const addLikeById = async (id) => {
-  const res = await pool.query("UPDATE tips SET likes = likes + 1 WHERE id=$1", [id]);
-  console.log("console.log:" + res)
+const addLikeById = async (userId, id, vote) => {
+  const res = await pool.query(
+    "UPDATE tips SET likes = likes + $3, wholiked = jsonb_set(COALESCE(wholiked, '{}'::jsonb), $1, 'true', true) WHERE id = $2",
+    [[userId], id, vote]
+  );
   return res.rowCount!==0;
 }
 
-const removeLikeById = async (id) => {
-  const res = await pool.query("UPDATE tips SET likes = likes - 1 WHERE id=$1", [id]);
-  // console.log("console.log:" +  res)
-  return res.rowCount!==0;
-}
-
-export { getAllTips, findTipById, findTipsByCategory, findTipsByCreator, addTip, updateTipWithId, deleteTipWithId, getRandomTip, addLikeById, removeLikeById };
+export { getAllTips, findTipById, findTipsByCategory, findTipsByCreator, addTip, updateTipWithId, deleteTipWithId, getRandomTip, addLikeById };

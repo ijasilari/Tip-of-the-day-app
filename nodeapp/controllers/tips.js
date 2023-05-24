@@ -1,4 +1,4 @@
-import {getAllTips, findTipsByCategory, findTipsByCreator, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip, addLikeById, removeLikeById } from "../models/tips.js";
+import {getAllTips, findTipsByCategory, findTipsByCreator, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip, addLikeById} from "../models/tips.js";
 import { validationResult } from "express-validator";
 
 const getTips = async (req, res, next) => {
@@ -189,30 +189,38 @@ const getTipByRandom = async (req, res, next) => {
 
 const addLike = async (req, res, next) => {
   const tipId = req.params.tid;
-  // console.log(tipId)
-  const like = await addLikeById(tipId)
-  console.log("this is a console log of: " + like);
-  if (!like) {
+  const { userId, vote }  = req.body;
+  // console.log(userId)
+  // console.log(vote)
+
+  const tip = await findTipById(tipId);
+  console.log(tip)
+  if (!tip) {
     const error = new Error(`Tip with ID ${tipId} not found`);
     error.statusCode = 404;
     return next(error);
   }
-
-  res.json({ like });
-};
-
-const removeLike = async (req, res, next) => {
-  const tipId = req.params.tid;
   // console.log(tipId)
-  const like = await removeLikeById(tipId)
+  // console.log(tip.wholiked)
+  const userLiked = tip.wholiked && tip.wholiked[userId];
+  // console.log(userLiked)
+  if (userLiked) {
+    const error = new Error(`You have already voted on this tip`);
+    error.statusCode = 400;
+    return next(error);
+  }
+  const like = await addLikeById(userId, tipId, vote)
   console.log("this is a console log of: " + like);
   if (!like) {
-    const error = new Error(`Tip with ID ${tipId} not found`);
+    const error = new Error(`Something went wrong`);
     error.statusCode = 404;
     return next(error);
   }
 
-  res.json({ like });
+  tip.likes = tip.likes + vote;
+  tip.wholiked = userId;
+  // console.log(tip)
+  res.json({ tip });
 };
 
 export {
@@ -226,5 +234,4 @@ export {
   getTipByIdPlainText,
   getTipByRandom,
   addLike,
-  removeLike
 };
