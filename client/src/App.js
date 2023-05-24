@@ -96,9 +96,8 @@ function App() {
   }
 
  return (
-
       <AuthContext.Provider
-     value={{
+      value={{
        isLoggedIn: !!token,
        token: token,
        userId: userId,
