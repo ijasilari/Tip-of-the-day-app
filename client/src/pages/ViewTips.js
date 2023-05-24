@@ -17,12 +17,13 @@ import { useFormik } from "formik";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import Dropdown from "../components/Dropdown";
-import { IconButton } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useContext } from "react";
 import { AuthContext } from "../components/auth-context";
 //import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import TablePagination from "@mui/material/TablePagination";
 import { css } from '@emotion/react';
@@ -38,8 +39,7 @@ function ViewTips(props) {
   const [editText, setEditText] = useState("");
   const [category, setCategory] = useState(1);
   const [categoryEdit, setCategoryEdit] = useState(1);
-  const [like, setLike] = useState(10);
-  const [likeActive, setLikeActive] = useState(false);
+
 
 
   const auth = useContext(AuthContext);
@@ -49,6 +49,7 @@ function ViewTips(props) {
   const endIndex = startIndex + rowsPerPage;
   const paginatedData = data.slice(startIndex, endIndex);
   console.log(paginatedData)
+  // const [vote, setVote] = useState();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -80,46 +81,42 @@ function ViewTips(props) {
   const handleTipClose = () => {
     setOpenEditTip(false);
   };
-  const removeTheLike = async (id, index) => {
-    const res = await axios.patch(
-      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/likeminus`,
-      {},
-      {
-        headers: {
-          Authorization: 'Bearer ' + auth.token
-        },
-      }
-    );
-    console.log(index);
-    if(res) {
-      setLike(data[index].likes);
-    }
-  }
 
-  const addTheLike = async (id, index) => {
+  const addTheLike = async (id, index, vote) => {
+    console.log(vote)
+    const userData = {userId: auth.userId, vote: vote}
+    try {
+
+
       const res = await axios.patch(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/likeplus`,
-        {},
+        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/like`,
+        userData,
         {
           headers: {
             Authorization: "Bearer " + auth.token,
           },
         }
       );
-      if(res) {
-      setLike(data[index].likes);
+      console.log(res)
+
+      setData(() => {
+        const newTips = [...data];
+        // console.log(newTips);
+        const foundIndex = newTips.findIndex((tip) => tip.id === id);
+        // console.log(foundIndex);
+        newTips[foundIndex].likes = newTips[foundIndex].likes + vote;
+        newTips[foundIndex].wholiked[auth.userId] = true
+        console.log([...newTips])
+        return [...newTips];
+
+      });
+    }
+      catch (error) {
+        console.log(error)
     }
   }
 
-  const likeEff = (id, index) => {
-    if(likeActive) {
-      setLikeActive(false);
-      removeTheLike(id, index);
-    } else {
-      setLikeActive(true);
-      addTheLike(id, index);
-    }
-  }
+  // console.log(vote)
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
@@ -262,6 +259,9 @@ function ViewTips(props) {
                 Description
               </TableCell>
               <TableCell align="center" sx={{ color: textColor }}>
+                Likes
+              </TableCell>
+              <TableCell align="center" sx={{ color: textColor }}>
                 Functions
               </TableCell>
               <TableCell align="center" sx={{ color: textColor }}></TableCell>
@@ -326,6 +326,33 @@ function ViewTips(props) {
                       />
                     </div>
                   </TableCell>
+                  <TableCell align="right">
+                    <Typography sx={{ textAlign: "center" }}>
+                      {item.likes}
+                    </Typography>
+
+                    {auth.token &&
+                      !item.wholiked[auth.userId]  &&(
+                        <>
+                            <IconButton
+                              onClick={() => {
+                                addTheLike(item.id, index, 1);
+                              }}
+                            >
+                              {" "}
+                              <ThumbUpIcon />{" "}
+                            </IconButton>
+                            <IconButton
+                              onClick={() => {
+                                addTheLike(item.id, index, -1);
+                              }}
+                            >
+                              {" "}
+                              <ThumbDownIcon />{" "}
+                            </IconButton>
+                        </>
+                      )}
+                  </TableCell>
                   <TableCell align="center" style={{ minWidth: "10rem" }}>
                     {auth.userId === item.creator && (
                       <Button
@@ -351,9 +378,6 @@ function ViewTips(props) {
                         Delete
                       </Button>
                     )}
-                    <IconButton onClick={() => {
-                          likeEff(item.id, index);
-                        }}> <ThumbUpIcon/> </IconButton>
                     <Dialog
                       maxWidth="sm"
                       id={props.theme}
@@ -389,23 +413,25 @@ function ViewTips(props) {
                             multiline={true}
                             rows={10}
                             sx={{
-                              '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                borderColor: textAreaOutlineColor,
-                              },
+                              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                                {
+                                  borderColor: textAreaOutlineColor,
+                                },
                               backgroundColor: backgroundColor,
-                              '& .MuiInputBase-input': {
+                              "& .MuiInputBase-input": {
                                 color: textColor,
                               },
-                              '& .MuiInputLabel-root': {
+                              "& .MuiInputLabel-root": {
                                 color: textColor,
                               },
-                              '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
+                              "& .MuiOutlinedInput-root": {
+                                "& fieldset": {
                                   borderColor: textColor,
                                 },
-                                '&:hover fieldset': {
+                                "&:hover fieldset": {
                                   borderColor: textAreaOutlineColor,
-                                }}
+                                },
+                              },
                             }}
                             autoFocus
                             onChange={formikTip.handleChange}
@@ -420,7 +446,7 @@ function ViewTips(props) {
                         <DialogActions>
                           <Button
                             variant="contained"
-                            className='buttons'
+                            className="buttons"
                             onClick={() => {
                               handleCancel();
                               handleTipClose();
@@ -465,7 +491,7 @@ function ViewTips(props) {
             setPage(0);
           }}
           sx={{
-            color: textColor
+            color: textColor,
           }}
         />
       </div>
