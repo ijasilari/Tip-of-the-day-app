@@ -101,3 +101,8 @@ pre {
   color: #ECECEC;
   background-color: #262626;
 }
+
+#light input{
+  color: black;
+  background-color: white;
+}

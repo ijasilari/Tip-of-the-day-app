@@ -10,8 +10,6 @@ import { AuthContext } from "./auth-context";
 import "./ButtonAppBar.css";
 import ReactSwitch from "react-switch";
 
-import { useState } from "react";
-
 function ButtonAppBar(props) {
   const auth = useContext(AuthContext);
 
