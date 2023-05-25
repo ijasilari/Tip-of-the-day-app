@@ -530,6 +530,7 @@ const ProfilePage = (props) => {
           <FormControlLabel sx={{color: textColor}}
             control={
               <Checkbox
+                data-testid="deleteCheckbox"
                 checked={deleteVerified}
                 onChange={handleDeleteVerification}
                 sx={{color: textColor}}
@@ -541,6 +542,7 @@ const ProfilePage = (props) => {
         <DialogActions sx={{backgroundColor: bgColor2}}>
           <Button onClick={handleDeleteConfirmationClose} sx={{color: textAreaOutlineColor}}>Cancel</Button>
           <Button
+            data-testid="deleteButton"
             onClick={handleDeleteAccount}
             disabled={!deleteVerified}
             color="error"
