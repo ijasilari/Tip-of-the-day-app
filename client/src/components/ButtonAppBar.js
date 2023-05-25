@@ -5,8 +5,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
-import Container from '@mui/material/Container';
-import MenuItem from '@mui/material/MenuItem';
 import { useContext } from "react";
 import { AuthContext } from "./auth-context";
 import "./ButtonAppBar.css";
@@ -55,6 +53,16 @@ const pagess = (
               uncheckedIcon={false}
               checkedIcon={false}
             />
+            {auth.isLoggedIn && (
+            <Button
+              component={NavLink}
+              to="/addtip"
+              color="inherit"
+              sx={styles.buttonStyle}
+            >
+              Add Tip
+            </Button>
+            )}
           <Button
             component={NavLink}
             to="/viewtips"
