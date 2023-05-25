@@ -28,26 +28,38 @@ const Authenticate = (props) => {
     password: Joi.string().min(8).required(),
   });
 
-  const switchThemeHanlder = () => {
+  const switchThemeHanlder = (errors) => {
+
     if (nameRef.current) {
-      nameRef.current.style.backgroundColor = backgroundColor;
+      nameRef.current.style.backgroundColor = !errors
+        ? backgroundColor
+        : errors && errors.name
+        ? "salmon"
+        : "#d4edda";
     }
     if (emailRef.current) {
-      emailRef.current.style.backgroundColor = backgroundColor;
+      emailRef.current.style.backgroundColor = !errors
+        ? backgroundColor
+        : errors && errors.email
+        ? "salmon"
+        : "#d4edda";
     }
     if (passwordRef.current) {
-      passwordRef.current.style.backgroundColor = backgroundColor;
+      passwordRef.current.style.backgroundColor = !errors
+        ? backgroundColor
+        : errors && errors.password
+        ? "salmon"
+        : "#d4edda";
     }
   };
 
   let backgroundColor = "";
-  if(props.theme === 'light') {
-    backgroundColor = 'white'
-    switchThemeHanlder();
-  }
-  else {
-    backgroundColor = '#1C1C1C';
-    switchThemeHanlder();
+  if (props.theme === "light") {
+    backgroundColor = "white";
+    switchThemeHanlder(inputError);
+  } else {
+    backgroundColor = "#1C1C1C";
+    switchThemeHanlder(inputError);
   }
 
   const validateData = (user) => {
@@ -63,15 +75,11 @@ const Authenticate = (props) => {
       });
 
       nameRef.current.style.backgroundColor =
-        user.name.length >= 3
+        user.name.length >= 3 ? "#d4edda" : user.name ? "salmon" : "salmon";
+      emailRef.current.style.backgroundColor =
+        user.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)
           ? "#d4edda"
-          : user.name
-          ? "salmon"
           : "salmon";
-       emailRef.current.style.backgroundColor =
-         user.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)
-           ? "#d4edda"
-           : "salmon";
       passwordRef.current.style.backgroundColor =
         user.password.length >= 8
           ? "#d4edda"
@@ -105,8 +113,6 @@ const Authenticate = (props) => {
     }
   };
 
-
-
   const auth = useContext(AuthContext);
 
   const signUpUserMutation = useMutation({
@@ -119,7 +125,7 @@ const Authenticate = (props) => {
       navigate("/");
     },
     onError: (error) => {
-      console.log(error)
+      console.log(error);
       setInputError({ signup: "Email exists" });
       if (emailRef.current) {
         emailRef.current.style.backgroundColor = "salmon";
@@ -138,7 +144,7 @@ const Authenticate = (props) => {
     },
     onError: (error) => {
       // An error happened!
-      setInputError({login:"Wrong credentials"})
+      setInputError({ login: "Wrong credentials" });
       console.log(error);
     },
   });
