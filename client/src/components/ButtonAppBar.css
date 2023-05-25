@@ -9,8 +9,12 @@ a{
 }
 
 .toggle{
-    margin: 4px;
-    margin-bottom: 8px;
+    margin-top: 10px;
+    margin-bottom: -1px;
     margin-right: 8px;
     color: white;
+}
+
+.MuiMenu-paper a{
+    display: block;
 }

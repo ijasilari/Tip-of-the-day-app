@@ -5,10 +5,16 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
+import Container from '@mui/material/Container';
+import MenuItem from '@mui/material/MenuItem';
 import { useContext } from "react";
 import { AuthContext } from "./auth-context";
 import "./ButtonAppBar.css";
 import ReactSwitch from "react-switch";
+
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Menu from '@mui/material/Menu';
 
 function ButtonAppBar(props) {
   const auth = useContext(AuthContext);
@@ -34,50 +40,21 @@ function ButtonAppBar(props) {
     }
   }
 
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: bgColor }}>
-        <Toolbar>
-          <Typography
-            color="inherit"
-            variant="h6"
-            sx={{'&.active': {
-              textDecoration: 'underline',
-              textUnderlineOffset: '4px'}
-            }}
-            component={NavLink}
-            to="/"
-          >
-            HomePage
-          </Typography>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1 }}
-          ></Typography>
+const pagess = (
+        <div>
           <label className="toggleLabel">
-            {props.theme == "light" ? "Light Mode" : "Dark Mode"}{" "}
+            {props.theme === "light" ? "Light Mode" : "Dark Mode"}{" "}
           </label>
-          <ReactSwitch
-            onChange={props.toggleTheme}
-            checked={props.theme === "dark"}
-            height={14}
-            width={28}
-            onColor={"#BB86FC"}
-            className="toggle"
-            uncheckedIcon={false}
-            checkedIcon={false}
-          />
-          {auth.isLoggedIn && (
-            <Button
-              component={NavLink}
-              to="/addtip"
-              color="inherit"
-              sx={styles.buttonStyle}
-            >
-              Add Tip
-            </Button>
-          )}
+            <ReactSwitch
+              onChange={props.toggleTheme}
+              checked={props.theme === "dark"}
+              height={14}
+              width={28}
+              onColor={"#BB86FC"}
+              className="toggle"
+              uncheckedIcon={false}
+              checkedIcon={false}
+            />
           <Button
             component={NavLink}
             to="/viewtips"
@@ -129,8 +106,110 @@ function ButtonAppBar(props) {
               LOGOUT
             </Button>
           )}
+    </div>
+)
+
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+    <AppBar position="static" sx={{ backgroundColor: bgColor }}>
+        <Toolbar>
+          <Typography
+            variant="h6"
+            noWrap
+            component={NavLink}
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              color: 'inherit',
+              textDecoration: 'none',
+              '&.active': {
+                textDecoration: 'underline',
+                textUnderlineOffset: '4px'}
+            }}
+            to="/"
+          >
+            HomePage
+          </Typography>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                "& .MuiPaper-root": {
+                backgroundColor: bgColor
+              }}}
+            >
+              {pagess}
+            </Menu>
+          </Box>
+          <Typography
+            variant="h5"
+            noWrap
+            component={NavLink}
+            href=""
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              color: 'inherit',
+              textDecoration: 'none',
+              '&.active': {
+                textDecoration: 'underline',
+                textUnderlineOffset: '4px'}
+            }}
+            to="/"
+          >
+            HomePage
+          </Typography>
+          <Box sx={{flexGrow: 1,display: { xs: 'none', md: 'flex', flexDirection: 'column' } }}>
+          </Box>
+
+          <Box sx={{display: { xs: 'none', md: 'flex', flexDirection: 'column' } }}>
+            {pagess}
+          </Box>
         </Toolbar>
-      </AppBar>
+
+    </AppBar>
     </Box>
   );
 }
