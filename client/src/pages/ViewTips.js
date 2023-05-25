@@ -290,6 +290,7 @@ function ViewTips(props) {
                     <div
                       style={{
                         overflow: "auto",
+                        minWidth: "1000px",
                         maxWidth: "1000px",
                       }}
                     >
