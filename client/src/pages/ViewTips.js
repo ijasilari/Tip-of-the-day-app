@@ -290,8 +290,8 @@ function ViewTips(props) {
                     <div
                       style={{
                         overflow: "auto",
-                        minWidth: "1000px",
-                        maxWidth: "1000px",
+                        minWidth: "50%",
+                        maxWidth: "50%",
                       }}
                     >
                       <ReactMarkdown
