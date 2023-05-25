@@ -43,6 +43,12 @@ const Authenticate = (props) => {
         : errors && errors.email
         ? "salmon"
         : "#d4edda";
+        if(errors && errors.signup) {
+          emailRef.current.style.backgroundColor = 'salmon'
+        }
+        if (errors && errors.login) {
+          emailRef.current.style.backgroundColor = "salmon";
+        }
     }
     if (passwordRef.current) {
       passwordRef.current.style.backgroundColor = !errors
@@ -50,6 +56,9 @@ const Authenticate = (props) => {
         : errors && errors.password
         ? "salmon"
         : "#d4edda";
+        if (errors && errors.login) {
+          passwordRef.current.style.backgroundColor = "salmon";
+        }
     }
   };
 
@@ -127,9 +136,9 @@ const Authenticate = (props) => {
     onError: (error) => {
       console.log(error);
       setInputError({ signup: "Email exists" });
-      if (emailRef.current) {
-        emailRef.current.style.backgroundColor = "salmon";
-      }
+      // if (emailRef.current) {
+      //  emailRef.current.style.backgroundColor = "salmon";
+      // }
     },
   });
 
