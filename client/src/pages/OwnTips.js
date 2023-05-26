@@ -158,6 +158,7 @@ export default function OwnTips(props) {
         // console.log([...newTips])
         return [...newTips];
       });
+      setCategoryEdit();
       handleTipClose();
     } catch (err) {}
   };
