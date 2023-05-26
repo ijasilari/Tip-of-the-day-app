@@ -145,10 +145,11 @@ function AddTip(props) {
         sx={{
           "& > :not(style)": {
             mt: 3,
-            ml: 3,
-            mr: 3,
-            width: "50%",
+            ml: 1,
+            mr: 1,
+            width: "90%",
             height: "100%",
+            maxWidth: "750px"
           },
         }}
         noValidate

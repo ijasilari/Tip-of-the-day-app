@@ -327,8 +327,8 @@ function ViewTips(props) {
                       />
                     </div>
                   </TableCell>
-                  <TableCell align="right">
-                    <Typography sx={{ textAlign: "center" }}>
+                  <TableCell align="right" sx={{width: "85px", minWidth: "85px"}}>
+                    <Typography sx={{ textAlign: "center", color: textColor}}>
                       {item.likes}
                     </Typography>
 
