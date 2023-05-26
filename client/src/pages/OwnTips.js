@@ -30,8 +30,9 @@ export default function OwnTips(props) {
   const [openEditTip, setOpenEditTip] = useState(false);
   const [id, setId] = useState();
   const [editText, setEditText] = useState("");
-  const [category, setCategory] = useState(1);
+  const [category, setCategory] = useState(0);
   const [categoryEdit, setCategoryEdit] = useState();
+  const [error, setError] = useState("");
   const auth = useContext(AuthContext);
 
   const categoryOptions = [
@@ -71,22 +72,47 @@ export default function OwnTips(props) {
   useEffect(() => {
     const creator = auth.userId;
     const fetchData = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getbycreator/${creator}`
-      );
-        console.log(response);
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getbycreator/${creator}`
+        );
         setData(response.data.tips);
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          console.log("User has not created any tips yet.");
+          setError("You have not created any tips yet!");
+          setData([]);
+        } else {
+          console.error(error);
+          setError("An error occurred while fetching data. Please try again later.");
+        }
+      }
     };
     fetchData();
   }, [auth.userId]);
 
     const fetchDataByCategoryAndCreator = async () => {
-      const response = await axios.get(
+      try {
+        const response = await axios.get(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
-      );
-       console.log(response)
-       const filteredData = response.data.tips.filter((tip) => tip.creator === auth.userId);
-       setData(filteredData);
+        );
+        const filteredData = response.data.tips.filter((tip) => tip.creator === auth.userId);
+        setData(filteredData);
+      }catch (error) {
+        if (error.response && error.response.status === 404) {
+          if(category === 0){
+            console.log("No category chosen");
+            setError("Please choose a category.");
+          }else {
+            console.log("There are no tips with the chosen category");
+            setError("There are no tips with the chosen category.");
+          }
+          setData([]);
+        } else {
+          console.error(error);
+          setError("An error occurred while fetching data. Please try again later.");
+        }
+      }
     };
 
 
@@ -173,14 +199,15 @@ export default function OwnTips(props) {
   });
 
   return (
-      <><CssBaseline /><Box
+      <><CssBaseline />
+      <Box
       sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         mt: 3,
       }}
-    >
+      >
       <Box sx={{ flexGrow: 1 }}>{/* content of the first box */}</Box>
       <Dropdown
         isSearchable
@@ -197,7 +224,13 @@ export default function OwnTips(props) {
         {" "}
         <SearchIcon className="searchIcon" />{" "}
       </IconButton>
-    </Box><Container sx={{ py: 8 }} maxWidth="md">
+      </Box>
+      <Container sx={{ py: 8 }} maxWidth="md">
+        {data.length === 0 ? (
+            <Typography variant="h5" align="center" style={{ color: textColor }}>
+              {error}
+            </Typography>
+          ) : (
         <Grid container spacing={4} >
           {data.map((item, index) => (
             <Grid item key={index} xs={10} sm={6} md={6}>
@@ -350,6 +383,7 @@ export default function OwnTips(props) {
             </Grid>
           ))}
         </Grid>
+        )}
       </Container></>
   );
 }

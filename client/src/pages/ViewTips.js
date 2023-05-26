@@ -37,8 +37,9 @@ function ViewTips(props) {
   const [openEditTip, setOpenEditTip] = useState(false);
   const [id, setId] = useState();
   const [editText, setEditText] = useState("");
-  const [category, setCategory] = useState(1);
+  const [category, setCategory] = useState(0);
   const [categoryEdit, setCategoryEdit] = useState(1);
+  const [error, setError] = useState("");
 
 
 
@@ -119,21 +120,53 @@ function ViewTips(props) {
   // console.log(vote)
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall`
-      );
-      //console.log(response);
-      setData(response.data.tips);
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall`
+        );
+        //console.log(response);
+        setData(response.data.tips);
+        if (response.data.tips.length === 0){
+          console.log("No tips in the database");
+          setError("No tips in the database");
+          setData([]);
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          console.log("No tips in the database");
+          setError("No tips in the database");
+          setData([]);
+        } else {
+          console.error(error);
+          setError("An error occurred while fetching data. Please try again later.");
+        }
+      }
     };
     fetchData();
   }, []);
 
   const fetchDataByCategory = async () => {
-    const response = await axios.get(
-      `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
-    );
-    //console.log(response);
-    setData(response.data.tips);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
+      );
+      //console.log(response);
+      setData(response.data.tips);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        if(category === 0){
+          console.log("No category chosen");
+          setError("Please choose a category.");
+        }else {
+          console.log("No tips with the chosen category in the database");
+          setError("There are no tips with the chosen category.");
+        }
+        setData([]);
+      } else {
+        console.error(error);
+        setError("An error occurred while fetching data. Please try again later.");
+      }
+    }
   };
 
   const deleteTip = async (tid) => {
@@ -248,6 +281,11 @@ function ViewTips(props) {
         </IconButton>
       </Box>
       <TableContainer component={Paper}>
+        {data.length === 0 ? (
+          <Typography variant="h5" align="center" style={{ color: textColor, backgroundColor: backgroundColor }}>
+            {error}
+          </Typography>
+        ) : (
         <Table
           sx={{ minWidth: 650, backgroundColor: { backgroundColor } }}
           aria-label="simple table"
@@ -356,28 +394,27 @@ function ViewTips(props) {
                   </TableCell>
                   <TableCell align="center" style={{ minWidth: "10rem" }}>
                     {auth.userId === item.creator && (
-                      <Button
-                        className="buttons"
-                        style={{ display: "inline", marginRight: "2px" }}
-                        variant="contained"
-                        onClick={() => {
-                          handleTipClickOpen(item.id, index);
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    )}
-                    {auth.userId === item.creator && (
-                      <Button
-                        className="buttons"
-                        style={{ display: "inline", marginLeft: "2px" }}
-                        variant="contained"
-                        onClick={() => {
-                          deleteTip(item.id);
-                        }}
-                      >
-                        Delete
-                      </Button>
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <Button
+                          className="buttons"
+                          style={{ marginBottom: "8px" }}
+                          variant="contained"
+                          onClick={() => {
+                            handleTipClickOpen(item.id, index);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          className="buttons"
+                          variant="contained"
+                          onClick={() => {
+                            deleteTip(item.id);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </div>
                     )}
                     <Dialog
                       maxWidth="sm"
@@ -471,7 +508,7 @@ function ViewTips(props) {
                 </TableRow>
               ))}
           </TableBody>
-        </Table>
+        </Table>)}
       </TableContainer>
       <div
         style={{
