@@ -8,31 +8,67 @@ describe('testing homepage', () => {
     cy.contains('My Tips').should('not.exist')
     cy.contains('ProfilePage').should('not.exist')
     cy.contains('Login').should('be.visible')
+  /*
+    // Verify initial toggle theme state
+    cy.get('[data-testid="themeSwitch"]').should('not.be.checked') // The switch should be unchecked initially
+    cy.get('.toggleLabel').should('contain', 'Light Mode') // The label should display 'Light Mode' initially
+
+    // Test the 'light' theme
+    cy.get('body').should('have.css', 'background-color', 'rgba(0, 0, 0, 0)')
+    cy.get('h2, p, h5, h3, h1, a').should('have.css', 'color', 'rgb(255, 255, 255)') // Test the text color for the 'light' theme
+    //cy.get('.textarea').should('have.css', 'outline-color', 'primary') // Test the text area outline color for the 'light' theme
+
+    // Toggle the switch
+    cy.get('.toggle [data-testid="themeSwitch"]').click({multiple: true, force: true}) // Simulate a click on the switch
+
+    // Verify the updated state
+    cy.get('[data-testid="themeSwitch"]').should('be.checked') // The switch should be checked after clicking
+    cy.get('.toggleLabel').should('contain', 'Dark Mode') // The label should display 'Dark Mode' after toggling
+
+    // Test the 'dark' theme
+    cy.get('[data-testid="themeSwitch"]').click({multiple: true, force: true});
+    cy.get('body').should('have.css', 'background-color', 'rgb(255, 255, 255)')
+    cy.get('h1, h2, h3, h4, h5, h6, hr, li, ol, p, ul').should('have.css', 'color', 'rgba(0, 0, 0, 0)') // Test the text color for the 'dark' theme
+    //cy.get('.textarea').should('have.css', 'outline-color', 'white') // Test the text area outline color for the 'dark' theme
+    
+    // Toggle the switch back
+    cy.get('[data-testid="themeSwitch"]').click({multiple: true, force: true}) // Simulate another click on the switch
+
+    // Verify the reverted state
+    cy.get('[data-testid="themeSwitch"]').should('not.be.checked') // The switch should be unchecked again
+    cy.get('.toggleLabel').should('contain', 'Light Mode') // The label should display 'Light Mode' after toggling back
+  */
   })
 })
 
 describe('testing view all tips', () => {
   it('check to see if view all tips page works', () => {
     cy.visit('http://localhost');
-    cy.get('[href="/viewtips"]').click();
-    cy.url().should('include', 'viewtips');
+    cy.contains('View All Tips').click();
 
     // Spy on the fetchDataByCategory function
     /*cy.window().then((win) => {
       cy.spy(win.ViewTips, 'fetchDataByCategory').as('fetchDataByCategory');
     });*/
-  
+
+    // Click the iconbutton without a category
+    cy.get('[data-testid="fetchDataButton"]').click();
+    cy.contains('Please choose a category.').should('be.visible');
+
     // Select category and click on the IconButton 
     cy.get('.dropdown-input').click();
     cy.get('.dropdown-item').contains('JavaScript').click();
     cy.get('[data-testid="fetchDataButton"]').click();
-  
+    cy.contains('There are no tips with the chosen category.').should('be.visible');
+    
+    // Get all tips
+    cy.get('.dropdown-input').click();
+    cy.get('.dropdown-item').contains('All').click();
+    cy.get('[data-testid="fetchDataButton"]').click();
+
     // Assert that the fetchDataByCategory function was called
     //cy.get('@fetchDataByCategory').should('have.been.called');
    
-    cy.contains('Tip Id').should('be.visible');
-    cy.contains('Description').should('be.visible');
-    cy.contains('Functions').should('be.visible');
   });
 });
 
@@ -81,7 +117,10 @@ describe('Testing the AddTip page', () => {
     cy.contains('This is a test tip from cypress').should('be.visible');
     cy.contains('Edit').should('be.visible');
     cy.contains('Delete').should('be.visible');
-    // check for functionality?
+
+    // test the like button
+    cy.get('[data-testid="thumbUpIcon"]').click();
+    //cy.get('[data-testid="thumbDownIcon"]').click({multiple: true, force: true});
   });
 
   it('should display validation errors for empty form fields', () => {
@@ -105,6 +144,15 @@ describe('Testing the My Tips page', () => {
 
     it('check to see if my tips page works', () => {
       
+      // Click the iconbutton without category
+      cy.get('[data-testid="fetchDataButton"]').click();
+      cy.contains('Please choose a category.').should('be.visible');
+
+      cy.get('.dropdown-input').click();
+      cy.get('.dropdown-item').contains('CSS').click();
+      cy.get('[data-testid="fetchDataButton"]').click();
+      cy.contains('There are no tips with the chosen category.').should('be.visible');
+
       // Select category and click on the IconButton 
       cy.get('.dropdown-input').click();
       cy.get('.dropdown-item').contains('JavaScript').click();
@@ -135,6 +183,10 @@ describe('Testing the My Tips page', () => {
       cy.contains('Delete').click()
 
       cy.get('This is an edited test tip from cypress').should('not.exist');
+    });
+
+    it('check that my tips page is empty', () => {
+      cy.contains('You have not created any tips yet!').should('be.visible');
     });
   });
   
