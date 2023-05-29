@@ -14,5 +14,6 @@ CREATE TABLE public.users (
     password VARCHAR(60) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
+    role VARCHAR(15) NULL,
     PRIMARY KEY (id)
 )

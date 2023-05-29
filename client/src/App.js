@@ -11,6 +11,7 @@ import Authenticate from "./pages/Authenticate";
 import "./App.css";
 import ProfilePage from "./pages/ProfilePage";
 import OwnTips from "./pages/OwnTips";
+import AdminPage from "./pages/AdminPage";
 
 export const ThemeContext = createContext(null);
 
@@ -20,12 +21,14 @@ let logoutTimer;
 function App() {
   const [token, setToken] = useState(false);
   const [userId, setuser] = useState(false);
+  const [role, SetRole] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState(false);
   const [theme, setTheme] = useState("light");
 
-  const login = useCallback((uid, token, expirationDate) => {
+  const login = useCallback((uid, token, role, expirationDate) => {
     setToken(token);
     setuser(uid);
+    SetRole(role);
 
     const tokenExpirationDate =
     expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
@@ -36,6 +39,7 @@ function App() {
       JSON.stringify({
         userId: uid,
         token,
+        role: role,
         expiration: tokenExpirationDate.toISOString()
       })
     )
@@ -44,14 +48,16 @@ function App() {
   const logout = useCallback(() => {
     setToken(null);
     setuser(null);
+    SetRole(null);
     setTokenExpirationDate(null);
     localStorage.removeItem('userData');
   },[]);
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem('userData'));
+    console.log(storedData);
     if (storedData && storedData.token && new Date(storedData.expiration) > new Date()) {
-      login(storedData.userId, storedData.token, new Date(storedData.expiration));
+      login(storedData.userId, storedData.token, storedData.role, new Date(storedData.expiration));
     }
   }, [login]);
 
@@ -70,7 +76,7 @@ function App() {
   }
 
   let routes;
-  if(token){
+  if(token && role === 'guest'){
     routes = (
       <Routes>
         <Route path="/" element={<HomePage theme={theme} />} />
@@ -78,9 +84,25 @@ function App() {
           path="/profilepage"
           element={<ProfilePage userId={userId} theme={theme} />}
         />
-        <Route path="addtip" element={<AddTip theme={theme} />} />
-        <Route path="viewtips" element={<ViewTips theme={theme} />} />
-        <Route path="owntips" element={<OwnTips theme={theme} />} />
+        <Route path="/addtip" element={<AddTip theme={theme} />} />
+        <Route path="/viewtips" element={<ViewTips theme={theme} />} />
+        <Route path="/owntips" element={<OwnTips theme={theme} />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    );
+  }
+  else if (token && role === "admin") {
+    routes = (
+      <Routes>
+        <Route path="/" element={<HomePage theme={theme} />} />
+        <Route path="/adminpage" element={<AdminPage theme={theme} />} />
+        <Route
+          path="/profilepage"
+          element={<ProfilePage userId={userId} theme={theme} />}
+        />
+        <Route path="/addtip" element={<AddTip theme={theme} />} />
+        <Route path="/viewtips" element={<ViewTips theme={theme} />} />
+        <Route path="/owntips" element={<OwnTips theme={theme} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     );
@@ -88,8 +110,8 @@ function App() {
     routes = (
       <Routes>
         <Route path="/" element={<HomePage theme={theme} />} />
-        <Route path="viewtips" element={<ViewTips theme={theme} />} />
-        <Route path="auth" element={<Authenticate theme={theme} />} />
+        <Route path="/viewtips" element={<ViewTips theme={theme} />} />
+        <Route path="/auth" element={<Authenticate theme={theme} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     );
@@ -101,6 +123,7 @@ function App() {
        isLoggedIn: !!token,
        token: token,
        userId: userId,
+       role: role,
        login: login,
        logout: logout,
      }}

@@ -39,83 +39,95 @@ function ButtonAppBar(props) {
   }
 
 const pagess = (
-        <div>
-          <label className="toggleLabel">
-            {props.theme === "light" ? "Light Mode" : "Dark Mode"}{" "}
-          </label>
-            <ReactSwitch
-              onChange={props.toggleTheme}
-              checked={props.theme === "dark"}
-              height={14}
-              width={28}
-              onColor={"#BB86FC"}
-              className="toggle"
-              uncheckedIcon={false}
-              checkedIcon={false}
-            />
-            {auth.isLoggedIn && (
-            <Button
-              component={NavLink}
-              to="/addtip"
-              color="inherit"
-              sx={styles.buttonStyle}
-            >
-              Add Tip
-            </Button>
-            )}
-          <Button
-            component={NavLink}
-            to="/viewtips"
-            color="inherit"
-            sx={styles.buttonStyle}
-          >
-            View All Tips
-          </Button>
-          {auth.isLoggedIn && (
-            <Button
-              component={NavLink}
-              to="/owntips"
-              color="inherit"
-              sx={styles.buttonStyle}
-            >
-              My Tips
-            </Button>
-          )}
-          {auth.isLoggedIn && (
-            <Button
-              component={NavLink}
-              to="/profilepage"
-              color="inherit"
-              sx={styles.buttonStyle}
-            >
-              ProfilePage
-            </Button>
-          )}
-          {!auth.isLoggedIn && (
-            <Button
-              component={NavLink}
-              to="/auth"
-              color="inherit"
-              sx={styles.buttonStyle}
-            >
-              Login
-            </Button>
-          )}
-          {auth.isLoggedIn && (
-            <Button
-              component={NavLink}
-              to="/"
-              color="inherit"
-              onClick={auth.logout}
-              sx={{":hover": {
-                bgcolor: backgroundBttnColor,
-              }}}
-            >
-              LOGOUT
-            </Button>
-          )}
-    </div>
-)
+  <div>
+    <label className="toggleLabel">
+      {props.theme === "light" ? "Light Mode" : "Dark Mode"}{" "}
+    </label>
+    <ReactSwitch
+      onChange={props.toggleTheme}
+      checked={props.theme === "dark"}
+      height={14}
+      width={28}
+      onColor={"#BB86FC"}
+      className="toggle"
+      uncheckedIcon={false}
+      checkedIcon={false}
+    />
+    {auth.isLoggedIn && (
+      <Button
+        component={NavLink}
+        to="/addtip"
+        color="inherit"
+        sx={styles.buttonStyle}
+      >
+        Add Tip
+      </Button>
+    )}
+    {auth.isLoggedIn && auth.role === 'admin' &&(
+      <Button
+        component={NavLink}
+        to="/adminpage"
+        color="inherit"
+        sx={styles.buttonStyle}
+      >
+        AdminPage
+      </Button>
+    )}
+    <Button
+      component={NavLink}
+      to="/viewtips"
+      color="inherit"
+      sx={styles.buttonStyle}
+    >
+      View All Tips
+    </Button>
+    {auth.isLoggedIn && (
+      <Button
+        component={NavLink}
+        to="/owntips"
+        color="inherit"
+        sx={styles.buttonStyle}
+      >
+        My Tips
+      </Button>
+    )}
+    {auth.isLoggedIn && (
+      <Button
+        component={NavLink}
+        to="/profilepage"
+        color="inherit"
+        sx={styles.buttonStyle}
+      >
+        ProfilePage
+      </Button>
+    )}
+    {!auth.isLoggedIn && (
+      <Button
+        component={NavLink}
+        to="/auth"
+        color="inherit"
+        sx={styles.buttonStyle}
+      >
+        Login
+      </Button>
+    )}
+    {auth.isLoggedIn && (
+      <Button
+        component={NavLink}
+        to="/"
+        color="inherit"
+        onClick={auth.logout}
+        sx={{
+          ":hover": {
+            bgcolor: backgroundBttnColor,
+          },
+        }}
+      >
+        LOGOUT
+      </Button>
+    )}
+  </div>
+);
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
