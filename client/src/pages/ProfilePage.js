@@ -281,9 +281,7 @@ const ProfilePage = (props) => {
     textAreaOutlineColor = '#bb86fc';
     backgroundColor = '#1D1D1D';
   }
-  const customInputStyle = {
-    borderColor: "red"
-  };
+
 
   return (
     <div
@@ -373,10 +371,9 @@ const ProfilePage = (props) => {
                     sx={{
                       '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                         borderColor: textAreaOutlineColor,
-                      },
-                      backgroundColor: backgroundColor,
+                      }
                     }}
-                    inputProps={{ style: { fontFamily: 'nunito', color: 'white' } }}
+
                   />
                   {formikPassword.errors.password ? (
                     <div style={{ color: "red" }}>
@@ -396,9 +393,6 @@ const ProfilePage = (props) => {
                       '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                         borderColor: textAreaOutlineColor,
                       }
-                    }}
-                    InputProps={{
-                      style: customInputStyle,
                     }}
                   />
                   {formikPassword.errors.newpassword ? (
@@ -443,8 +437,7 @@ const ProfilePage = (props) => {
                     sx={{
                       '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                         borderColor: textAreaOutlineColor,
-                      },
-                      backgroundColor: backgroundColor
+                      }
                     }}
                   />
                   {formikEmail.errors.email ? (
@@ -489,8 +482,7 @@ const ProfilePage = (props) => {
                     sx={{
                       '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
                         borderColor: textAreaOutlineColor,
-                      },
-                      backgroundColor: backgroundColor
+                      }
                     }}
                   />
                   {formikUsername.errors.username ? (
