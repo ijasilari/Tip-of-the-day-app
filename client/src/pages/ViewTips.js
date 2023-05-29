@@ -54,6 +54,7 @@ function ViewTips(props) {
   };
 
   const categoryOptions = [
+    { value: 11, label: "All" },
     { value: 1, label: "CSS" },
     { value: 2, label: "Java" },
     { value: 3, label: "JavaScript" },
@@ -142,27 +143,31 @@ function ViewTips(props) {
 
   const fetchDataByCategory = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
-      );
-      //console.log(response);
-      setData(response.data.tips);
       setPage(0);
+      if (category === 11){
+        const response = await axios.get(
+          `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall`
+        );
+        setData(response.data.tips);
+      } else {
+        const response = await axios.get(
+          `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
+        );
+        setData(response.data.tips);
+      }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        if (category === 0) {
+        if(category === 0){
           console.log("No category chosen");
           setError("Please choose a category.");
-        } else {
+        }else {
           console.log("No tips with the chosen category in the database");
           setError("There are no tips with the chosen category.");
         }
         setData([]);
       } else {
         console.error(error);
-        setError(
-          "An error occurred while fetching data. Please try again later."
-        );
+        setError("An error occurred while fetching data. Please try again later.");
       }
     }
   };
