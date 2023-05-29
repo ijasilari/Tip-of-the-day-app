@@ -138,11 +138,12 @@ const loginUser = async(req, res) => {
 
 const updateUserWithId = async (req, res, next) => {
 
-  const { username, password, email } = req.body;
+  const { username, password, email, role } = req.body;
   const schema = Joi.object({
     username: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(8).required(),
+    role: Joi.string().valid("admin", "guest").required(),
   });
 
   const { error } = schema.validate(req.body);
@@ -182,7 +183,7 @@ const updateUserWithId = async (req, res, next) => {
     }
 
 
-    if (user.id !== req.userData.userId) {
+    if (user.id !== req.userData.userId && req.userData.role !== "admin") {
       const error = new Error(`Not authorized to update user`);
       error.statusCode = 401;
       return next(error);
@@ -191,7 +192,8 @@ const updateUserWithId = async (req, res, next) => {
       userId,
       username,
       hashedPassword,
-      email
+      email,
+      role
     );
     // console.log(hashedPassword)
 
@@ -204,12 +206,13 @@ const updateUserWithId = async (req, res, next) => {
     user.username = username;
     user.password = hashedPassword;
     user.email = email;
+    user.role = role;
 
     res.status(200).json({ user });
   }
 
   else {
-    if (user.id !== req.userData.userId) {
+    if (user.id !== req.userData.userId && req.userData.role !== "admin") {
       const error = new Error(`Not authorized to update user`);
       error.statusCode = 401;
       return next(error);
@@ -218,7 +221,8 @@ const updateUserWithId = async (req, res, next) => {
       userId,
       username,
       password,
-      email
+      email,
+      role
     );
 
     if (!result) {
@@ -230,6 +234,7 @@ const updateUserWithId = async (req, res, next) => {
     user.username = username;
     user.password = password;
     user.email = email;
+    user.role = role;
 
     res.status(200).json({ user });
   }
@@ -246,7 +251,7 @@ const deleteUserWithId = async (req, res, next) => {
     error.statusCode = 404;
     return next(error);
   }
-  if (user.id !== req.userData.userId) {
+  if (user.id !== req.userData.userId && req.userData.role !== 'admin') {
     const error = new Error(`Not authorized to delete user`);
     error.statusCode = 401;
     return next(error);
