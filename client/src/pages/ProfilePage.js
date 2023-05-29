@@ -125,6 +125,7 @@ const ProfilePage = (props) => {
       username: userData.username,
       email: userData.email,
       password: formikPassword.values.password,
+      role: userData.role
     };
     try {
       console.log(userDetails);
@@ -151,6 +152,7 @@ const ProfilePage = (props) => {
       username: userData.username,
       email: formikEmail.values.email,
       password: userData.password,
+      role: userData.role
     };
     try {
       console.log(userDetails);
@@ -182,6 +184,7 @@ const ProfilePage = (props) => {
       username: formikUsername.values.username,
       email: userData.email,
       password: userData.password,
+      role: userData.role
     };
     try {
       console.log(userDetails);
