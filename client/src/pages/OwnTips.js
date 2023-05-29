@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -36,6 +35,7 @@ export default function OwnTips(props) {
   const auth = useContext(AuthContext);
 
   const categoryOptions = [
+    { value: 11, label: "All" },
     {value: 1, label: "CSS"},
     {value: 2, label: "Java"},
     {value: 3, label: "JavaScript"},
@@ -93,11 +93,19 @@ export default function OwnTips(props) {
 
     const fetchDataByCategoryAndCreator = async () => {
       try {
-        const response = await axios.get(
-        `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
-        );
-        const filteredData = response.data.tips.filter((tip) => tip.creator === auth.userId);
-        setData(filteredData);
+        if (category === 11){
+          const creator = auth.userId;
+          const response = await axios.get(
+            `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getbycreator/${creator}`
+          );
+          setData(response.data.tips);
+        } else {
+          const response = await axios.get(
+          `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall/${category}`
+          );
+          const filteredData = response.data.tips.filter((tip) => tip.creator === auth.userId);
+          setData(filteredData);
+        }
       }catch (error) {
         if (error.response && error.response.status === 404) {
           if(category === 0){
