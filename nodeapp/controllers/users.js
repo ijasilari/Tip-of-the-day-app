@@ -163,6 +163,7 @@ const updateUserWithId = async (req, res, next) => {
       return next(error);
     }
   }
+
   if (password !== user.password) {
     let hashedPassword;
     try {
@@ -172,6 +173,7 @@ const updateUserWithId = async (req, res, next) => {
       error.statusCode = 500;
       return next(error);
     }
+
 
     if (user.id !== req.userData.userId) {
       const error = new Error(`Not authorized to update user`);
@@ -197,7 +199,9 @@ const updateUserWithId = async (req, res, next) => {
     user.email = email;
 
     res.status(200).json({ user });
-  } else {
+  }
+
+  else {
     if (user.id !== req.userData.userId) {
       const error = new Error(`Not authorized to update user`);
       error.statusCode = 401;
@@ -222,7 +226,8 @@ const updateUserWithId = async (req, res, next) => {
 
     res.status(200).json({ user });
   }
-};
+
+ };
 
 const deleteUserWithId = async (req, res, next) => {
   const userId = req.params.uid;

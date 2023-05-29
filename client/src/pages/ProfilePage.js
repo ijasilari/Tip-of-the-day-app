@@ -139,6 +139,9 @@ const ProfilePage = (props) => {
         }
       );
       console.log(response);
+      const modified = { ...userData };
+      modified.password = response.data.user.password;
+      setuserData(modified);
       formikPassword.resetForm();
     } catch (err) {}
   };

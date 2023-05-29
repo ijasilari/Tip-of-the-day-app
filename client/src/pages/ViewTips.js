@@ -22,12 +22,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useContext } from "react";
 import { AuthContext } from "../components/auth-context";
 //import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import TablePagination from "@mui/material/TablePagination";
-import { css } from '@emotion/react';
-import "./OwnTips.css"
+import { css } from "@emotion/react";
+import "./OwnTips.css";
 
 const labelStyle = css`
   color: red; /* Change the text color */
@@ -41,16 +41,13 @@ function ViewTips(props) {
   const [categoryEdit, setCategoryEdit] = useState();
   const [error, setError] = useState("");
 
-
-
   const auth = useContext(AuthContext);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const startIndex = page * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
   const paginatedData = data.slice(startIndex, endIndex);
-  console.log(paginatedData)
-  // const [vote, setVote] = useState();
+  console.log(paginatedData);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -84,11 +81,9 @@ function ViewTips(props) {
   };
 
   const addTheLike = async (id, index, vote) => {
-    console.log(vote)
-    const userData = {userId: auth.userId, vote: vote}
+    console.log(vote);
+    const userData = { userId: auth.userId, vote: vote };
     try {
-
-
       const res = await axios.patch(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/like`,
         userData,
@@ -98,7 +93,7 @@ function ViewTips(props) {
           },
         }
       );
-      console.log(res)
+      console.log(res);
 
       setData(() => {
         const newTips = [...data];
@@ -106,16 +101,14 @@ function ViewTips(props) {
         const foundIndex = newTips.findIndex((tip) => tip.id === id);
         // console.log(foundIndex);
         newTips[foundIndex].likes = newTips[foundIndex].likes + vote;
-        newTips[foundIndex].wholiked[auth.userId] = true
-        console.log([...newTips])
+        newTips[foundIndex].wholiked[auth.userId] = true;
+        console.log([...newTips]);
         return [...newTips];
-
       });
+    } catch (error) {
+      console.log(error);
     }
-      catch (error) {
-        console.log(error)
-    }
-  }
+  };
 
   // console.log(vote)
   useEffect(() => {
@@ -126,7 +119,7 @@ function ViewTips(props) {
         );
         //console.log(response);
         setData(response.data.tips);
-        if (response.data.tips.length === 0){
+        if (response.data.tips.length === 0) {
           console.log("No tips in the database");
           setError("No tips in the database");
           setData([]);
@@ -138,7 +131,9 @@ function ViewTips(props) {
           setData([]);
         } else {
           console.error(error);
-          setError("An error occurred while fetching data. Please try again later.");
+          setError(
+            "An error occurred while fetching data. Please try again later."
+          );
         }
       }
     };
@@ -152,19 +147,22 @@ function ViewTips(props) {
       );
       //console.log(response);
       setData(response.data.tips);
+      setPage(0);
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        if(category === 0){
+        if (category === 0) {
           console.log("No category chosen");
           setError("Please choose a category.");
-        }else {
+        } else {
           console.log("No tips with the chosen category in the database");
           setError("There are no tips with the chosen category.");
         }
         setData([]);
       } else {
         console.error(error);
-        setError("An error occurred while fetching data. Please try again later.");
+        setError(
+          "An error occurred while fetching data. Please try again later."
+        );
       }
     }
   };
@@ -175,7 +173,7 @@ function ViewTips(props) {
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${tid}/delete`,
         {
           headers: {
-            Authorization: 'Bearer ' + auth.token
+            Authorization: "Bearer " + auth.token,
           },
         }
       );
@@ -231,13 +229,13 @@ function ViewTips(props) {
     return errors;
   };
 
-   console.log(categoryEdit)
+  console.log(categoryEdit);
 
   const formikTip = useFormik({
     enableReinitialize: true,
     initialValues: {
       description: editText,
-      category: categoryEdit
+      category: categoryEdit,
     },
     validate: validateTip,
     onSubmit: editTip,
@@ -246,15 +244,14 @@ function ViewTips(props) {
   let textColor = "";
   let backgroundColor = "";
   let textAreaOutlineColor = "";
-  if(props.theme === 'light') {
-    textColor = 'black'
-    backgroundColor = 'white';
-    textAreaOutlineColor = 'primary';
-  }
-  else {
-    textColor = '#ECECEC';
-    backgroundColor = '#1C1C1C';
-    textAreaOutlineColor = '#bb86fc';
+  if (props.theme === "light") {
+    textColor = "black";
+    backgroundColor = "white";
+    textAreaOutlineColor = "primary";
+  } else {
+    textColor = "#ECECEC";
+    backgroundColor = "#1C1C1C";
+    textAreaOutlineColor = "#bb86fc";
   }
 
   return (
