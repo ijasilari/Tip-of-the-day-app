@@ -87,7 +87,7 @@ function App() {
         <Route path="/addtip" element={<AddTip theme={theme} />} />
         <Route path="/viewtips" element={<ViewTips theme={theme} />} />
         <Route path="/owntips" element={<OwnTips theme={theme} />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route exact path="*" element={<HomePage theme={theme} />} />
       </Routes>
     );
   }
@@ -103,7 +103,7 @@ function App() {
         <Route path="/addtip" element={<AddTip theme={theme} />} />
         <Route path="/viewtips" element={<ViewTips theme={theme} />} />
         <Route path="/owntips" element={<OwnTips theme={theme} />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route exact path="*" element={<HomePage theme={theme} />} />
       </Routes>
     );
   } else {
@@ -112,7 +112,7 @@ function App() {
         <Route path="/" element={<HomePage theme={theme} />} />
         <Route path="/viewtips" element={<ViewTips theme={theme} />} />
         <Route path="/auth" element={<Authenticate theme={theme} />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route exact path="*" element={<HomePage theme={theme} />} />
       </Routes>
     );
   }
