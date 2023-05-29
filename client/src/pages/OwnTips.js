@@ -47,6 +47,18 @@ export default function OwnTips(props) {
     {value: 9, label: "Rust"},
     {value: 10, label: "Linux"}
   ]
+  const categoryOptionsEdit = [
+    {value: 1, label: "CSS"},
+    {value: 2, label: "Java"},
+    {value: 3, label: "JavaScript"},
+    {value: 4, label: "HTTP"},
+    {value: 5, label: "Python"},
+    {value: 6, label: "CPP"},
+    {value: 7, label: "Dart"},
+    {value: 8, label: "Flutter"},
+    {value: 9, label: "Rust"},
+    {value: 10, label: "Linux"}
+  ]
 
   const getCategoryLabel = (categoryId) => {
     const category = categoryOptions.find(
@@ -319,7 +331,7 @@ export default function OwnTips(props) {
                     <Dropdown
                       isSearchable
                       placeHolder="Select..."
-                      options={categoryOptions}
+                      options={categoryOptionsEdit}
                       onChange={(value) => {
                         setCategoryEdit(value.value)
                         formikTip.values.category = value.value;
