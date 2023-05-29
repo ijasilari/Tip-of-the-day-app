@@ -24,6 +24,7 @@ const signUpUser = async (req, res) => {
       username: Joi.string().required(),
       email: Joi.string().email().required(),
       password: Joi.string().min(8).required(),
+      role: Joi.string().required()
     });
 
     const {error} = schema.validate(req.body);
@@ -46,7 +47,8 @@ const signUpUser = async (req, res) => {
         id: v4(),
         username,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        role: 'guest'
     };
     //console.log(newUser);
     try{
@@ -63,7 +65,8 @@ const signUpUser = async (req, res) => {
         const token = jwt.sign(
             {
                 id: newUser.id,
-                email: newUser.email
+                email: newUser.email,
+                role: newUser.role
             },
             process.env.JWT_KEY,
             { expiresIn: '1h'}
@@ -72,6 +75,7 @@ const signUpUser = async (req, res) => {
         res.status(201).json({
             id: newUser.id,
             email: newUser.email,
+            role: newUser.role,
             token
         });
 
@@ -97,6 +101,7 @@ const loginUser = async(req, res) => {
         return res.status(500).send('Something went wrong');
     }
 
+    console.log(identifiedUser, 'userin tiedot')
     let isValidPassword;
     try{
         isValidPassword = await bcrypt.compare(password, identifiedUser.password);
@@ -111,7 +116,8 @@ const loginUser = async(req, res) => {
         const token = jwt.sign(
             {
                 id: identifiedUser.id,
-                email: identifiedUser.email
+                email: identifiedUser.email,
+                role: identifiedUser.role
             },
             process.env.JWT_KEY,
             { expiresIn: '1h'}
@@ -120,6 +126,7 @@ const loginUser = async(req, res) => {
         res.status(201).json({
             id: identifiedUser.id,
             email: identifiedUser.email,
+            role: identifiedUser.role,
             token
         })
     } catch (err) {

@@ -14,7 +14,8 @@ const verifyToken = (req, res, next) => {
             throw new Error('Authentication failed');
         }
         const decodedToken = jwt.verify(token, process.env.JWT_KEY);
-        req.userData = {userId: decodedToken.id};
+        console.log(decodedToken)
+        req.userData = {userId: decodedToken.id, role: decodedToken.role};
         next();
     }catch (err) {
         res.status(401).send('Authentication failed');

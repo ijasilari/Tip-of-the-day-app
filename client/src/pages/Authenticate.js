@@ -130,7 +130,7 @@ const Authenticate = (props) => {
       // Will execute only once, for the last mutation,
       // regardless which mutation resolves first
       console.log(data);
-      auth.login(data.id, data.token);
+      auth.login(data.id, data.token, data.role);
       navigate("/");
     },
     onError: (error) => {
@@ -147,8 +147,8 @@ const Authenticate = (props) => {
     onSuccess: (data) => {
       // Will execute only once, for the last mutation,
       // regardless which mutation resolves first
-      //console.log(data);
-      auth.login(data.id, data.token);
+      console.log(data);
+      auth.login(data.id, data.token, data.role);
       navigate("/");
     },
     onError: (error) => {

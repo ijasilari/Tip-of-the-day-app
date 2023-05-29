@@ -28,9 +28,9 @@ const users = {
     try {
       await pool.connect();
       await pool.query(
-        `INSERT INTO "users" ("id", "username", "email", "password")
-             VALUES ($1, $2, $3, $4)`,
-        [user.id, user.username, user.email, user.password]
+        `INSERT INTO "users" ("id", "username", "email", "password", "role")
+             VALUES ($1, $2, $3, $4, $5)`,
+        [user.id, user.username, user.email, user.password, user.role]
       ); // sends queries
       return true;
     } catch (error) {
@@ -86,13 +86,13 @@ const users = {
       });
     }),
 
-  updateUserById: (userId, name, hashedPassword, email) =>
+  updateUserById: (userId, name, hashedPassword, email, role) =>
     new Promise((resolve, reject) => {
       console.log("models updateuserbyid");
-      console.log(userId, name, hashedPassword, email);
+      console.log(userId, name, hashedPassword, email, role);
       pool.query(
-        "UPDATE users SET username=$1, password=$2, email=$3, updated_at=now() WHERE id=$4",
-        [name, hashedPassword, email, userId],
+        "UPDATE users SET username=$1, password=$2, email=$3, updated_at=now(), role=$4 WHERE id=$5",
+        [name, hashedPassword, email, role, userId],
         (err, result) => {
           if (err) {
             reject(err);
