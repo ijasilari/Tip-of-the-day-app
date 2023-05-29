@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -27,7 +20,14 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import TablePagination from "@mui/material/TablePagination";
 import { css } from "@emotion/react";
-import "./OwnTips.css";
+import "./ViewTips.css";
+
+import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
 
 const labelStyle = css`
   color: red; /* Change the text color */
@@ -259,289 +259,238 @@ function ViewTips(props) {
     textAreaOutlineColor = "#bb86fc";
   }
 
+  const getCategoryLabel = (categoryId) => {
+    const category = categoryOptions.find(
+      (option) => option.value === categoryId
+    );
+    return category ? category.label : "";
+  };
+
+  const styles = {
+    buttonStyle: {
+      '& .MuiTablePagination-menuItem': {
+        color: 'red'
+      }
+    }
+  }
+
   return (
-    <div data-testid="viewTipsPage">
+    <><CssBaseline />
       <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          mt: 3,
-        }}
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        mt: 3,
+      }}
       >
-        <Box sx={{ flexGrow: 1 }}>{/* content of the first box */}</Box>
-        <Dropdown
-          isSearchable
-          placeHolder="Select..."
-          options={categoryOptions}
-          onChange={(value) => {
-            setCategory(value.value);
-          }}
-        />
+      <Box sx={{ flexGrow: 1 }}>{/* content of the first box */}</Box>
+      <Dropdown
+        isSearchable
+        placeHolder="Select..."
+        options={categoryOptions}
+        onChange={(value) => setCategory(value.value)} />
 
-        <IconButton
-          data-testid="fetchDataButton"
-          sx={{ marginLeft: 0, mr: "30%" }}
-          onClick={() => fetchDataByCategory()}
-          style={{ backgroundColor: "transparent" }}
-        >
-          {" "}
-          <SearchIcon className="searchIcon" />{" "}
-        </IconButton>
+      <IconButton
+        data-testid="fetchDataButton"
+        sx={{ marginLeft: 0, mr: "30%" }}
+        onClick={() => fetchDataByCategory()}
+        style={{ backgroundColor: 'transparent' }}
+      >
+        {" "}
+        <SearchIcon className="searchIcon" />{" "}
+      </IconButton>
       </Box>
-      <TableContainer component={Paper}>
+      <Container sx={{ py: 8 }} maxWidth="md">
         {data.length === 0 ? (
-          <Typography
-            variant="h5"
-            align="center"
-            style={{ color: textColor, backgroundColor: backgroundColor }}
-          >
-            {error}
-          </Typography>
-        ) : (
-          <Table
-            sx={{ minWidth: 650, backgroundColor: { backgroundColor } }}
-            aria-label="simple table"
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ color: textColor }}>Tip Id</TableCell>
-                <TableCell align="left" sx={{ color: textColor }}>
-                  Description
-                </TableCell>
-                <TableCell align="center" sx={{ color: textColor }}>
-                  Likes
-                </TableCell>
-                <TableCell align="center" sx={{ color: textColor }}>
-                  Functions
-                </TableCell>
-                <TableCell align="center" sx={{ color: textColor }}></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedData &&
-                paginatedData.map((item, index) => (
-                  <TableRow
-                    key={index}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      sx={{ color: textColor }}
-                    >
-                      {item.id}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        overflow: "auto",
-                      }}
-                    >
-                      <div
-                        style={{
-                          overflow: "auto",
-                          minWidth: "50%",
-                          maxWidth: "50%",
-                        }}
-                      >
-                        <ReactMarkdown
-                          children={item.description}
-                          components={{
-                            p: ({ node, ...props }) => (
-                              <p style={{ color: textColor }} {...props} />
-                            ),
-                            code({
-                              node,
-                              inline,
-                              className,
-                              children,
-                              ...props
-                            }) {
-                              const match = /language-(\w+)/.exec(
-                                className || ""
-                              );
-                              return !inline && match ? (
-                                <SyntaxHighlighter
-                                  children={String(children).replace(/\n$/, "")}
-                                  language={match[1]}
-                                  style={tomorrow}
-                                  {...props}
-                                />
-                              ) : (
-                                <code className={className} {...props}>
-                                  {children}
-                                </code>
-                              );
-                            },
-                          }}
-                        />
-                      </div>
-                    </TableCell>
-                    <TableCell
-                      align="right"
-                      sx={{ width: "85px", minWidth: "85px" }}
-                    >
-                      <Typography
-                        sx={{ textAlign: "center", color: textColor }}
-                      >
-                        {item.likes}
-                      </Typography>
+            <Typography variant="h5" align="center" style={{ color: textColor }}>
+              {error}
+            </Typography>
+          ) : (
+        <Grid container spacing={4} >
+          {paginatedData &&
+          paginatedData.map((item, index) => (
+            <Grid item key={index} xs={10} sm={6} md={6}>
+              <Card sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: backgroundColor }}>
 
-                      {auth.token && !item.wholiked[auth.userId] && (
-                        <>
-                          <IconButton
-                            onClick={() => {
-                              addTheLike(item.id, index, 1);
-                            }}
-                          >
-                            {" "}
-                            <ThumbUpIcon />{" "}
-                          </IconButton>
-                          <IconButton
-                            onClick={() => {
-                              addTheLike(item.id, index, -1);
-                            }}
-                          >
-                            {" "}
-                            <ThumbDownIcon />{" "}
-                          </IconButton>
-                        </>
-                      )}
-                    </TableCell>
-                    <TableCell align="center" style={{ minWidth: "10rem" }}>
-                      {auth.userId === item.creator && (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Button
-                            className="buttons"
-                            style={{ marginBottom: "8px" }}
-                            variant="contained"
-                            onClick={() => {
-                              handleTipClickOpen(item.id, index);
-                            }}
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            className="buttons"
-                            variant="contained"
-                            onClick={() => {
-                              deleteTip(item.id);
-                            }}
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      )}
-                      <Dialog
-                        maxWidth="sm"
-                        id={props.theme}
-                        open={openEditTip}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                        onClose={() => {
-                          handleTipClose();
-                        }}
-                      >
-                        <Box
-                          component="form"
-                          noValidate
-                          onSubmit={formikTip.handleSubmit}
-                          sx={{ backgroundColor: backgroundColor }}
-                        >
-                          <DialogTitle id="alert-dialog-title">
-                            Change Tip Id: {id}
-                            <Dropdown
-                              isSearchable
-                              placeHolder="Select..."
-                              options={categoryOptions}
-                              onChange={(value) => {
-                                setCategoryEdit(value.value);
-                                formikTip.values.category = value.value;
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography gutterBottom variant="h5" component="h2">
+                    {getCategoryLabel(item.category)}
+                  </Typography>
+                  <Box style={{ overflowY: 'auto', paddingBottom: 0, marginBottom: 0 }}>
+                    <ReactMarkdown
+                      children={item.description}
+                      components={{
+                        p: ({ node, ...props }) => <p style={{ color: textColor }} {...props} />,
+                        code({ node, inline, className, children, ...props }) {
+                          const match = /language-(\w+)/.exec(className || '');
+                          return !inline && match ? (
+                            <SyntaxHighlighter
+                              children={String(children).replace(/\n$/, '')}
+                              language={match[1]}
+                              style={tomorrow}
+                              {...props} />
+                          ) : (
+                            <code className={className} {...props}>
+                              {children}
+                            </code>
+                          );
+                        },
+                      }} />
+                  </Box>
+                </CardContent>
+                <CardActions>
+                  {auth.userId === item.creator && (
+                    <Button
+                      className="buttonsOutline"
+                      style={{ display: "inline", marginRight: "2px" }}
+                      variant="outlined"
+                      onClick={() => {
+                        handleTipClickOpen(item.id, index);
+                      } }
+                    >
+                      Edit
+                    </Button>
+                  )}
+                  {auth.userId === item.creator && (
+                    <Button
+                      className="buttonsOutline"
+                      style={{ display: "inline", marginLeft: "2px" }}
+                      variant="outlined"
+                      onClick={() => {
+                        deleteTip(item.id);
+                      } }
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </CardActions>
+                <Box sx={{ mt: 'auto', padding: 0, margin: 0, marginLeft: '8px', marginBottom: '5px'}}>
+                    <Typography
+                          sx={{ color: textColor,
+                                display: 'inline',
                               }}
-                              theme={props.theme}
-                            />
-                            <TextField
-                              name="description"
-                              required
-                              variant="outlined"
-                              fullWidth
-                              id="description"
-                              label="Description"
-                              multiline={true}
-                              rows={10}
-                              sx={{
-                                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                  {
-                                    borderColor: textAreaOutlineColor,
-                                  },
-                                backgroundColor: backgroundColor,
-                                "& .MuiInputBase-input": {
-                                  color: textColor,
-                                },
-                                "& .MuiInputLabel-root": {
-                                  color: textColor,
-                                },
-                                "& .MuiOutlinedInput-root": {
-                                  "& fieldset": {
-                                    borderColor: textColor,
-                                  },
-                                  "&:hover fieldset": {
-                                    borderColor: textAreaOutlineColor,
-                                  },
-                                },
-                              }}
-                              autoFocus
-                              onChange={formikTip.handleChange}
-                              value={formikTip.values.description}
-                            />
-                            {formikTip.errors.description ? (
-                              <div style={{ color: "red" }}>
-                                {formikTip.errors.description}
-                              </div>
-                            ) : null}
-                            {formikTip.errors.category ? (
-                              <div style={{ color: "red" }}>
-                                {formikTip.errors.category}
-                              </div>
-                            ) : null}
-                          </DialogTitle>
-                          <DialogActions>
-                            <Button
-                              variant="contained"
-                              className="buttons"
+                        >
+                          Likes: {item.likes}
+                        </Typography>
+                        {auth.token && !item.wholiked[auth.userId] && (
+                          <>
+                            <IconButton
                               onClick={() => {
-                                handleCancel();
-                                handleTipClose();
+                                addTheLike(item.id, index, 1);
                               }}
                             >
-                              Cancel
-                            </Button>
-                            <Button
-                              variant="contained"
-                              role="button"
-                              type="submit"
-                              className="buttons"
+                              {" "}
+                              <ThumbUpIcon />{" "}
+                            </IconButton>
+                            <IconButton
+                              onClick={() => {
+                                addTheLike(item.id, index, -1);
+                              }}
                             >
-                              Change Tip Description
-                            </Button>
-                          </DialogActions>
-                        </Box>
-                      </Dialog>
-                    </TableCell>
-                    <TableCell align="right"></TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
+                              {" "}
+                              <ThumbDownIcon />{" "}
+                            </IconButton>
+                          </>
+                        )}
+                  </Box>
+              </Card>
+              <Dialog
+                maxWidth="sm"
+                id={props.theme}
+                open={openEditTip}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                onClose={() => {
+                  handleTipClose();
+                } }
+              >
+                <Box
+                  component="form"
+                  noValidate
+                  onSubmit={formikTip.handleSubmit}
+                  sx={{ backgroundColor: backgroundColor }}
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    Change Tip Id: {id}
+                    <Dropdown
+                      isSearchable
+                      placeHolder="Select..."
+                      options={categoryOptions}
+                      onChange={(value) => {
+                        setCategoryEdit(value.value)
+                        formikTip.values.category = value.value;
+                      }}
+                      theme={props.theme} />
+                    <TextField
+                      name="description"
+                      required
+                      variant="outlined"
+                      fullWidth
+                      id="description"
+                      label="Description"
+                      multiline={true}
+                      rows={10}
+                      sx={{
+                        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: textAreaOutlineColor,
+                        },
+                        backgroundColor: backgroundColor,
+                        '& .MuiInputBase-input': {
+                          color: textColor,
+                        },
+                        '& .MuiInputLabel-root': {
+                          color: textColor,
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            borderColor: textColor,
+                          },
+                          '&:hover fieldset': {
+                            borderColor: textAreaOutlineColor,
+                          }}
+                      }}
+                      autoFocus
+                      onChange={formikTip.handleChange}
+                      value={formikTip.values.description} />
+                    {formikTip.errors.category ? (
+                      <div style={{ color: "red" }}>
+                        {formikTip.errors.category}
+                      </div>
+                    ) : null}
+                    {formikTip.errors.description ? (
+                      <div style={{ color: "red" }}>
+                        {formikTip.errors.description}
+                      </div>
+                    ) : null}
+                  </DialogTitle>
+                  <DialogActions>
+                    <Button
+                      variant="contained"
+                      className='buttons'
+                      onClick={() => {
+                        handleCancel();
+                        handleTipClose();
+                      } }
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="contained"
+                      role="button"
+                      type="submit"
+                      className="buttons"
+                    >
+                      Change Tip Description
+                    </Button>
+                  </DialogActions>
+                </Box>
+              </Dialog>
+            </Grid>
+          ))}
+        </Grid>
         )}
-      </TableContainer>
+      </Container>
       <div
         style={{
           display: "flex",
@@ -554,6 +503,7 @@ function ViewTips(props) {
           component="div"
           count={data.length}
           rowsPerPage={rowsPerPage}
+          labelRowsPerPage={"Cards per page"}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={(event) => {
@@ -561,11 +511,12 @@ function ViewTips(props) {
             setPage(0);
           }}
           sx={{
-            color: textColor,
+            color: textColor
           }}
+
         />
       </div>
-    </div>
+      </>
   );
 }
 
