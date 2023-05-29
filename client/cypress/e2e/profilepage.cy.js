@@ -99,9 +99,65 @@ describe('Testing the Profile page', () => {
       cy.contains('Email: newemail@example.com');
     });
 
-    it('allows deleting the account', () => {
+
+    it('change all information at once', () => {
       //authenticate
       cy.login('newemail@example.com', 'newpassword')
+      // Visit the Profile page
+      cy.contains('ProfilePage').click()
+
+      //change password
+      cy.contains('Change Password').click();
+      
+      // Enter new password
+      cy.get('input[name="password"]').clear().type('password3');
+      cy.get('input[name="newpassword"]').clear().type('password3');
+  
+      // Submit the form
+      cy.get('button[type="submit"]').click();
+
+      // change email
+      cy.contains('Change Email').click();
+
+      // Enter valid new email
+      cy.get('input[name="email"]').type('user.email@example.com');
+  
+      // Submit the form
+      cy.get('button[type="submit"]').click();
+  
+      // Assert that the email was changed successfully
+      cy.contains('user.email@example.com').should('be.visible');
+
+      // change username
+      cy.contains('Change Username').click();
+  
+      // Enter new username
+      cy.get('input[name="username"]').type('User Name');
+  
+      // Submit the form
+      cy.get('button[type="submit"]').click();
+  
+      // Assert that the username was changed successfully
+      cy.contains('User Name').should('be.visible');
+
+    });
+
+    it('test login with new information', () => {
+      //authenticate
+      cy.login('user.email@example.com', 'password3')
+      // Visit the Profile page
+      cy.contains('ProfilePage').click()
+
+      cy.contains('Profile');
+      cy.contains('Created:');
+      cy.contains('Last updated:');
+      cy.contains('Username: User Name');
+      cy.contains('Email: user.email@example.com');
+    });
+
+    it('allows deleting the account', () => {
+      //authenticate
+      cy.login('user.email@example.com', 'password3')
       // Visit the Profile page
       cy.contains('ProfilePage').click()
       
@@ -111,8 +167,11 @@ describe('Testing the Profile page', () => {
       cy.get('[data-testid="deleteCheckbox"]').click();
       cy.get('[data-testid="deleteButton"]').click();
   
-      // Assert that the account was deleted and user is redirected
+      // Assert that the user is redirected and the account was deleted
       cy.url().should('eq', 'http://localhost/');
       cy.contains('Login');
+
+      cy.login('user.email@example.com', 'password3')
+      cy.contains('Wrong credentials').should('be.visible');
     });
   });
