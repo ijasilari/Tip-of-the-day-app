@@ -54,9 +54,10 @@ const AdminPage = (props) => {
       formikRole.resetForm();
     };
 
-    const handleDeleteConfirmationOpen = (userId) => {
+    const handleDeleteConfirmationOpen = (userId, index) => {
       setShowDeleteConfirmation(true);
-      SetuserId(userId)
+      SetuserId(userId);
+      setSelectedCard(index);
     };
 
     const handleDeleteConfirmationClose = () => {
@@ -362,7 +363,7 @@ const AdminPage = (props) => {
      }
   return (
     <div>
-      <Typography sx={{ textAlign: "center" }} variant="h4" gutterBottom>
+      <Typography sx={{color: textColor, textAlign: "center" }} variant="h4" gutterBottom>
         Admin Page
       </Typography>
 
@@ -370,22 +371,19 @@ const AdminPage = (props) => {
         {userData &&
           userData.map((user, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card>
+              <Card sx={{backgroundColor: backgroundColor }}>
                 <CardContent>
-                  <Typography variant="h6" component="div">
+                  <Typography sx={{ color: textColor}} variant="h6" component="div">
                     Username: {user.username} {user.id}
                   </Typography>
-                  <Typography variant="h6" component="div">
+                  <Typography sx={{ color: textColor}} variant="h6" component="div">
                     Created: {user.created_at}
                   </Typography>
-                  <Typography variant="h6" component="div">
+                  <Typography sx={{ color: textColor}} variant="h6" component="div">
                     Email: {user.email}
                   </Typography>
-                  <Typography variant="h6" component="div">
+                  <Typography sx={{ color: textColor}} variant="h6" component="div">
                     Role: {user.role}
-                  </Typography>
-                  <Typography variant="h6" component="div">
-                    Password: {user.password}
                   </Typography>
                   <Button
                     className="buttonsOutline"
@@ -600,12 +598,13 @@ const AdminPage = (props) => {
                     color="error"
                     // onClick={handleDeleteConfirmationOpen}
                     onClick={() => {
-                      handleDeleteConfirmationOpen(user.id);
+                      handleDeleteConfirmationOpen(user.id, index);
                       // SetuserId(user.id);
                     }}
                   >
                     Delete Account
                   </Button>
+                  {selectedCard === index && (
                   <Dialog
                     open={showDeleteConfirmation}
                     onClose={handleDeleteConfirmationClose}
@@ -652,6 +651,7 @@ const AdminPage = (props) => {
                       </Button>
                     </DialogActions>
                   </Dialog>
+                  )}
                 </CardContent>
               </Card>
             </Grid>
