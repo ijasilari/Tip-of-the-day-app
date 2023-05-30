@@ -10,7 +10,16 @@ const devCon = {
   port: process.env.DB_PORT,
 };
 
-const pool = new pg.Pool( devCon );
+const prodCon = {
+  connectionString: process.env.CONNECTION_STRING,
+  ssl: {
+    rejectUnauthorized: false
+  }
+};
+
+const pool = new pg.Pool(
+  process.env.NODE_ENV === 'production' ? prodCon : devCon
+);
 
 const tips = [
   [

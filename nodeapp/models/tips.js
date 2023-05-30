@@ -9,8 +9,17 @@ const devCon = {
   password: process.env.POSTGRES_PASSWORD,
   port: process.env.DB_PORT,
 };
+const prodCon = {
+  connectionString: process.env.CONNECTION_STRING,
+  ssl: {
+    rejectUnauthorized: false
+  }
+};
 
-const pool = new pg.Pool(devCon);
+const pool = new pg.Pool(
+  process.env.NODE_ENV === 'production' ? prodCon : devCon
+);
+
 
 const getAllTips = async () => {
   const tips = await pool.query("SELECT * FROM tips ORDER BY id");
