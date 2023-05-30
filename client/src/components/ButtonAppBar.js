@@ -40,7 +40,7 @@ function ButtonAppBar(props) {
 
 const pagess = (
   <div>
-    {auth.isLoggedIn && (
+    {auth.isLoggedIn && auth.role === 'guest' &&(
       <Button
         component={NavLink}
         to="/addtip"
@@ -68,7 +68,7 @@ const pagess = (
     >
       View All Tips
     </Button>
-    {auth.isLoggedIn && (
+    {auth.isLoggedIn && auth.role === 'guest' &&(
       <Button
         component={NavLink}
         to="/owntips"
@@ -78,7 +78,7 @@ const pagess = (
         My Tips
       </Button>
     )}
-    {auth.isLoggedIn && (
+    {auth.isLoggedIn && auth.role === 'guest' &&(
       <Button
         component={NavLink}
         to="/profilepage"

@@ -15,7 +15,7 @@ const pool = new pg.Pool(devCon);
 const users = {
   findAll: () =>
     new Promise((resolve, reject) => {
-      pool.query("SELECT * FROM users", (err, result) => {
+      pool.query("SELECT * FROM users ORDER BY created_at DESC", (err, result) => {
         if (err) {
           return reject(err);
         }
