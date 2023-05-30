@@ -353,7 +353,7 @@ function ViewTips(props) {
                   </Box>
                 </CardContent>
                 <CardActions>
-                  {(auth.userId === item.creator) || (auth.role === 'admin') &&(
+                  {(auth.role === 'admin' || auth.userId === item.creator) &&(
                     <Button
                       className="buttonsOutline"
                       style={{ display: "inline", marginRight: "2px" }}
@@ -365,7 +365,7 @@ function ViewTips(props) {
                       Edit
                     </Button>
                   )}
-                  {(auth.userId === item.creator) || (auth.role === 'admin') &&(
+                  {(auth.role === 'admin' || auth.userId === item.creator) &&(
                     <Button
                       className="buttonsOutline"
                       style={{ display: "inline", marginLeft: "2px" }}
