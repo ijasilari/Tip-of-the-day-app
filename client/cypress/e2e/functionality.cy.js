@@ -8,36 +8,33 @@ describe('testing homepage', () => {
     cy.contains('My Tips').should('not.exist')
     cy.contains('ProfilePage').should('not.exist')
     cy.contains('Login').should('be.visible')
-  /*
+
     // Verify initial toggle theme state
     cy.get('[data-testid="themeSwitch"]').should('not.be.checked') // The switch should be unchecked initially
     cy.get('.toggleLabel').should('contain', 'Light Mode') // The label should display 'Light Mode' initially
 
     // Test the 'light' theme
-    cy.get('body').should('have.css', 'background-color', 'rgba(0, 0, 0, 0)')
-    cy.get('h2, p, h5, h3, h1, a').should('have.css', 'color', 'rgb(255, 255, 255)') // Test the text color for the 'light' theme
-    //cy.get('.textarea').should('have.css', 'outline-color', 'primary') // Test the text area outline color for the 'light' theme
+    cy.get('body').should('have.css', 'background-color', 'rgb(255, 255, 255)') // Test the background color for the 'light' theme
+    cy.get('h2, p, h5, h3, h1').should('have.css', 'color', 'rgb(0, 0, 0)') // Test the text color for the 'light' theme
 
     // Toggle the switch
-    cy.get('.toggle [data-testid="themeSwitch"]').click({multiple: true, force: true}) // Simulate a click on the switch
+    cy.get('[data-testid="themeSwitch"]').click({force: true}) // Simulate a click on the switch
 
     // Verify the updated state
     cy.get('[data-testid="themeSwitch"]').should('be.checked') // The switch should be checked after clicking
     cy.get('.toggleLabel').should('contain', 'Dark Mode') // The label should display 'Dark Mode' after toggling
 
     // Test the 'dark' theme
-    cy.get('[data-testid="themeSwitch"]').click({multiple: true, force: true});
-    cy.get('body').should('have.css', 'background-color', 'rgb(255, 255, 255)')
-    cy.get('h1, h2, h3, h4, h5, h6, hr, li, ol, p, ul').should('have.css', 'color', 'rgba(0, 0, 0, 0)') // Test the text color for the 'dark' theme
-    //cy.get('.textarea').should('have.css', 'outline-color', 'white') // Test the text area outline color for the 'dark' theme
-    
+    cy.get('#dark').should('have.css', 'background-color', 'rgb(0, 0, 0)') // Test the background color for the 'dark' theme
+    cy.get('h1, h2, h3, h4, h5, h6, hr, li, ol, p, ul').should('have.css', 'color', 'rgb(236, 236, 236)') // Test the text color for the 'dark' theme
+
     // Toggle the switch back
-    cy.get('[data-testid="themeSwitch"]').click({multiple: true, force: true}) // Simulate another click on the switch
+    cy.get('[data-testid="themeSwitch"]').click({force: true}) // Simulate another click on the switch
 
     // Verify the reverted state
     cy.get('[data-testid="themeSwitch"]').should('not.be.checked') // The switch should be unchecked again
     cy.get('.toggleLabel').should('contain', 'Light Mode') // The label should display 'Light Mode' after toggling back
-  */
+
   })
 })
 

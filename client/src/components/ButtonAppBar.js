@@ -40,19 +40,6 @@ function ButtonAppBar(props) {
 
 const pagess = (
   <div>
-    <label className="toggleLabel">
-      {props.theme === "light" ? "Light Mode" : "Dark Mode"}{" "}
-    </label>
-    <ReactSwitch
-      onChange={props.toggleTheme}
-      checked={props.theme === "dark"}
-      height={14}
-      width={28}
-      onColor={"#BB86FC"}
-      className="toggle"
-      uncheckedIcon={false}
-      checkedIcon={false}
-    />
     {auth.isLoggedIn && (
       <Button
         component={NavLink}
@@ -191,6 +178,20 @@ const pagess = (
                 backgroundColor: bgColor
               }}}
             >
+            <label className="toggleLabel">
+              {props.theme === "light" ? "Light Mode" : "Dark Mode"}{" "}
+            </label>
+            <ReactSwitch
+              data-testid="toggleSwitch"
+              onChange={props.toggleTheme}
+              checked={props.theme === "dark"}
+              height={14}
+              width={28}
+              onColor={"#BB86FC"}
+              className="toggle"
+              uncheckedIcon={false}
+              checkedIcon={false}
+            />
               {pagess}
             </Menu>
           </Box>
@@ -216,8 +217,24 @@ const pagess = (
           <Box sx={{flexGrow: 1,display: { xs: 'none', md: 'flex', flexDirection: 'column' } }}>
           </Box>
 
-          <Box sx={{display: { xs: 'none', md: 'flex', flexDirection: 'column' } }}>
-            {pagess}
+          <Box sx={{display: { xs: 'none', md: 'flex' } }}>
+            <div>       
+              <label className="toggleLabel">
+                {props.theme === "light" ? "Light Mode" : "Dark Mode"}{" "}
+              </label>
+              <ReactSwitch
+                data-testid="themeSwitch"
+                onChange={props.toggleTheme}
+                checked={props.theme === "dark"}
+                height={14}
+                width={28}
+                onColor={"#BB86FC"}
+                className="toggle"
+                uncheckedIcon={false}
+                checkedIcon={false}
+              />
+              </div>
+              {pagess}
           </Box>
         </Toolbar>
 
