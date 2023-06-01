@@ -18,7 +18,7 @@ const getUsers = async (req, res) => {
 
 const signUpUser = async (req, res) => {
     console.log(req.body);
-    const {username, email, password} = req.body;
+    const {username, email, password, role} = req.body;
 
     const schema = Joi.object({
       username: Joi.string().required(),
@@ -48,7 +48,7 @@ const signUpUser = async (req, res) => {
         username,
         email,
         password: hashedPassword,
-        role: 'guest'
+        role: role
     };
     //console.log(newUser);
     try{

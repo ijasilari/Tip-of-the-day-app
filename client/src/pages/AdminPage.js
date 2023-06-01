@@ -17,6 +17,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import Dropdown from "../components/Dropdown";
 import { AuthContext } from "../components/auth-context";
 import axios from "axios";
 
@@ -33,6 +34,11 @@ const AdminPage = (props) => {
     const [userData, setuserData] = useState([]);
     const [userId, SetuserId] = useState();
     const [selectedCard, setSelectedCard] = useState(null);
+
+    const roleOptionsEdit = [
+      { value: 1, label: "guest" },
+      { value: 2, label: "admin" },
+    ];
 
 
     useEffect(() => {
@@ -260,6 +266,7 @@ const AdminPage = (props) => {
           // console.log([...newTips])
           return [...newUserData];
         });
+        formikRole.values.role = "...Select";
         formikRole.resetForm();
       } catch (err) {}
     };
@@ -343,11 +350,12 @@ const AdminPage = (props) => {
 
     const formikRole = useFormik({
       initialValues: {
-        role: "",
+        role: "...Select",
       },
       validate: validateRole,
       onSubmit: changeRole,
     });
+
 
      let textColor = "";
      let bgColor2 = "";
@@ -363,7 +371,11 @@ const AdminPage = (props) => {
      }
   return (
     <div>
-      <Typography sx={{color: textColor, textAlign: "center" }} variant="h4" gutterBottom>
+      <Typography
+        sx={{ color: textColor, textAlign: "center" }}
+        variant="h4"
+        gutterBottom
+      >
         Admin Page
       </Typography>
 
@@ -371,18 +383,34 @@ const AdminPage = (props) => {
         {userData &&
           userData.map((user, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card sx={{backgroundColor: backgroundColor }}>
+              <Card sx={{ backgroundColor: backgroundColor }}>
                 <CardContent>
-                  <Typography sx={{ color: textColor}} variant="h6" component="div">
+                  <Typography
+                    sx={{ color: textColor }}
+                    variant="h6"
+                    component="div"
+                  >
                     Username: {user.username} {user.id}
                   </Typography>
-                  <Typography sx={{ color: textColor}} variant="h6" component="div">
+                  <Typography
+                    sx={{ color: textColor }}
+                    variant="h6"
+                    component="div"
+                  >
                     Created: {user.created_at}
                   </Typography>
-                  <Typography sx={{ color: textColor}} variant="h6" component="div">
+                  <Typography
+                    sx={{ color: textColor }}
+                    variant="h6"
+                    component="div"
+                  >
                     Email: {user.email}
                   </Typography>
-                  <Typography sx={{ color: textColor}} variant="h6" component="div">
+                  <Typography
+                    sx={{ color: textColor }}
+                    variant="h6"
+                    component="div"
+                  >
                     Role: {user.role}
                   </Typography>
                   <Button
@@ -560,20 +588,14 @@ const AdminPage = (props) => {
                       noValidate
                       onSubmit={formikRole.handleSubmit}
                     >
-                      <TextField
-                        label="New Role"
-                        fullWidth
-                        margin="normal"
-                        name="role"
-                        id="role"
-                        onChange={formikRole.handleChange}
-                        value={formikRole.values.role}
-                        sx={{
-                          "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                            {
-                              borderColor: textAreaOutlineColor,
-                            },
+                      <Dropdown
+                        isSearchable
+                        placeHolder={formikRole.values.role}
+                        options={roleOptionsEdit}
+                        onChange={(value) => {
+                          formikRole.values.role = value.label;
                         }}
+                        theme={props.theme}
                       />
                       {formikRole.errors.role ? (
                         <div style={{ color: "red" }}>
@@ -605,52 +627,52 @@ const AdminPage = (props) => {
                     Delete Account
                   </Button>
                   {selectedCard === index && (
-                  <Dialog
-                    open={showDeleteConfirmation}
-                    onClose={handleDeleteConfirmationClose}
-                  >
-                    <DialogTitle
-                      sx={{ backgroundColor: bgColor2, color: textColor }}
+                    <Dialog
+                      open={showDeleteConfirmation}
+                      onClose={handleDeleteConfirmationClose}
                     >
-                      Delete Account
-                    </DialogTitle>
-                    <DialogContent sx={{ backgroundColor: bgColor2 }}>
-                      <Typography sx={{ color: textColor }}>
-                        Are you sure you want to delete this account?{userId}
-                      </Typography>
-                      <FormControlLabel
-                        sx={{ color: textColor }}
-                        control={
-                          <Checkbox
-                            data-testid="deleteCheckbox"
-                            checked={deleteVerified}
-                            onChange={handleDeleteVerification}
-                            sx={{ color: textColor }}
-                          />
-                        }
-                        label="I understand that this action is irreversible."
-                      />
-                    </DialogContent>
-                    <DialogActions sx={{ backgroundColor: bgColor2 }}>
-                      <Button
-                        onClick={handleDeleteConfirmationClose}
-                        sx={{ color: textAreaOutlineColor }}
+                      <DialogTitle
+                        sx={{ backgroundColor: bgColor2, color: textColor }}
                       >
-                        Cancel
-                      </Button>
-                      <Button
-                        data-testid="deleteButton"
-                        // onClick={handleDeleteAccount}
-                        onClick={() => {
-                          handleDeleteAccount();
-                        }}
-                        disabled={!deleteVerified}
-                        color="error"
-                      >
-                        Delete
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
+                        Delete Account
+                      </DialogTitle>
+                      <DialogContent sx={{ backgroundColor: bgColor2 }}>
+                        <Typography sx={{ color: textColor }}>
+                          Are you sure you want to delete this account?{userId}
+                        </Typography>
+                        <FormControlLabel
+                          sx={{ color: textColor }}
+                          control={
+                            <Checkbox
+                              data-testid="deleteCheckbox"
+                              checked={deleteVerified}
+                              onChange={handleDeleteVerification}
+                              sx={{ color: textColor }}
+                            />
+                          }
+                          label="I understand that this action is irreversible."
+                        />
+                      </DialogContent>
+                      <DialogActions sx={{ backgroundColor: bgColor2 }}>
+                        <Button
+                          onClick={handleDeleteConfirmationClose}
+                          sx={{ color: textAreaOutlineColor }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          data-testid="deleteButton"
+                          // onClick={handleDeleteAccount}
+                          onClick={() => {
+                            handleDeleteAccount();
+                          }}
+                          disabled={!deleteVerified}
+                          color="error"
+                        >
+                          Delete
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                   )}
                 </CardContent>
               </Card>

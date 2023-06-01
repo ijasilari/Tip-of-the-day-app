@@ -28,6 +28,13 @@ const loggedInUser2 = {
   token: "",
 };
 
+const loggedInAdmin = {
+  userId: "",
+  email: "",
+  token: "",
+  role: "admin"
+};
+
 beforeAll(async () => {
   await pool.query("BEGIN");
   await pool.query("TRUNCATE TABLE tips CASCADE");
@@ -38,12 +45,21 @@ beforeAll(async () => {
     username: "Tauno Testaaja",
     email: "taunotestaaja@gmail.com",
     password: "password123",
+    role: "guest"
   };
 
   const data2 = {
     username: "Testaaja",
     email: "testaaja@gmail.com",
     password: "password123",
+    role: "guest"
+  };
+
+  const data3 = {
+    username: "admin",
+    email: "admin@gmail.com",
+    password: "adminadmin",
+    role: "admin",
   };
   const response = await supertest(app)
     .post("/api/users/signup")
@@ -60,11 +76,19 @@ beforeAll(async () => {
   loggedInUser2.userId = response2.body.id;
   loggedInUser2.email = response2.body.email;
   loggedInUser2.token = response2.body.token;
+
+  const response3 = await supertest(app)
+    .post("/api/users/signup")
+    .set("Accept", "application/json")
+    .send(data3);
+  loggedInAdmin.userId = response3.body.id;
+  loggedInAdmin.email = response3.body.email;
+  loggedInAdmin.token = response3.body.token;
 });
 
 afterAll(() => pool.end());
 
-describe('Tips tests', () => {
+describe('TOTD tests', () => {
   let TipId = "";
 
   it("POST /addtip", async () => {
@@ -82,6 +106,66 @@ describe('Tips tests', () => {
     expect(response.status).toEqual(201);
     expect(response.body.Tip.description).toEqual("Test Tip");
     TipId = response.body.id;
+  });
+
+  it("PATCH /:tid/like add like to tip", async () => {
+    const tip = {
+      userId: loggedInUser.userId,
+      vote: 1
+    };
+
+    const response = await supertest(app)
+      .patch(`/api/tips/${TipId}/like`)
+      .set("Authorization", "Bearer " + loggedInUser.token)
+      .set("Accept", "application/json")
+      .send(tip);
+    expect(response.status).toEqual(200);
+    expect(response.body.tip.wholiked).toEqual(loggedInUser.userId);
+    expect(response.body.tip.likes).toEqual(1);
+  });
+
+  it("PATCH /:tid/like try to add like to tip with wrong id", async () => {
+    const tip = {
+      userId: loggedInUser.userId,
+      vote: 1,
+    };
+
+    const response = await supertest(app)
+      .patch(`/api/tips/123456789/like`)
+      .set("Authorization", "Bearer " + loggedInUser.token)
+      .set("Accept", "application/json")
+      .send(tip);
+    expect(response.status).toEqual(404);
+    expect(response.error.text).toContain("Tip with ID 123456789 not found");
+  });
+
+  it("PATCH /:tid/like try to add like to tip which user has already voted on", async () => {
+    const tip = {
+      userId: loggedInUser.userId,
+      vote: 1,
+    };
+
+    const response = await supertest(app)
+      .patch(`/api/tips/${TipId}/like`)
+      .set("Authorization", "Bearer " + loggedInUser.token)
+      .set("Accept", "application/json")
+      .send(tip);
+    expect(response.status).toEqual(400);
+    expect(response.error.text).toContain("You have already voted on this tip");
+  });
+
+  it("PATCH /:tid/like try to add like to tip without proper autentication", async () => {
+    const tip = {
+      userId: loggedInUser.userId,
+      vote: 1,
+    };
+
+    const response = await supertest(app)
+      .patch(`/api/tips/${TipId}/like`)
+      .set("Accept", "application/json")
+      .send(tip);
+    expect(response.status).toEqual(401);
+    expect(response.error.text).toContain("Authentication failed");
   });
 
 it("GET /getall", async () => {
@@ -412,6 +496,7 @@ it("POST /signup with existing user", async () => {
     username: "Tauno Testaaja",
     email: "taunotestaaja@gmail.com",
     password: "password123",
+    role: "guest"
   };
   const response = await supertest(app)
     .post("/api/users/signup")
@@ -459,6 +544,7 @@ it("PATCH /:userId/update change name of the user, email and password with fault
     username: "Tahvo Testaaja",
     email: "tahvotestaaja@gmail.com",
     password: "password123",
+    role: 'guest'
   };
 
   const response = await supertest(app)
@@ -475,6 +561,7 @@ it("PATCH /:userId/update should throw authentication error when trying to chang
     username: "newuser",
     email: "newuser@gmail.com",
     password: "newuser12345",
+    role: "guest"
   };
 
   const response = await supertest(app)
@@ -491,6 +578,7 @@ it("PATCH /:userId/update change name of the user, email and password", async ()
     username: "Tahvo Testaaja",
     email: "tahvotestaaja@gmail.com",
     password: "password12345",
+    role: "guest"
   };
 
   const response = await supertest(app)
@@ -509,6 +597,7 @@ it("PATCH /:userId/update update values to same as they were should succeed", as
     username: "Tahvo Testaaja",
     email: "tahvotestaaja@gmail.com",
     password: loggedInUser.password,
+    role: "guest"
   };
 
   const response = await supertest(app)
@@ -542,6 +631,7 @@ it("PATCH /:userId/update change email to same as other user email", async () =>
     username: "Tahvo Testaaja",
     email: "testaaja@gmail.com",
     password: "password12345",
+    role: "guest"
   };
 
   const response = await supertest(app)
@@ -636,6 +726,52 @@ it("DELETE /:userId/delete try to delete user without token", async () => {
     .set("Accept", "application/json");
   expect(response.status).toEqual(401);
   expect(response.text).toEqual("Authentication failed");
+});
+
+it("PATCH /:userId/update try to modify another user details as admin", async () => {
+
+  const data = {
+    username: "testuser",
+    email: "testuser@gmail.com",
+    password: "testuser123",
+    role: "admin",
+  };
+
+  const response = await supertest(app)
+    .patch(`/api/users/${loggedInUser2.userId}/update`)
+    .set("Authorization", "Bearer " + loggedInAdmin.token)
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(200);
+  expect(response.body.user.email).toEqual("testuser@gmail.com");
+  expect(response.body.user.username).toEqual("testuser");
+  expect(response.body.user.role).toEqual("admin");
+});
+
+it("POST /login as new admin", async () => {
+  const data = {
+    email: "testuser@gmail.com",
+    password: "testuser123",
+  };
+
+  const response = await supertest(app)
+    .post("/api/users/login")
+    .set("Accept", "application/json")
+    .send(data);
+  expect(response.status).toEqual(201);
+  expect(response.body.email).toEqual("testuser@gmail.com");
+  expect(response.body.token).toBeTruthy();
+  expect(response.body.id).toBeTruthy();
+  expect(response.body.role).toEqual("admin");
+});
+
+it("DELETE /:userId/delete try to delete user as admin", async () => {
+  const response = await supertest(app)
+    .delete(`/api/users/${loggedInUser2.userId}/delete`)
+    .set("Authorization", "Bearer " + loggedInAdmin.token)
+    .set("Accept", "application/json");
+ expect(response.status).toEqual(200);
+ expect(response.text).toEqual('{"message":"Deleted the user."}');
 });
 
 })
