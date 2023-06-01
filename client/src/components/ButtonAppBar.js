@@ -20,7 +20,7 @@ function ButtonAppBar(props) {
   let bgColor = "";
   let backgroundBttnColor;
   if (props.theme === "light") {
-    bgColor = "#1976D2";
+    bgColor = "#1976D2 !important";
   } else {
     bgColor = "#1d1d1d";
     backgroundBttnColor = "#bb86fcd6";
@@ -218,7 +218,7 @@ const pagess = (
           </Box>
 
           <Box sx={{display: { xs: 'none', md: 'flex' } }}>
-            <div>       
+            <div>
               <label className="toggleLabel">
                 {props.theme === "light" ? "Light Mode" : "Dark Mode"}{" "}
               </label>

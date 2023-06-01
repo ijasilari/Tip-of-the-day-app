@@ -28,6 +28,7 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
+import { makeStyles } from "@material-ui/core/styles";
 
 const labelStyle = css`
   color: red; /* Change the text color */
@@ -279,13 +280,7 @@ function ViewTips(props) {
     return category ? category.label : "";
   };
 
-  const styles = {
-    buttonStyle: {
-      '& .MuiTablePagination-menuItem': {
-        color: 'red'
-      }
-    }
-  }
+
 
   return (
     <><CssBaseline />
@@ -512,6 +507,7 @@ function ViewTips(props) {
           justifyContent: "center",
           marginTop: "1rem",
         }}
+        id="pagination"
       >
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
@@ -525,10 +521,7 @@ function ViewTips(props) {
             setRowsPerPage(parseInt(event.target.value, 10));
             setPage(0);
           }}
-          sx={{
-            color: textColor
-          }}
-
+          id="pagination"
         />
       </div>
       </>
