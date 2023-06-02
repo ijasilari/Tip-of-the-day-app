@@ -229,7 +229,7 @@ function AddTip(props) {
           }}
         >
           <h1 className="text">Attention!</h1>
-          <div style={{ textAlign: "left", paddingBottom: "10px" }}>
+          <div style={{ textAlign: "left", paddingBottom: "10px", marginBottom: "10px"}}>
             <p className="text">
               This page supports markdown and syntax highlight code. To create
               codeblock with highlight write:

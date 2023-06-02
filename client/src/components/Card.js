@@ -60,7 +60,7 @@ const Card = (props) => {
 
       const interval = setInterval(() => {
         fetchCardData();
-      }, 5000);
+      }, 3000);
       return () => clearInterval(interval);
     }
 
