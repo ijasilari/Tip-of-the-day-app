@@ -34,8 +34,6 @@ const ProfilePage = (props) => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [userData, setuserData] = useState([]);
-  console.log(auth.userId)
-  console.log(props.userId)
 
   const dateView = (date) => {
     const convertDate = new Date(date).toLocaleDateString("en-GB");
@@ -47,7 +45,6 @@ const ProfilePage = (props) => {
       const response = await axios.get(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/${props.userId}`
       );
-      console.log(response.data.user);
       setuserData(response.data.user);
     };
     fetchData();
@@ -114,7 +111,6 @@ const ProfilePage = (props) => {
           },
         }
       );
-      console.log(response);
       auth.logout();
       navigate("/");
     } catch (err) {}
@@ -128,7 +124,6 @@ const ProfilePage = (props) => {
       role: userData.role
     };
     try {
-      console.log(userDetails);
       const response = await axios.patch(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/${props.userId}/update`,
         userDetails,
@@ -139,7 +134,6 @@ const ProfilePage = (props) => {
           },
         }
       );
-      console.log(response);
       const modified = { ...userData };
       modified.password = response.data.user.password;
       setuserData(modified);
@@ -155,7 +149,6 @@ const ProfilePage = (props) => {
       role: userData.role
     };
     try {
-      console.log(userDetails);
       const response = await axios.patch(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/${props.userId}/update`,
         userDetails,
@@ -166,9 +159,7 @@ const ProfilePage = (props) => {
           },
         }
       );
-      console.log(response);
       const modified = { ...userData };
-      console.log(modified)
       modified.email = formikEmail.values.email;
       setuserData(modified);
       formikEmail.resetForm();
@@ -187,7 +178,6 @@ const ProfilePage = (props) => {
       role: userData.role
     };
     try {
-      console.log(userDetails);
       const response = await axios.patch(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/${props.userId}/update`,
         userDetails,
@@ -198,9 +188,7 @@ const ProfilePage = (props) => {
           },
         }
       );
-      console.log(response);
       const modified = { ...userData };
-      console.log(modified)
       modified.username = formikUsername.values.username;
       setuserData(modified);
       formikUsername.resetForm();

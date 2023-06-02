@@ -3,16 +3,12 @@ import { validationResult } from "express-validator";
 
 const getTips = async (req, res, next) => {
   const tips = await getAllTips();
-  // console.log(tips)
   res.json({ tips });
 };
 
 const getTipsByCategory = async (req, res, next) => {
   const tipCategory = req.params.category;
-  console.log(tipCategory);
-  // console.log(tipId)
   const tips = await findTipsByCategory(tipCategory);
-  console.log(tips)
 
   if (tips.length === 0) {
     const error = new Error(`Tip with CATEGORY ${tipCategory} not found`);
@@ -25,7 +21,6 @@ const getTipsByCategory = async (req, res, next) => {
 
 const getTipsByCreator = async (req, res, next) => {
   const creator = req.params.creator;
-  console.log(creator);
   const tips = await findTipsByCreator(creator);
 
   if (tips.length === 0) {
@@ -39,7 +34,6 @@ const getTipsByCreator = async (req, res, next) => {
 
 const getTipById = async (req, res, next) => {
   const tipId = req.params.tid;
-  // console.log(tipId)
   const tip = await findTipById(tipId);
 
   if (!tip) {
@@ -53,7 +47,6 @@ const getTipById = async (req, res, next) => {
 
 const getTipByIdPlainText = async (req, res, next) => {
   const tipId = req.params.tid;
-  // console.log(tipId)
   if (tipId < 1) {
     const error = new Error(`Tip ID must be higher than 0`);
     error.statusCode = 404;
@@ -62,13 +55,11 @@ const getTipByIdPlainText = async (req, res, next) => {
 
   const fetchData = async (id) => {
     const tip = await findTipById(id);
-    // console.log(tip)
 
     if (!tip) {
       const newId = Math.floor(Math.random() * 100) + 1;
       const newId2 = Math.floor(Math.random() * 100) + 1;
       const remainder = newId % newId2;
-      // console.log(remainder)
       fetchData(remainder);
     } else {
       res.send(tip.description);
@@ -86,8 +77,6 @@ const addNewTip = async (req, res, next) => {
   }
 
   const { category, description, creator } = req.body;
-  // console.log(req.body)
-  // console.log(description)
 
   const newTip = {
     // id,
@@ -97,7 +86,6 @@ const addNewTip = async (req, res, next) => {
   };
 
   const result = await addTip(newTip);
-  // console.log(result)
   if (!result) {
     const error = new Error(`Something went wrong when adding new tip`);
     error.statusCode = 500;
@@ -120,8 +108,6 @@ const updateTipById = async (req, res, next) => {
 
   const { description, category, creator } = req.body;
   const tipId = req.params.tid;
-  // console.log(tipId)
-  console.log(category)
   const tip = await findTipById(tipId);
 
   if (!tip) {
@@ -129,7 +115,7 @@ const updateTipById = async (req, res, next) => {
     error.statusCode = 404;
     return next(error);
   }
-  if (tip.creator !== req.userData.userId) {
+  if (tip.creator !== req.userData.userId && req.userData.role !== 'admin') {
     const error = new Error(`Not authorized to update tip`);
     error.statusCode = 401;
     return next(error);
@@ -155,16 +141,14 @@ const updateTipById = async (req, res, next) => {
 
 const deleteTipById = async (req, res, next) => {
   const tipId = req.params.tid;
-  // console.log(tipId)
   const tip = await findTipById(tipId);
-  // console.log(tip)
   if (!tip) {
     const error = new Error(`Tip with ID ${tipId} not found`);
     error.statusCode = 404;
     return next(error);
   }
 
-  if (tip.creator !== req.userData.userId) {
+  if (tip.creator !== req.userData.userId && req.userData.role !== 'admin') {
     const error = new Error(`Not authorized to delete tip`);
     error.statusCode = 401;
     return next(error);
@@ -182,7 +166,6 @@ const deleteTipById = async (req, res, next) => {
 const getTipByRandom = async (req, res, next) => {
 
   const tip = await getRandomTip();
-  console.log(tip)
 
   res.status(200).json({ tip });
 };
@@ -190,27 +173,20 @@ const getTipByRandom = async (req, res, next) => {
 const addLike = async (req, res, next) => {
   const tipId = req.params.tid;
   const { userId, vote }  = req.body;
-  // console.log(userId)
-  // console.log(vote)
 
   const tip = await findTipById(tipId);
-  console.log(tip)
   if (!tip) {
     const error = new Error(`Tip with ID ${tipId} not found`);
     error.statusCode = 404;
     return next(error);
   }
-  // console.log(tipId)
-  // console.log(tip.wholiked)
   const userLiked = tip.wholiked && tip.wholiked[userId];
-  // console.log(userLiked)
   if (userLiked) {
     const error = new Error(`You have already voted on this tip`);
     error.statusCode = 400;
     return next(error);
   }
   const like = await addLikeById(userId, tipId, vote)
-  console.log("this is a console log of: " + like);
   if (!like) {
     const error = new Error(`Something went wrong`);
     error.statusCode = 404;
@@ -219,7 +195,6 @@ const addLike = async (req, res, next) => {
 
   tip.likes = tip.likes + vote;
   tip.wholiked = userId;
-  // console.log(tip)
   res.json({ tip });
 };
 

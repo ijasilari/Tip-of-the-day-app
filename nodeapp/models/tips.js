@@ -22,8 +22,7 @@ const pool = new pg.Pool(
 
 
 const getAllTips = async () => {
-  const tips = await pool.query("SELECT * FROM tips ORDER BY id");
-  // console.log(tips)
+  const tips = await pool.query("SELECT * FROM tips ORDER BY id DESC");
   return tips.rows;
 };
 
@@ -47,7 +46,6 @@ const addTip = async (tip) => {
     "INSERT INTO tips (category, description, creator) VALUES ($1, $2, $3) RETURNING id",
     [tip.category, tip.description, tip.creator]
   );
-  // console.log(result)
   return result.rows[0].id;
 };
 
@@ -61,7 +59,6 @@ const updateTipWithId = async (description, category, id) => {
 
 const deleteTipWithId = async (id) => {
   const result = await pool.query("DELETE FROM tips WHERE id=$1", [id]);
-  // console.log(result)
   return result.rowCount !== 0;
 };
 

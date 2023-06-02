@@ -146,7 +146,6 @@ export default function OwnTips(props) {
           },
         }
       );
-      console.log(response);
 
       setData((prev) => prev.filter((e) => e.id !== tid));
     } catch (err) {}
@@ -155,7 +154,6 @@ export default function OwnTips(props) {
   const editTip = async () => {
     const editedTip = { description: formikTip.values.description, category: categoryEdit, creator: auth.userId };
     try {
-      console.log(editedTip);
       const response = await axios.patch(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/update`,
         editedTip,
@@ -166,16 +164,12 @@ export default function OwnTips(props) {
           },
         }
       );
-      console.log(response);
 
       setData(() => {
         const newTips = [...data];
-        // console.log(newTips);
         const foundIndex = newTips.findIndex((tip) => tip.id === id);
-        // console.log(foundIndex);
         newTips[foundIndex].description = formikTip.values.description;
         newTips[foundIndex].category = categoryEdit;
-        // console.log([...newTips])
         return [...newTips];
       });
       setCategoryEdit();

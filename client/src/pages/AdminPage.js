@@ -16,7 +16,6 @@ import { AccountCircle, Email, Lock } from "@mui/icons-material";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
 import Dropdown from "../components/Dropdown";
 import { AuthContext } from "../components/auth-context";
 import axios from "axios";
@@ -46,8 +45,6 @@ const AdminPage = (props) => {
         const response = await axios.get(
           `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/getusers`
         );
-        console.log(response)
-        console.log(response.data);
         setuserData(response.data);
       };
       fetchData();
@@ -134,7 +131,6 @@ const AdminPage = (props) => {
             },
           }
         );
-        console.log(response);
         setuserData((prev) => prev.filter((e) => e.id !== userId));
         handleDeleteConfirmationClose();
       } catch (err) {}
@@ -150,7 +146,6 @@ const AdminPage = (props) => {
         role: userData[foundIndex].role
       };
       try {
-        console.log(userDetails);
         const response = await axios.patch(
           `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/${userId}/update`,
           userDetails,
@@ -165,7 +160,6 @@ const AdminPage = (props) => {
           const newUserData = [...userData];
           const foundIndex = newUserData.findIndex((tip) => tip.id === userId);
           newUserData[foundIndex].password = response.data.user.password;
-          // console.log([...newTips])
           return [...newUserData];
         });
         formikPassword.resetForm();
@@ -181,7 +175,6 @@ const AdminPage = (props) => {
         role: userData[foundIndex].role
       };
       try {
-        console.log(userDetails);
         const response = await axios.patch(
           `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/${userId}/update`,
           userDetails,
@@ -196,7 +189,6 @@ const AdminPage = (props) => {
           const newUserData = [...userData];
           const foundIndex = newUserData.findIndex((tip) => tip.id === userId);
           newUserData[foundIndex].email = response.data.user.email;
-          // console.log([...newTips])
           return [...newUserData];
         });
         formikEmail.resetForm();
@@ -216,7 +208,6 @@ const AdminPage = (props) => {
         role: userData[foundIndex].role
       };
       try {
-        console.log(userDetails);
         const response = await axios.patch(
           `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/${userId}/update`,
           userDetails,
@@ -231,7 +222,6 @@ const AdminPage = (props) => {
           const newUserData = [...userData];
           const foundIndex = newUserData.findIndex((tip) => tip.id === userId);
           newUserData[foundIndex].username = response.data.user.username;
-          // console.log([...newTips])
           return [...newUserData];
         });
         formikUsername.resetForm();
@@ -247,7 +237,6 @@ const AdminPage = (props) => {
         role: formikRole.values.role
       };
       try {
-        console.log(userDetails);
         const response = await axios.patch(
           `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/users/${userId}/update`,
           userDetails,
@@ -258,12 +247,10 @@ const AdminPage = (props) => {
             },
           }
         );
-        console.log(response)
         setuserData(() => {
           const newUserData = [...userData];
           const foundIndex = newUserData.findIndex((tip) => tip.id === userId);
           newUserData[foundIndex].role = response.data.user.role;
-          // console.log([...newTips])
           return [...newUserData];
         });
         formikRole.values.role = "...Select";
@@ -618,10 +605,8 @@ const AdminPage = (props) => {
                     variant="outlined"
                     fullWidth
                     color="error"
-                    // onClick={handleDeleteConfirmationOpen}
                     onClick={() => {
                       handleDeleteConfirmationOpen(user.id, index);
-                      // SetuserId(user.id);
                     }}
                   >
                     Delete Account
@@ -662,7 +647,6 @@ const AdminPage = (props) => {
                         </Button>
                         <Button
                           data-testid="deleteButton"
-                          // onClick={handleDeleteAccount}
                           onClick={() => {
                             handleDeleteAccount();
                           }}
