@@ -28,6 +28,8 @@ services:
     ports:
       - "3000:3000"
     restart: always
+    depends_on:
+      - db
     volumes:
       - ./nodeapp:/opt/api
     command: npm run dev
@@ -49,3 +51,19 @@ services:
       - ./client:/opt/client
       - /opt/client/node_modules
     command: npm start
+
+  db_init:
+    build:
+      context: ./nodeapp
+      dockerfile: Dockerfile
+    environment:
+      DB_PORT: 5432
+      DB_HOST: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tips
+    depends_on:
+      - db
+    volumes:
+      - ./nodeapp:/opt/api
+    command: sh -c "sleep 10 && cd /opt/api && npm run seed:db"

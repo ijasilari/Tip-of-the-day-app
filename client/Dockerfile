@@ -4,7 +4,7 @@ WORKDIR /opt/client
 
 COPY package*.json /opt/client/
 
-RUN npm install
+RUN npm install --force
 
 COPY ./ /opt/client/
 

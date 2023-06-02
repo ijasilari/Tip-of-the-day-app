@@ -31,7 +31,7 @@ To get to aging info of user test1:
 
 Set the MAXIMUM period between password change to 500 days:
 
-\`$	sudo chage -M 500 test1\``, 10, '123456789'
+\`$	sudo chage -M 500 test1\``, 10, '123456789',1
   ],
   [
     `Command: date
@@ -46,21 +46,21 @@ $ export MYVAR="HALOO-"date "+%F-%T-DATEDIR"
 $ echo $MYVAR
 ~~~
 
-(Author: Petteri)`, 10, '123456789'
+(Author: Petteri)`, 10, '123456789',2
   ],
   [
     `Topic: find
 
 Find files from current location (.) with precise name. For each hit, run a command - this time grep from the found file ({}) - end the command with semicolon ... escape it to make part of parameter
 
-\`$ find . -name "wisdom.txt" -exec grep -i vote {} \;\``, 10, '123456789'
+\`$ find . -name "wisdom.txt" -exec grep -i vote {} \;\``, 10, '123456789',3
   ],
   [
     `Topic: for loop (bash)
 
 Example one liner:
 
-\`$ for file in ls; do echo $file; done\``, 10, '123456789'
+\`$ for file in ls; do echo $file; done\``, 10, '123456789',4
   ],
   [
     `Topic: gpasswd
@@ -76,7 +76,7 @@ Demote user u2 from engineers group admins:
 
 See the admins of the group:
 
-\`$ grep engineers /etc/gshadow\``, 10, '123456789'
+\`$ grep engineers /etc/gshadow\``, 10, '123456789',5
   ],
   [
     `Topic: LVM - Logical Volume Management
@@ -97,7 +97,7 @@ Steps to create a brand new LVM device:
 # lvcreate -n vision200 -L 2G vg200    (Create a mountable partition)
 # mkfs.xfs /dev/vg200/vision200        (Make filesystem)
 # mount /dev/vg200/vision200 /vision200
-~~~`, 10, '123456789'
+~~~`, 10, '123456789',6
   ],
   [
     `Topic: LVM - Logical Volume Management
@@ -108,14 +108,14 @@ To expand the existing LVM partition:
 # xfs_growfs /vision
 ~~~
 ... OR:
-\`# lvresize -l +100%FREE /dev/vg200/vision\``, 10, '123456789'
+\`# lvresize -l +100%FREE /dev/vg200/vision\``, 10, '123456789',7
   ],
   [
     `Command: useradd
 
 Example: Create a user with userid "userjohn" with bash shel (-s). Create home directory (-m) automatically and provide natural name (-c). Uidnumber will be automatically generated.
 
-\`$ useradd -m -c "User John" -s /bin/bash userjohn\``, 10, '123456789'
+\`$ useradd -m -c "User John" -s /bin/bash userjohn\``, 10, '123456789',8
   ],
   [
     `Topic: wc
@@ -123,7 +123,7 @@ Example: Create a user with userid "userjohn" with bash shel (-s). Create home d
 wc - counts the number of characters and lines.
 Example: calculate nr of lines:
 
-\`$ wc -l file.txt\``, 10, '123456789'
+\`$ wc -l file.txt\``, 10, '123456789',9
   ],
   [
     `Command: wget
@@ -143,14 +143,14 @@ Other alternatives for command line HTTP:
 * curl
 
 
-(Author: Petteri)`, 10, '123456789'
+(Author: Petteri)`, 10, '123456789',10
   ],
   [
     `According to Larry Wall, the original author of the Perl programming language, there are three great virtues of a programmer; Laziness, Impatience and Hubris
 
 * Laziness: The quality that makes you go to great effort to reduce overall energy expenditure. It makes you write labor-saving programs that other people will find useful and document what you wrote so you don't have to answer so many questions about it.
 * Impatience: The anger you feel when the computer is being lazy. This makes you write programs that don't just react to your needs, but actually anticipate them. Or at least pretend to.
-* Hubris: The quality that makes you write (and maintain) programs that other people won't want to say bad things about.`, 10, '123456789'
+* Hubris: The quality that makes you write (and maintain) programs that other people won't want to say bad things about.`, 10, '123456789',11
   ],
   [
     `I well remember when this realization first came on me with full force.
@@ -161,13 +161,13 @@ that "hesitating at the angles of stairs" the realization came over me with
 full force that a good part of the remainder of my life was going to be spent
 in finding errors in my own programs.
 
-Maurice Wilkes. Memoirs of a computer pioneer. `, 10, '123456789'
+Maurice Wilkes. Memoirs of a computer pioneer. `, 10, '123456789',12
   ],
 ];
 
 pool.query(
-  `INSERT INTO tips (description,category,creator) VALUES ($1,$2,$3), ($4,$5,$6), ($7,$8,$9), ($10,$11,$12), ($13,$14,$15), ($16,$17,$18),
-  ($19,$20,$21), ($22,$23,$24), ($25,$26,$27), ($28,$29,$30), ($31,$32,$33), ($34,$35,$36) ON CONFLICT (id) DO NOTHING`,
+  `INSERT INTO tips (description,category,creator,id) VALUES ($1,$2,$3,$4), ($5,$6,$7,$8), ($9,$10,$11,$12), ($13,$14,$15,$16), ($17,$18,$19,$20), ($21,$22,$23,$24),
+  ($25,$26,$27,$28), ($29,$30,$31,$32), ($33,$34,$35,$36), ($37,$38,$39,$40), ($41,$42,$43,$44), ($45,$46,$47,$48) ON CONFLICT (id) DO NOTHING`,
   [...tips.flat()],
   (err, res) => {
     if (err) {
@@ -177,3 +177,6 @@ pool.query(
     console.log("Rows inserted:", res.rowCount);
   }
 );
+
+pool.query("SELECT setval('tips_id_seq', 13, false)");
+

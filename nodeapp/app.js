@@ -3,8 +3,8 @@ import {signUpUser, loginUser, getUsers} from './controllers/users.js';
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import usersRouter from "../nodeapp/routes/usersroutes.js";
-import tipsRouter from "../nodeapp/routes/tipsroutes.js";
+import usersRouter from "./routes/usersroutes.js"
+import tipsRouter from './routes/tipsroutes.js';
 
 
 // const express = require('express')

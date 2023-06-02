@@ -16,7 +16,8 @@
     "test:jest": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules npx jest --forceExit",
     "test:coverage": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules npx jest --forceExit --coverage",
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "seed:db": "cd scripts && node add_data_to_db.js && node add_admin_to_db.js"
   },
   "author": "Petteri J",
   "license": "ISC",
