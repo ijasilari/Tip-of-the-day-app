@@ -63,7 +63,6 @@ function AddTip(props) {
 
     const AddNewTip = async () => {
       const newTip = { category: category, description: formikTip.values.description, creator: auth.userId };
-      console.log(newTip);
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/addtip`,
@@ -76,7 +75,6 @@ function AddTip(props) {
             },
           }
         );
-        console.log(response);
         formikTip.values.description = "";
         formikTip.errors.description = "";
       } catch (err) {
