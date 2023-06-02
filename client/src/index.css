@@ -11,6 +11,7 @@ body {
 code {
   font: 100%/1.5 Questrial, sans-serif;
 }
-
-
+.MuiMenuItem-root{
+  color: black !important;
+}
 

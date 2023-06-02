@@ -92,7 +92,8 @@ describe('Testing the Admin page', () => {
       cy.contains('Change Role').click();
 
       // Enter new role
-      cy.get('input[name="role"]').type('admin');
+      cy.get('.dropdown-input').click({multiple: true, force: true});
+      cy.get('.dropdown-item').contains('admin').click();
 
       // Submit the form
       cy.get('button[type="submit"]').click();
@@ -126,6 +127,38 @@ describe('Testing the Admin page', () => {
       cy.get('[data-testid="deleteCheckbox"]').click({force: true});
       cy.get('[data-testid="deleteButton"]').click({force: true});
 
+    });
+
+    it('can edit and delete any tips', () => {
+        //authenticate
+        cy.login('admin@gmail.com', 'admin')
+        cy.wait(2000);
+
+        // Visit the view all tips page
+        cy.contains('View All Tips').click()
+
+        // should see edit and delete buttons
+        cy.contains('Edit').should('be.visible');
+        cy.contains('Delete').should('be.visible');
+
+        // Can edit RIIPPUU Tipsestä
+        cy.contains('Edit').click()
+  
+        cy.get('.dropdown-input').click({multiple: true, force: true});
+        cy.get('.dropdown-item').contains('Java').click();
+        //cy.get('textarea[name="description"]').eq(0).type(' edited');
+      
+        cy.contains('Change Tip Description').click({force: true});
+        cy.wait(2000);
+        cy.contains('Java').eq(0);
+        //cy.contains('This is a test tip from cypress edited').should('be.visible');
+
+        cy.wait(2000);
+        // Can delete
+        cy.contains('Delete').click();
+
+        cy.get('This is a test tip from cypress edited').should('not.exist');
+  
     });
 
 });

@@ -14,12 +14,10 @@ import { IconButton, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useContext } from "react";
 import { AuthContext } from "../components/auth-context";
-//import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
 import TablePagination from "@mui/material/TablePagination";
-import { css } from "@emotion/react";
 import "./ViewTips.css";
 
 import CssBaseline from '@mui/material/CssBaseline';
@@ -29,9 +27,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 
-const labelStyle = css`
-  color: red; /* Change the text color */
-`;
+
 function ViewTips(props) {
   const [data, setData] = useState([]);
   const [openEditTip, setOpenEditTip] = useState(false);
@@ -47,7 +43,6 @@ function ViewTips(props) {
   const startIndex = page * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
   const paginatedData = data.slice(startIndex, endIndex);
-  console.log(paginatedData);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -95,7 +90,6 @@ function ViewTips(props) {
   };
 
   const addTheLike = async (id, index, vote) => {
-    console.log(vote);
     const userData = { userId: auth.userId, vote: vote };
     try {
       const res = await axios.patch(
@@ -107,16 +101,12 @@ function ViewTips(props) {
           },
         }
       );
-      console.log(res);
 
       setData(() => {
         const newTips = [...data];
-        // console.log(newTips);
         const foundIndex = newTips.findIndex((tip) => tip.id === id);
-        // console.log(foundIndex);
         newTips[foundIndex].likes = newTips[foundIndex].likes + vote;
         newTips[foundIndex].wholiked[auth.userId] = true;
-        console.log([...newTips]);
         return [...newTips];
       });
     } catch (error) {
@@ -124,14 +114,12 @@ function ViewTips(props) {
     }
   };
 
-  // console.log(vote)
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/getall`
         );
-        //console.log(response);
         setData(response.data.tips);
         if (response.data.tips.length === 0) {
           console.log("No tips in the database");
@@ -195,7 +183,6 @@ function ViewTips(props) {
           },
         }
       );
-      //console.log(response);
 
       setData((prev) => prev.filter((e) => e.id !== tid));
     } catch (err) {}
@@ -208,7 +195,6 @@ function ViewTips(props) {
       creator: auth.userId,
     };
     try {
-      //console.log(editedTip);
       const response = await axios.patch(
         `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/${id}/update`,
         editedTip,
@@ -219,15 +205,12 @@ function ViewTips(props) {
           },
         }
       );
-      //console.log(response);
 
       setData(() => {
         const newTips = [...data];
-        // console.log(newTips);
         const foundIndex = newTips.findIndex((tip) => tip.id === id);
-        // console.log(foundIndex);
         newTips[foundIndex].description = formikTip.values.description;
-        // console.log([...newTips])
+        newTips[foundIndex].category = categoryEdit;
         return [...newTips];
       });
       setCategoryEdit();
@@ -246,8 +229,6 @@ function ViewTips(props) {
     }
     return errors;
   };
-
-  console.log(categoryEdit);
 
   const formikTip = useFormik({
     enableReinitialize: true,
@@ -279,13 +260,7 @@ function ViewTips(props) {
     return category ? category.label : "";
   };
 
-  const styles = {
-    buttonStyle: {
-      '& .MuiTablePagination-menuItem': {
-        color: 'red'
-      }
-    }
-  }
+
 
   return (
     <><CssBaseline />
@@ -512,6 +487,7 @@ function ViewTips(props) {
           justifyContent: "center",
           marginTop: "1rem",
         }}
+        id="pagination"
       >
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
@@ -525,10 +501,7 @@ function ViewTips(props) {
             setRowsPerPage(parseInt(event.target.value, 10));
             setPage(0);
           }}
-          sx={{
-            color: textColor
-          }}
-
+          id="pagination"
         />
       </div>
       </>

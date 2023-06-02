@@ -1,6 +1,8 @@
 .App{
   box-sizing: border-box;
   min-height: 100vh;
+  height: fit-content;
+  padding-bottom: 25px;
 }
 
 #dark {
@@ -30,10 +32,6 @@ ul{
 
 #dark .MuiTablePagination-displayedRows{
   color: #f0f0f0;
-}
-
-.MuiList-root{
-  background-color: #2d2d2d;
 }
 
 #dark .MuiSvgIcon-root{

@@ -17,7 +17,6 @@ const getUsers = async (req, res) => {
 }
 
 const signUpUser = async (req, res) => {
-    console.log(req.body);
     const {username, email, password, role} = req.body;
 
     const schema = Joi.object({
@@ -50,10 +49,8 @@ const signUpUser = async (req, res) => {
         password: hashedPassword,
         role: role
     };
-    //console.log(newUser);
     try{
         const exist = await users.findByEmail(newUser.email);
-        console.log("LÖYTYYKÖ??", exist);
         if(exist[0]){
             return res.status(422).send('Could not create user, user exists');
         }
@@ -61,7 +58,6 @@ const signUpUser = async (req, res) => {
         if(!result){
             return res.status(500).send('Something went wrong, could not create user');
         }
-        //console.log(result);
         const token = jwt.sign(
             {
                 id: newUser.id,
@@ -91,17 +87,14 @@ const loginUser = async(req, res) => {
     let identifiedUser;
     try {
         const result = await users.findByEmail(email);
-        console.log("LÖYTYYKÖ??!", result);
         if(!result[0]){
             return res.status(401).send('No user found, check your credentials');
         }
         identifiedUser = result[0];
-        //console.log(identifiedUser.name);
     } catch(err){
         return res.status(500).send('Something went wrong');
     }
 
-    console.log(identifiedUser, 'userin tiedot')
     let isValidPassword;
     try{
         isValidPassword = await bcrypt.compare(password, identifiedUser.password);
@@ -164,7 +157,6 @@ const updateUserWithId = async (req, res, next) => {
 
   if (email !== user.email) {
     const exist = await users.findRowCountByEmail(email);
-    console.log(exist, "löytyykö tämä");
     if (exist) {
       const error = new Error(`Email exists`);
       error.statusCode = 422;
@@ -195,7 +187,6 @@ const updateUserWithId = async (req, res, next) => {
       email,
       role
     );
-    // console.log(hashedPassword)
 
     if (!result) {
       const error = new Error(`Could not update user`);
@@ -267,7 +258,6 @@ const deleteUserWithId = async (req, res, next) => {
 
 const getUserWithId = async (req, res, next) => {
   const userId = req.params.uid;
-  // console.log(userId)
   const user = await users.findUserById(userId)
 
   if (!user) {
@@ -278,8 +268,6 @@ const getUserWithId = async (req, res, next) => {
 
   res.json({ user });
 };
-
-
 
 export {
   signUpUser,

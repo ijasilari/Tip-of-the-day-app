@@ -63,7 +63,6 @@ function AddTip(props) {
 
     const AddNewTip = async () => {
       const newTip = { category: category, description: formikTip.values.description, creator: auth.userId };
-      console.log(newTip);
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_LOCAL_BACKEND_URL}/api/tips/addtip`,
@@ -76,7 +75,6 @@ function AddTip(props) {
             },
           }
         );
-        console.log(response);
         formikTip.values.description = "";
         formikTip.errors.description = "";
       } catch (err) {
@@ -145,18 +143,18 @@ function AddTip(props) {
         sx={{
           "& > :not(style)": {
             mt: 3,
-            ml: 1,
-            mr: 1,
+            ml: "auto",
+            mr: "auto",
             width: "90%",
             height: "100%",
-            maxWidth: "750px"
+            maxWidth: "800px"
           },
         }}
         noValidate
         autoComplete="off"
       >
         <Box
-          display="inline-flex"
+          display="block"
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
@@ -197,7 +195,7 @@ function AddTip(props) {
         />
         {formikTip.errors.category ? (
           <Box
-            display="inline-flex"
+            display="block"
             style={{ color: "red", textAlign: "inherit" }}
           >
             {formikTip.errors.category}
@@ -215,7 +213,7 @@ function AddTip(props) {
           type="submit"
           fullWidth
           variant="contained"
-          sx={{ mt: 3, mb: 2 }}
+          sx={{ mt: 3, mb: 2, display: "block" }}
           className="buttons"
         >
           Add New Tip
@@ -229,16 +227,17 @@ function AddTip(props) {
           }}
         >
           <h1 className="text">Attention!</h1>
-          <div style={{ textAlign: "left", paddingBottom: "10px" }}>
+          <div style={{ textAlign: "left", paddingBottom: "10px", marginBottom: "10px"}}>
             <p className="text">
               This page supports markdown and syntax highlight code. To create
               codeblock with highlight write:
             </p>
-            <ReactMarkdown children={codeBlSyntax} />
+            <ReactMarkdown className="nested" children={codeBlSyntax} />
             <p className="text">Example:</p>
-            <ReactMarkdown children={syntaxExample} />
+            <ReactMarkdown className="nested" children={syntaxExample} />
             <p className="text">Output:</p>
             <ReactMarkdown
+              className="nested"
               children={codeExample}
               components={{
                 p: ({ node, ...props }) => (
@@ -261,6 +260,14 @@ function AddTip(props) {
                 },
               }}
             />
+            <p style={{marginTop: "30px"}} className="text">To add a new line of text use <code>\</code>:</p>
+            <code className="nested">First Line sentence \
+                  Second Line sentence </code>
+            <p className="text" style={{marginTop: "30px"}}>Or you can press <code>space key</code> two times then <code>Enter</code>:</p>
+            <pre className="nested">
+              <p><code>First Line sentence␠␠</code></p>
+              <p><code>Second Line sentence</code></p>
+            </pre>
           </div>
         </Container>
       </Box>
