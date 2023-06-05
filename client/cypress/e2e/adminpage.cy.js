@@ -100,7 +100,8 @@ describe('Testing the Admin page', () => {
       cy.get('button[type="submit"]').click();
 
       // Assert that the role was changed successfully
-      cy.contains('guest').should('be.visible');
+      cy.wait(1000);
+      cy.contains('Role: admin').should('be.visible');
 
     });
 
