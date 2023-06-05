@@ -14,3 +14,19 @@ services:
     volumes:
       - /var/lib/postgresql/data
     container_name: database
+
+  db_init:
+    build:
+      context: ./nodeapp
+      dockerfile: Dockerfile
+    environment:
+      DB_PORT: 5432
+      DB_HOST: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tips
+    depends_on:
+      - db
+    volumes:
+      - ./nodeapp:/opt/api
+    command: sh -c "sleep 10 && cd /opt/api && npm run seed:db"

@@ -774,4 +774,13 @@ it("DELETE /:userId/delete try to delete user as admin", async () => {
  expect(response.text).toEqual('{"message":"Deleted the user."}');
 });
 
+it("DELETE /:userId/delete deleting admin", async () => {
+  const response = await supertest(app)
+    .delete(`/api/users/${loggedInAdmin.userId}/delete`)
+    .set("Authorization", "Bearer " + loggedInAdmin.token)
+    .set("Accept", "application/json");
+  expect(response.status).toEqual(200);
+  expect(response.text).toEqual('{"message":"Deleted the user."}');
+});
+
 })
