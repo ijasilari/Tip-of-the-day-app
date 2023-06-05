@@ -153,7 +153,7 @@ describe('Testing the My Tips page', () => {
       cy.contains('Edit').click()
 
       cy.get('textarea[name="description"]').clear();
-      cy.contains('Change Tip Description').click();
+      cy.contains('Update Tip Description/Category').click();
       cy.contains('Required tip category').should('be.visible');
       cy.contains('Required tip description').should('be.visible');
 
@@ -162,7 +162,7 @@ describe('Testing the My Tips page', () => {
 
       cy.get('textarea[name="description"]').clear().type('This is an edited test tip from cypress');
     
-      cy.contains('Change Tip Description').click();
+      cy.contains('Update Tip Description/Category').click();
       cy.wait(2000);
       cy.contains('This is an edited test tip from cypress').should('be.visible');
     });

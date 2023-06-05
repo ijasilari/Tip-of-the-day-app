@@ -402,7 +402,7 @@ function ViewTips(props) {
                   sx={{ backgroundColor: backgroundColor }}
                 >
                   <DialogTitle id="alert-dialog-title">
-                    Change Tip Id: {id}
+                    Change Tip With Id: {id}
                     <Dropdown
                       isSearchable
                       placeHolder="Select..."
@@ -471,7 +471,7 @@ function ViewTips(props) {
                       type="submit"
                       className="buttons"
                     >
-                      Change Tip Description
+                      Update Tip Description/Category
                     </Button>
                   </DialogActions>
                 </Box>

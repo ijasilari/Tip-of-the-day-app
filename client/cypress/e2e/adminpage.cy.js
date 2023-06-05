@@ -19,7 +19,8 @@ describe('Testing the Admin page', () => {
       // Submit the form
       cy.get('button[type="submit"]').click();
 
-
+      cy.visit('/viewtips');
+      cy.contains('This is a test tip from cypress').should('be.visible');
     });
 
     it('displays all the user information', () => {
@@ -30,7 +31,7 @@ describe('Testing the Admin page', () => {
 
       // contains admin and test user information
       cy.contains('Admin Page').should('be.visible');
-      cy.contains('Username: Admin 1').should('be.visible');
+      cy.contains('Username: admin 1').should('be.visible');
       cy.contains('Email: admin@gmail.com').should('be.visible');
       cy.contains('Role: admin').should('be.visible');
       cy.wait(1000);
@@ -148,7 +149,7 @@ describe('Testing the Admin page', () => {
         cy.get('.dropdown-item').contains('Java').click();
         //cy.get('textarea[name="description"]').eq(0).type(' edited');
       
-        cy.contains('Change Tip Description').click({force: true});
+        cy.contains('Update Tip Description/Category').click({force: true});
         cy.wait(2000);
         cy.contains('Java').eq(0);
         //cy.contains('This is a test tip from cypress edited').should('be.visible');
