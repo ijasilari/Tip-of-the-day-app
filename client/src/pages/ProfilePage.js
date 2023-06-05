@@ -283,13 +283,18 @@ const ProfilePage = (props) => {
         alignItems: "center",
         height: "80%",
       }}
+      className="background"
     >
       <Grid
         container
+        direction="column"
         spacing={2}
         sx={{ display: "flex", textAlign: "center", justifyContent: "center", marginTop: "10px" }}
       >
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={6} sx={{width: "50%", margin: "auto",
+            '@media (max-width: 600px)': {
+              width: '90%',
+            }}}>
           <Card
           sx={{backgroundColor: backgroundColor}}>
             <div
@@ -331,7 +336,10 @@ const ProfilePage = (props) => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} >
+        <Grid item xs={2} sm={6} sx={{width: "50%", margin: "auto",
+            '@media (max-width: 600px)': {
+              width: '90%',
+            } }}>
           <Card style={{ backgroundColor: bgColor2}}>
             <CardHeader title="Account Settings" style={{ color: textColor}}/>
             <CardContent>

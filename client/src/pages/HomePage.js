@@ -14,7 +14,7 @@ function HomePage(props) {
   const text = "Welcome to TOTD (Tip Of The Day) Application!"
 
   return (
-    <div data-testid="homePage" style={{minHeight: "800px"}}>
+    <div data-testid="homePage" className="background">
       <SlideTransition text={text} color={textColor}/>
       <Card theme={props.theme} />
     </div>

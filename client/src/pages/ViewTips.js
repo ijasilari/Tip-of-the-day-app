@@ -263,13 +263,12 @@ function ViewTips(props) {
 
 
   return (
-    <><CssBaseline />
+    <div className="background"><CssBaseline />
       <Box
       sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        mt: 3,
       }}
       >
       <Box sx={{ flexGrow: 1 }}>{/* content of the first box */}</Box>
@@ -501,10 +500,11 @@ function ViewTips(props) {
             setRowsPerPage(parseInt(event.target.value, 10));
             setPage(0);
           }}
+          sx={{'& .MuiSelect-select':{color: textColor}}}
           id="pagination"
         />
       </div>
-      </>
+      </div>
   );
 }
 

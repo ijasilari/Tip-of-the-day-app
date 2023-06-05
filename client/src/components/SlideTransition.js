@@ -14,7 +14,7 @@ function SlideTransition(props) {
         variant="h3"
         textAlign="center"
         color={props.color}
-        marginTop="2.5rem"
+        marginTop="0"
         marginBottom="4rem"
         gutterBottom
       >
