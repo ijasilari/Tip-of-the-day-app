@@ -357,7 +357,7 @@ const AdminPage = (props) => {
        backgroundColor = "#1D1D1D";
      }
   return (
-    <div>
+    <div className="background">
       <Typography
         sx={{ color: textColor, textAlign: "center" }}
         variant="h4"
