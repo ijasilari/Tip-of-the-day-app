@@ -121,7 +121,7 @@ function AddTip(props) {
     }
 
   return (
-    <div data-testid="addTipPage">
+    <div data-testid="addTipPage" className="background" style={{paddingBottom: '10px', paddingTop: '20px'}}>
       <Typography
         component="h5"
         variant="h3"
@@ -129,6 +129,7 @@ function AddTip(props) {
         color={textColor}
         marginTop="3rem"
         gutterBottom
+        sx={{marginTop: '0'}}
       >
         Add New Tip To The List
       </Typography>
@@ -203,7 +204,7 @@ function AddTip(props) {
         ) : null}
         {formikTip.errors.description ? (
           <Box
-            display="inline-flex"
+            display="block"
             style={{ color: "red", textAlign: "inherit" }}
           >
             {formikTip.errors.description}
@@ -227,7 +228,7 @@ function AddTip(props) {
           }}
         >
           <h1 className="text">Attention!</h1>
-          <div style={{ textAlign: "left", paddingBottom: "10px", marginBottom: "10px"}}>
+          <div style={{ textAlign: "left", paddingBottom: "10px"}}>
             <p className="text">
               This page supports markdown and syntax highlight code. To create
               codeblock with highlight write:

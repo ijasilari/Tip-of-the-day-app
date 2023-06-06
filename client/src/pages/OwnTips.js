@@ -214,13 +214,12 @@ export default function OwnTips(props) {
   });
 
   return (
-      <><CssBaseline />
+      <div className="background"><CssBaseline />
       <Box
       sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        mt: 3,
       }}
       >
       <Box sx={{ flexGrow: 1 }}>{/* content of the first box */}</Box>
@@ -399,6 +398,6 @@ export default function OwnTips(props) {
           ))}
         </Grid>
         )}
-      </Container></>
+      </Container></div>
   );
 }

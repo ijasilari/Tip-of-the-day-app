@@ -194,9 +194,10 @@ const Authenticate = (props) => {
         alignItems: "center",
         height: "100vh",
       }}
+      className="background"
     >
       <Card
-        style={{ padding: "20px", backgroundColor: backgroundColor }}
+        style={{ padding: "20px", backgroundColor: backgroundColor, marginTop: '0'}}
         data-testid="authPage"
         className="authentication"
       >

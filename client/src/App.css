@@ -2,7 +2,7 @@
   box-sizing: border-box;
   min-height: 100vh;
   height: fit-content;
-  padding-bottom: 25px;
+
 }
 
 #dark {
@@ -106,4 +106,22 @@ pre {
 #light input{
   color: black;
   background-color: white;
+}
+
+.background{
+  min-height: 100vh;
+  padding-top: 20px;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+#light .background{
+  background-image: url('./pages/images/white.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+#dark .background{
+  background-image: url('./pages/images/dark.jpg');
+  background-size: cover;
+  background-position: center;
 }
