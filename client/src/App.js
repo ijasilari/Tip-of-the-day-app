@@ -12,8 +12,6 @@ import "./App.css";
 import ProfilePage from "./pages/ProfilePage";
 import OwnTips from "./pages/OwnTips";
 import AdminPage from "./pages/AdminPage";
-import lightImg from "./pages/images/1920x1080_light.png";
-import darkImg from "./pages/images/1920x1080.png";
 
 export const ThemeContext = createContext(null);
 
@@ -104,7 +102,7 @@ function App() {
   } else {
     routes = (
       <Routes>
-        <Route path="/" element={<HomePage theme={theme} lightImg={lightImg} />} />
+        <Route path="/" element={<HomePage theme={theme}/>} />
         <Route path="/viewtips" element={<ViewTips theme={theme} />} />
         <Route path="/auth" element={<Authenticate theme={theme} />} />
         <Route exact path="*" element={<HomePage theme={theme} />} />
