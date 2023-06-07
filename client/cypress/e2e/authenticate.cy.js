@@ -48,17 +48,18 @@ describe('Authentication', () => {
         cy.contains('"email" is not allowed to be empty').should('be.visible');
         cy.contains('"password" is not allowed to be empty').should('be.visible');
     
-        cy.get('#name').type('Username'); 
+        cy.get('#name').type('Na'); // Enter an invalid username
         cy.get('#email').type('invalidemail'); // Enter an invalid email
         cy.get('#password').type('short'); // Enter a short password
         cy.contains('SIGNUP').click();
-        cy.get('#name').should('have.css', 'background-color', 'rgb(212, 237, 218)');
+        cy.get('#name').should('have.css', 'background-color', 'rgb(250, 128, 114)');
         cy.get('#email').should('have.css', 'background-color', 'rgb(250, 128, 114)');
         cy.get('#password').should('have.css', 'background-color', 'rgb(250, 128, 114)');
+        cy.contains('"name" length must be at least 3 characters long').should('be.visible');
         cy.contains('"email" must be a valid email').should('be.visible');
         cy.contains('"password" length must be at least 8 characters long').should('be.visible');
 
-        cy.get('#name').clear().type('Username');
+        cy.get('#name').clear().type('Username'); // Enter valid username
         cy.get('#email').clear().type('newuser@example.com'); // Enter an already in use email
         cy.get('#password').clear().type('longpassword'); // Enter a valid password
         cy.contains('SIGNUP').click();
