@@ -1,20 +1,20 @@
-a{
-    text-decoration: none;
+a {
+  text-decoration: none;
 }
 
-.toggleLabel{
-    margin: 4px;
-    margin-bottom: 8px;
-    font-size: smaller;
+.toggleLabel {
+  margin: 4px;
+  margin-bottom: 8px;
+  font-size: smaller;
 }
 
-.toggle{
-    margin-top: 10px;
-    margin-bottom: -1px;
-    margin-right: 8px;
-    color: white;
+.toggle {
+  margin-top: 10px;
+  margin-bottom: -1px;
+  margin-right: 8px;
+  color: white;
 }
 
-.MuiMenu-paper a{
-    display: block;
+.MuiMenu-paper a {
+  display: block;
 }
