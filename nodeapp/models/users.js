@@ -12,27 +12,28 @@ const devCon = {
 const prodCon = {
   connectionString: process.env.CONNECTION_STRING,
   ssl: {
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 };
 
 const pool = new pg.Pool(
-  process.env.NODE_ENV === 'production' ? prodCon : devCon
+  process.env.NODE_ENV === "production" ? prodCon : devCon
 );
 
 const users = {
   findAll: () =>
     new Promise((resolve, reject) => {
-      pool.query("SELECT * FROM users ORDER BY created_at DESC", (err, result) => {
-        if (err) {
-          return reject(err);
+      pool.query(
+        "SELECT * FROM users ORDER BY created_at DESC",
+        (err, result) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(result);
         }
-        resolve(result);
-      });
+      );
     }),
   create: async (user) => {
-    console.log("models create");
-    console.log(user);
     try {
       await pool.connect();
       await pool.query(
@@ -48,8 +49,6 @@ const users = {
   },
   findByEmail: (email) =>
     new Promise((resolve, reject) => {
-      console.log("models findbyemail");
-      console.log(email);
       pool.query(
         "SELECT * FROM users WHERE email=$1;",
         [email],
@@ -65,8 +64,6 @@ const users = {
     }),
   findRowCountByEmail: (email) =>
     new Promise((resolve, reject) => {
-      console.log("models findrowcountbyemail");
-      console.log(email);
       pool.query(
         "SELECT * FROM users WHERE email=$1;",
         [email],
@@ -82,8 +79,6 @@ const users = {
     }),
   findUserById: (id) =>
     new Promise((resolve, reject) => {
-      console.log("models finduserbyid");
-      console.log(id);
       pool.query("SELECT * FROM users WHERE id=$1;", [id], (err, result) => {
         if (err) {
           reject(err);
@@ -96,8 +91,6 @@ const users = {
 
   updateUserById: (userId, name, hashedPassword, email, role) =>
     new Promise((resolve, reject) => {
-      console.log("models updateuserbyid");
-      console.log(userId, name, hashedPassword, email, role);
       pool.query(
         "UPDATE users SET username=$1, password=$2, email=$3, updated_at=now(), role=$4 WHERE id=$5",
         [name, hashedPassword, email, role, userId],
@@ -113,8 +106,6 @@ const users = {
     }),
   deleteUserById: (id) =>
     new Promise((resolve, reject) => {
-      console.log("models deleteuserbyid");
-      console.log(id);
       pool.query("DELETE FROM users WHERE id=$1", [id], (err, result) => {
         if (err) {
           reject(err);
@@ -126,4 +117,4 @@ const users = {
     }),
 };
 
-export {users};
+export { users };

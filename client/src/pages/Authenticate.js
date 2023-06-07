@@ -74,7 +74,6 @@ const Authenticate = (props) => {
   const validateData = (user) => {
     const result = schema.validate(user, { abortEarly: false });
 
-    console.log(result);
     if (result.error) {
       const errors = {};
       result.error.details.forEach((err) => {

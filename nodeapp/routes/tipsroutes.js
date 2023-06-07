@@ -11,7 +11,7 @@ import {
   addNewTip,
   getTipByIdPlainText,
   getTipByRandom,
-  addLike
+  addLike,
 } from "../controllers/tips.js";
 
 const tipsRouter = Router();

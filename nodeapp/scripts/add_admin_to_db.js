@@ -23,12 +23,12 @@ const devCon = {
 const prodCon = {
   connectionString: process.env.CONNECTION_STRING,
   ssl: {
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 };
 
 const pool = new pg.Pool(
-  process.env.NODE_ENV === 'production' ? prodCon : devCon
+  process.env.NODE_ENV === "production" ? prodCon : devCon
 );
 
 pool
