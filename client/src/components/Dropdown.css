@@ -11,7 +11,7 @@
   cursor: pointer;
 }
 
-#dark .dropdown-container:hover{
+#dark .dropdown-container:hover {
   border-color: #bb86fc;
   box-shadow: 0 0 10px #bb86fc;
 }

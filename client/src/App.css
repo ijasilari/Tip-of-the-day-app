@@ -1,8 +1,7 @@
-.App{
+.App {
   box-sizing: border-box;
   min-height: 100vh;
   height: fit-content;
-
 }
 
 #dark {
@@ -19,22 +18,22 @@ hr,
 li,
 ol,
 p,
-ul{
+ul {
   color: #f0f0f0;
 }
 
-#light .MuiMenu-paper{
+#light .MuiMenu-paper {
   background: #1976d2;
 }
-#dark .MuiTablePagination-selectLabel{
+#dark .MuiTablePagination-selectLabel {
   color: #f0f0f0;
 }
 
-#dark .MuiTablePagination-displayedRows{
+#dark .MuiTablePagination-displayedRows {
   color: #f0f0f0;
 }
 
-#dark .MuiSvgIcon-root{
+#dark .MuiSvgIcon-root {
   color: #f0f0f0;
 }
 
@@ -43,7 +42,8 @@ p,
 h5,
 h3,
 h1,
-a {
+a,
+#light li {
   color: #000000;
 }
 
@@ -61,10 +61,6 @@ pre {
   width: fit-content;
 }
 
-#light li {
-  color: #000000;
-}
-
 .searchIcon {
   margin-bottom: 16px;
 }
@@ -77,51 +73,43 @@ pre {
   border-radius: 8px;
 }
 
-#dark .buttons{
-  background-color: #BB86FC;
+#dark .buttons {
+  background-color: #bb86fc;
 }
 
-#dark .buttonsOutline{
-  border-color: #BB86FC;
-  color:#BB86FC;
+#dark .buttonsOutline {
+  border-color: #bb86fc;
+  color: #bb86fc;
 }
 
-#dark #description-label{
-  color: #ECECEC;
+#dark textarea,
+#dark #description-label,
+#dark label {
+  color: #ececec;
 }
 
-#dark textarea{
-  color: #ECECEC;
-}
-
-#dark label{
-  color: #ECECEC;
-}
-
-#dark input{
-  color: #ECECEC;
+#dark input {
+  color: #ececec;
   background-color: #262626;
 }
 
-#light input{
+#light input {
   color: black;
   background-color: white;
 }
 
-.background{
+.background {
   min-height: 100vh;
   padding-top: 20px;
   background-repeat: no-repeat;
   background-attachment: fixed;
-}
-#light .background{
-  background-image: url('./pages/images/white.jpg');
   background-size: cover;
   background-position: center;
+}
+#light .background {
+  background-image: url("./pages/images/white.jpg");
 }
 
-#dark .background{
-  background-image: url('./pages/images/dark.jpg');
-  background-size: cover;
-  background-position: center;
+#dark .background {
+  background-image: url("./pages/images/dark.jpg");
 }

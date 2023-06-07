@@ -18,7 +18,7 @@ export const signUpUser = async ({ username, email, password }) => {
         username,
         email,
         password,
-        role: 'guest'
+        role: "guest",
       }),
     }
   );
@@ -40,6 +40,6 @@ export const loginUser = async ({ email, password }) => {
       }),
     }
   );
-  console.log(res)
+
   return await res.json();
 };
