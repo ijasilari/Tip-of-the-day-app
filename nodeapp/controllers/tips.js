@@ -1,4 +1,14 @@
-import {getAllTips, findTipsByCategory, findTipsByCreator, findTipById, addTip, updateTipWithId, deleteTipWithId, getRandomTip, addLikeById} from "../models/tips.js";
+import {
+  getAllTips,
+  findTipsByCategory,
+  findTipsByCreator,
+  findTipById,
+  addTip,
+  updateTipWithId,
+  deleteTipWithId,
+  getRandomTip,
+  addLikeById,
+} from "../models/tips.js";
 import { validationResult } from "express-validator";
 
 const getTips = async (req, res, next) => {
@@ -79,10 +89,9 @@ const addNewTip = async (req, res, next) => {
   const { category, description, creator } = req.body;
 
   const newTip = {
-    // id,
     category: category,
     description: description,
-    creator: creator
+    creator: creator,
   };
 
   const result = await addTip(newTip);
@@ -94,7 +103,7 @@ const addNewTip = async (req, res, next) => {
 
   res.status(201).json({
     Tip: newTip,
-    id: result
+    id: result,
   });
 };
 
@@ -115,29 +124,25 @@ const updateTipById = async (req, res, next) => {
     error.statusCode = 404;
     return next(error);
   }
-  if (tip.creator !== req.userData.userId && req.userData.role !== 'admin') {
+  if (tip.creator !== req.userData.userId && req.userData.role !== "admin") {
     const error = new Error(`Not authorized to update tip`);
     error.statusCode = 401;
     return next(error);
   }
-    const result = await updateTipWithId(
-      description,
-      category,
-      tipId
-    );
+  const result = await updateTipWithId(description, category, tipId);
 
-    if (!result) {
+  if (!result) {
     const error = new Error(`Couldnt update Tip with ID ${tipId}`);
     error.statusCode = 404;
     return next(error);
-    }
+  }
 
-    tip.id = tipId
-    tip.description = description
-    tip.category = category
-    tip.creator = creator
-    res.status(200).json({ tip });
-  };
+  tip.id = tipId;
+  tip.description = description;
+  tip.category = category;
+  tip.creator = creator;
+  res.status(200).json({ tip });
+};
 
 const deleteTipById = async (req, res, next) => {
   const tipId = req.params.tid;
@@ -148,7 +153,7 @@ const deleteTipById = async (req, res, next) => {
     return next(error);
   }
 
-  if (tip.creator !== req.userData.userId && req.userData.role !== 'admin') {
+  if (tip.creator !== req.userData.userId && req.userData.role !== "admin") {
     const error = new Error(`Not authorized to delete tip`);
     error.statusCode = 401;
     return next(error);
@@ -164,7 +169,6 @@ const deleteTipById = async (req, res, next) => {
 };
 
 const getTipByRandom = async (req, res, next) => {
-
   const tip = await getRandomTip();
 
   res.status(200).json({ tip });
@@ -172,7 +176,7 @@ const getTipByRandom = async (req, res, next) => {
 
 const addLike = async (req, res, next) => {
   const tipId = req.params.tid;
-  const { userId, vote }  = req.body;
+  const { userId, vote } = req.body;
 
   const tip = await findTipById(tipId);
   if (!tip) {
@@ -186,7 +190,7 @@ const addLike = async (req, res, next) => {
     error.statusCode = 400;
     return next(error);
   }
-  const like = await addLikeById(userId, tipId, vote)
+  const like = await addLikeById(userId, tipId, vote);
   if (!like) {
     const error = new Error(`Something went wrong`);
     error.statusCode = 404;

@@ -1,18 +1,13 @@
-import { getTips, addLike, getTipsByCategory, deleteTipById, updateTipById, getTipById, addNewTip, getTipByIdPlainText, getTipByRandom } from './controllers/tips.js';
-import {signUpUser, loginUser, getUsers} from './controllers/users.js';
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import usersRouter from "./routes/usersroutes.js"
-import tipsRouter from './routes/tipsroutes.js';
+import usersRouter from "./routes/usersroutes.js";
+import tipsRouter from "./routes/tipsroutes.js";
 
-
-// const express = require('express')
-const port = 3000
+const port = 3000;
 const app = express();
 app.use(cors());
 // var dt = require('./modules/totd.js')
-
 
 // app.use('/public', express.static(path.join(__dirname, 'public')))
 function handleHttpError(err, req, res, next) {
@@ -25,15 +20,15 @@ function handleHttpError(err, req, res, next) {
 app.use(handleHttpError);
 app.use(bodyParser.json());
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
-  )
-  next()
-})
-app.use('/public', express.static('public'))
+  );
+  next();
+});
+app.use("/public", express.static("public"));
 /*
 app.get('/', (req, res) => {
 	res.send('Hello Express! Use the /totd/<nr> to fetch tips')
@@ -48,8 +43,8 @@ app.get('/totd/:id', (req, res) => {
 dt.scanAllFiles();
 */
 /*
-** These are for testing only at this point:
-*/
+ ** These are for testing only at this point:
+ */
 /*
 app.get('/file/:name', (req, res) => {
 	res.send(dt.readFile(req.params['name']) + "\n")
@@ -65,7 +60,6 @@ app.get('/api/*', (req, res) => {
 
 app.use("/api/users", usersRouter);
 app.use("/api/tips", tipsRouter);
-app.patch("/:tid/addALike", addLike)
 
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
@@ -77,4 +71,4 @@ if (process.env.NODE_ENV !== "test") {
   });
 }
 
-export default app
+export default app;

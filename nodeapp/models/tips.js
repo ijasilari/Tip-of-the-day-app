@@ -12,14 +12,13 @@ const devCon = {
 const prodCon = {
   connectionString: process.env.CONNECTION_STRING,
   ssl: {
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 };
 
 const pool = new pg.Pool(
-  process.env.NODE_ENV === 'production' ? prodCon : devCon
+  process.env.NODE_ENV === "production" ? prodCon : devCon
 );
-
 
 const getAllTips = async () => {
   const tips = await pool.query("SELECT * FROM tips ORDER BY id DESC");
@@ -32,14 +31,18 @@ const findTipById = async (id) => {
 };
 
 const findTipsByCategory = async (category) => {
-  const tip = await pool.query("SELECT * FROM tips WHERE category=$1", [category]);
+  const tip = await pool.query("SELECT * FROM tips WHERE category=$1", [
+    category,
+  ]);
   return tip.rows;
-}
+};
 
 const findTipsByCreator = async (creator) => {
-  const tip = await pool.query("SELECT * FROM tips WHERE creator=$1", [creator]);
+  const tip = await pool.query("SELECT * FROM tips WHERE creator=$1", [
+    creator,
+  ]);
   return tip.rows;
-}
+};
 
 const addTip = async (tip) => {
   const result = await pool.query(
@@ -63,12 +66,11 @@ const deleteTipWithId = async (id) => {
 };
 
 const getRandomTip = async () => {
-
-  const result  = await pool.query(
+  const result = await pool.query(
     "SELECT * FROM tips ORDER BY RANDOM() LIMIT 1"
   );
 
-  return result.rows[0]
+  return result.rows[0];
 };
 
 const addLikeById = async (userId, id, vote) => {
@@ -76,7 +78,17 @@ const addLikeById = async (userId, id, vote) => {
     "UPDATE tips SET likes = likes + $3, wholiked = jsonb_set(COALESCE(wholiked, '{}'::jsonb), $1, 'true', true) WHERE id = $2",
     [[userId], id, vote]
   );
-  return res.rowCount!==0;
-}
+  return res.rowCount !== 0;
+};
 
-export { getAllTips, findTipById, findTipsByCategory, findTipsByCreator, addTip, updateTipWithId, deleteTipWithId, getRandomTip, addLikeById };
+export {
+  getAllTips,
+  findTipById,
+  findTipsByCategory,
+  findTipsByCreator,
+  addTip,
+  updateTipWithId,
+  deleteTipWithId,
+  getRandomTip,
+  addLikeById,
+};
