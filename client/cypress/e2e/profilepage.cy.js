@@ -55,7 +55,6 @@ describe('Testing the Profile page', () => {
       cy.contains('Invalid email address').should('be.visible');
       cy.get('input[name="email"]').clear();
       cy.contains('Required email address').should('be.visible');
-      //already existing email??
 
       // Enter valid new email
       cy.get('input[name="email"]').type('newemail@example.com');

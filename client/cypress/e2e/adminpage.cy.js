@@ -31,7 +31,7 @@ describe('Testing the Admin page', () => {
 
       // contains admin and test user information
       cy.contains('Admin Page').should('be.visible');
-      cy.contains('Username: admin 1').should('be.visible');
+      cy.contains('Username: admin').should('be.visible');
       cy.contains('Email: admin@gmail.com').should('be.visible');
       cy.contains('Role: admin').should('be.visible');
       cy.wait(1000);
@@ -143,23 +143,21 @@ describe('Testing the Admin page', () => {
         cy.contains('Edit').should('be.visible');
         cy.contains('Delete').should('be.visible');
 
-        // Can edit RIIPPUU Tipsestä
+        // Can edit
         cy.contains('Edit').click()
   
         cy.get('.dropdown-input').click({multiple: true, force: true});
         cy.get('.dropdown-item').contains('Java').click();
-        //cy.get('textarea[name="description"]').eq(0).type(' edited');
       
         cy.contains('Update Tip Description/Category').click({force: true});
         cy.wait(2000);
         cy.contains('Java').eq(0);
-        //cy.contains('This is a test tip from cypress edited').should('be.visible');
+        cy.wait(1000);
 
-        cy.wait(2000);
         // Can delete
         cy.contains('Delete').click();
 
-        cy.get('This is a test tip from cypress edited').should('not.exist');
+        cy.get('This is a test tip from cypress').should('not.exist');
   
     });
 

@@ -28,9 +28,6 @@ describe('Authentication', () => {
       cy.get('#email').type('newuser@example.com');
       cy.get('#password').type('password');
       cy.contains('SIGNUP').click();
-      //cy.get('#name').should('have.css', 'background-color', 'rgb(212, 237, 218)');
-      //cy.get('#email').should('have.css', 'background-color', 'rgb(212, 237, 218)');
-      //cy.get('#password').should('have.css', 'background-color', 'rgb(212, 237, 218)');
       cy.url().should('eq', 'http://localhost/');
     });
     

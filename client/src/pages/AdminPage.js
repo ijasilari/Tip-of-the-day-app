@@ -377,7 +377,7 @@ const AdminPage = (props) => {
                     variant="h6"
                     component="div"
                   >
-                    Username: {user.username} {user.id}
+                    Username: {user.username}
                   </Typography>
                   <Typography
                     sx={{ color: textColor }}

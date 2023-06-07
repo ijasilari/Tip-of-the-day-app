@@ -8,6 +8,10 @@ describe('testing homepage', () => {
     cy.contains('My Tips').should('not.exist')
     cy.contains('ProfilePage').should('not.exist')
     cy.contains('Login').should('be.visible')
+  })
+
+  it('check that the light/dark theme works', () => {
+    cy.visit('http://localhost')
 
     // Verify initial toggle theme state
     cy.get('[data-testid="themeSwitch"]').should('not.be.checked') // The switch should be unchecked initially
@@ -34,8 +38,8 @@ describe('testing homepage', () => {
     // Verify the reverted state
     cy.get('[data-testid="themeSwitch"]').should('not.be.checked') // The switch should be unchecked again
     cy.get('.toggleLabel').should('contain', 'Light Mode') // The label should display 'Light Mode' after toggling back
-
-  })
+  });
+  
 })
 
 describe('testing view all tips', () => {
@@ -106,10 +110,6 @@ describe('Testing the AddTip page', () => {
     cy.contains('Edit').should('be.visible');
     cy.contains('Delete').should('be.visible');
 
-    // test the like button
-    // RIIPPUU tipseistä
-    //cy.get('[data-testid="thumbUpIcon"]').click();
-    //cy.get('[data-testid="thumbDownIcon"]').click({multiple: true, force: true});
   });
 
   it('should display validation errors for empty form fields', () => {
