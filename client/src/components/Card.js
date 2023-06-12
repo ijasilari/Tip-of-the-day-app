@@ -56,7 +56,7 @@ const Card = (props) => {
     if (dataLoaded) {
       const interval = setInterval(() => {
         fetchCardData();
-      }, 3000);
+      }, 12000);
       return () => clearInterval(interval);
     }
   }, [dataLoaded]);
