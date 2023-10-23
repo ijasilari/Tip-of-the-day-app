@@ -15,7 +15,7 @@ ToTD version 2 is an application made with PERN stack (PostgreSQL, Express, Reac
 
 TotD version 2 is deployed on Render where the database, backend and frontend are maintained. 
 
-The link to render: https://totd-frontend.onrender.com/ 
+The link to render: https://totd-frontend.onrender.com/ (Backend won't work anymore, because free hosting trial has expired)
 
 
 ## TotD version 2 running instructions
